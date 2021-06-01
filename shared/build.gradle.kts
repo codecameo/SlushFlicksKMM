@@ -1,12 +1,14 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    kotlin("multiplatform")
-    kotlin("native.cocoapods")
-    id("com.android.library")
+    kotlin(Plugin.multiPlatform)
+    kotlin(Plugin.nativeCocoapods)
+    kotlin(Plugin.serialization) version Versions.kotlin
+    id(Plugin.android)
+    id(Plugin.sqlDelight)
 }
 
-version = "1.0"
+version = Application.versionName
 
 kotlin {
     android()
@@ -26,32 +28,71 @@ kotlin {
         frameworkName = "shared"
         podfile = project.file("../iosSlushFlicks/Podfile")
     }
-    
+
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                // Coroutines
+                /*implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}") {
+                    isForce = true
+                }*/
+
+                implementation(Deps.datetime)
+
+                // Ktor
+                implementation(Ktor.clientCore)
+                implementation(Ktor.clientJson)
+                implementation(Ktor.clientLogging)
+                implementation(Ktor.clientSerialization)
+
+                // Kotlinx Serialization
+                implementation(Serialization.core)
+
+                // SQL Delight
+                implementation(SqlDelight.runtime)
+                implementation(SqlDelight.coroutineExtensions)
+
+                // koin
+                api(Koin.core)
+                api(Koin.test)
+
+                // kermit
+                api(Deps.kermit)
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation(Ktor.clientAndroid)
+                implementation(SqlDelight.androidDriver)
+            }
+        }
         val androidTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation("junit:junit:4.13.2")
             }
         }
-        val iosMain by getting
+        val iosMain by getting {
+            dependencies {
+                implementation(Ktor.clientIos)
+                implementation(SqlDelight.nativeDriver)
+            }
+        }
         val iosTest by getting
     }
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = AndroidSdk.compile
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(30)
+        minSdk = AndroidSdk.min
+        targetSdk = AndroidSdk.target
     }
 }

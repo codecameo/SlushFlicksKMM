@@ -2,7 +2,6 @@ package com.sifat.slushflicks
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.sifat.slushflicks.Greeting
 import android.widget.TextView
 
 fun greet(): String {
@@ -16,5 +15,6 @@ class MainActivity : AppCompatActivity() {
 
         val tv: TextView = findViewById(R.id.text_view)
         tv.text = greet()
+
     }
 }

@@ -5,19 +5,38 @@ plugins {
 
 dependencies {
     implementation(project(":shared"))
-    implementation("com.google.android.material:material:1.3.0")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+
+    implementation(AndroidX.appCompat)
+
+    //Kotlin 1.5.10 is not compatible with compose version
+    /*implementation(Compose.runtime)
+    implementation(Compose.runtimeLiveData)
+    implementation(Compose.ui)
+    implementation(Compose.material)
+    implementation(Compose.uiTooling)
+    implementation(Compose.foundationLayout)
+    implementation(Compose.accompanist)
+    implementation(Compose.compiler)
+    implementation(Compose.constraintLayout)
+    implementation(Compose.activity)
+    implementation(Compose.navigation)
+    implementation(Compose.uiGraphics)*/
+
+    implementation(Google.material)
+    implementation(Deps.datetime)
+
+    debugImplementation(SquareUp.leakCanary)
+
 }
 
 android {
-    compileSdk = 30
+    compileSdk = AndroidSdk.compile
     defaultConfig {
-        applicationId = "com.sifat.slushflicks"
-        minSdk = 21
-        targetSdk = 30
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = Application.applicationId
+        minSdk = AndroidSdk.min
+        targetSdk = AndroidSdk.target
+        versionCode = Application.versionCode
+        versionName = Application.versionName
     }
     buildTypes {
         getByName("release") {
@@ -26,6 +45,10 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        //compose = true
     }
+
+    /*composeOptions {
+        kotlinCompilerExtensionVersion = Versions.compose
+    }*/
 }
