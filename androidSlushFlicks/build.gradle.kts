@@ -8,25 +8,25 @@ dependencies {
 
     implementation(AndroidX.appCompat)
 
-    //Kotlin 1.5.10 is not compatible with compose version
-    /*implementation(Compose.runtime)
+    // Kotlin 1.5.10 is not compatible with compose version
+    implementation(Compose.runtime)
     implementation(Compose.runtimeLiveData)
     implementation(Compose.ui)
     implementation(Compose.material)
     implementation(Compose.uiTooling)
     implementation(Compose.foundationLayout)
-    implementation(Compose.accompanist)
     implementation(Compose.compiler)
     implementation(Compose.constraintLayout)
     implementation(Compose.activity)
     implementation(Compose.navigation)
-    implementation(Compose.uiGraphics)*/
+    implementation(Compose.uiGraphics)
 
     implementation(Google.material)
     implementation(Deps.datetime)
 
-    debugImplementation(SquareUp.leakCanary)
+    implementation(Coil.coilAccompanist)
 
+    debugImplementation(SquareUp.leakCanary)
 }
 
 android {
@@ -45,10 +45,10 @@ android {
     }
 
     buildFeatures {
-        //compose = true
+        compose = true
     }
 
-    /*composeOptions {
+    composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
-    }*/
+    }
 }

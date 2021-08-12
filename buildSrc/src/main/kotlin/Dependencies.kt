@@ -1,7 +1,7 @@
 object Versions {
     const val dateTime = "0.2.1"
-    const val kotlin = "1.5.10"
-    const val gradle = "7.0.0-beta03"
+    const val kotlin = "1.5.21"
+    const val gradle = "7.0.0"
     const val kotlinCoroutines = "1.4.3-native-mt"
     const val ktor = "1.5.3"
     const val kotlinxSerialization = "1.1.0"
@@ -10,17 +10,17 @@ object Versions {
     const val kermit = "0.1.9"
 
     const val slf4j = "1.7.30"
-    const val compose = "1.0.0-beta07"
+    const val compose = "1.0.1"
     const val nav_compose = "1.0.0-alpha10"
-    const val constraint_compose = "1.0.0-alpha03"
-    const val activity_compose = "1.3.0-alpha03"
-    const val accompanist = "0.9.0"
+    const val constraint_compose = "1.0.0-beta02"
+    const val activity_compose = "1.3.1"
 
     const val junit = "4.13"
     const val testRunner = "1.3.0"
     const val material = "1.3.0"
     const val appCompact = "1.3.0"
     const val coil = "0.8.1"
+    const val accompanist_coil = "0.15.0"
     const val leakCanaryVersion = "2.7"
 }
 
@@ -80,7 +80,6 @@ object Compose {
     const val foundationLayout = "androidx.compose.foundation:foundation-layout:${Versions.compose}"
     const val material = "androidx.compose.material:material:${Versions.compose}"
     const val navigation = "androidx.navigation:navigation-compose:${Versions.nav_compose}"
-    const val accompanist = "com.google.accompanist:accompanist-coil:${Versions.accompanist}"
     const val runtime = "androidx.compose.runtime:runtime:${Versions.compose}"
     const val runtimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
     const val compiler = "androidx.compose.compiler:compiler:${Versions.compose}"
@@ -110,16 +109,24 @@ object Ktor {
     const val clientJs = "io.ktor:ktor-client-js:${Versions.ktor}"
 }
 
+object Coil {
+    const val coilAccompanist =
+        "com.google.accompanist:accompanist-coil:${Versions.accompanist_coil}"
+}
+
 object Serialization {
-    const val core = "org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.kotlinxSerialization}"
+    const val core =
+        "org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.kotlinxSerialization}"
 }
 
 object SqlDelight {
     const val runtime = "com.squareup.sqldelight:runtime:${Versions.sqlDelight}"
-    const val coroutineExtensions = "com.squareup.sqldelight:coroutines-extensions:${Versions.sqlDelight}"
+    const val coroutineExtensions =
+        "com.squareup.sqldelight:coroutines-extensions:${Versions.sqlDelight}"
     const val androidDriver = "com.squareup.sqldelight:android-driver:${Versions.sqlDelight}"
 
     const val nativeDriver = "com.squareup.sqldelight:native-driver:${Versions.sqlDelight}"
-    const val nativeDriverMacos = "com.squareup.sqldelight:native-driver-macosx64:${Versions.sqlDelight}"
+    const val nativeDriverMacos =
+        "com.squareup.sqldelight:native-driver-macosx64:${Versions.sqlDelight}"
     const val sqlliteDriver = "com.squareup.sqldelight:sqlite-driver:${Versions.sqlDelight}"
 }
