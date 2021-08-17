@@ -47,7 +47,7 @@ enum class ImageDimension(val dimension: String) {
 
 class ApiRequest {
     companion object {
-        const val QUERY_KEY_API_KEY = "data.remote_key"
+        const val QUERY_KEY_API_KEY = "api_key"
         const val QUERY_KEY_SEARCH = "query"
         const val QUERY_KEY_PAGE = "page"
         const val PATH_COLLECTION = "collection"
@@ -67,7 +67,7 @@ class ApiEndPoint {
         const val MOVIE_CREDITS_URL = "movie/{$PATH_MOVIE_ID}/credits"
         const val MOVIE_RECOMMENDATION_URL = "movie/{$PATH_MOVIE_ID}/recommendations"
         const val MOVIE_SIMILAR_URL = "movie/{$PATH_MOVIE_ID}/similar"
-        const val MOVIE_RELATED_MOVIE_URL = "movie/{$PATH_MOVIE_ID}/{$PATH_RELATION_TYPE}"
+        const val RELATED_MOVIE_URL = "movie/{$PATH_MOVIE_ID}/{$PATH_RELATION_TYPE}"
         const val MOVIE_REVIEWS_URL = "movie/{$PATH_MOVIE_ID}/reviews"
         const val GENRES_MOVIE_URL = "genre/movie/list"
         const val POPULAR_MOVIE_URL = "movie/popular"
@@ -144,7 +144,7 @@ class StatusCode {
 @Serializable
 data class ErrorResponse(
     @SerialName("status_code")
-    val statusCode: Int,
+    val statusCode: Int? = null,
     @SerialName("status_message")
-    val message: String
+    val message: String? = null
 )

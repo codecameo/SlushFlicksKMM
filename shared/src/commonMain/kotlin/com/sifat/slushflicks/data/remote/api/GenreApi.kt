@@ -4,7 +4,7 @@ import com.sifat.slushflicks.data.remote.ApiResponse
 import com.sifat.slushflicks.data.remote.model.GenreListApiModel
 
 interface GenreApi {
-    fun getTvGenre(apiKey: String): ApiResponse<GenreListApiModel>
+    suspend fun getTvGenre(): ApiResponse<GenreListApiModel>
 
-    fun getMovieGenre(apiKey: String): ApiResponse<GenreListApiModel>
+    suspend fun getMovieGenre(): ApiResponse<GenreListApiModel>
 }

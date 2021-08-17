@@ -5,7 +5,7 @@ import com.sifat.slushflicks.data.remote.model.MovieListApiModel
 import com.sifat.slushflicks.data.remote.model.TvListApiModel
 
 interface SearchApi {
-    fun getSearchMovies(query: String, apiKey: String, page: Int): ApiResponse<MovieListApiModel>
+    suspend fun getSearchMovies(query: String, page: Int): ApiResponse<MovieListApiModel>
 
-    fun getSearchTvShows(query: String, apiKey: String, page: Int): ApiResponse<TvListApiModel>
+    suspend fun getSearchTvShows(query: String, page: Int): ApiResponse<TvListApiModel>
 }

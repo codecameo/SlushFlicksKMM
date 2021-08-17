@@ -8,22 +8,21 @@ import com.sifat.slushflicks.data.remote.model.TvShowDetailsApiModel
 import com.sifat.slushflicks.data.remote.model.VideoListApiModel
 
 interface TvShowApi {
-    fun getTrendingTvShow(apiKey: String, page: Int): ApiResponse<TvListApiModel>
+    suspend fun getTrendingTvShow(page: Int): ApiResponse<TvListApiModel>
 
-    fun getTvShowList(collection: String, apiKey: String, page: Int): ApiResponse<TvListApiModel>
+    suspend fun getTvShowList(collection: String, page: Int): ApiResponse<TvListApiModel>
 
-    fun getTvShowDetails(tvShowId: Long, apiKey: String): ApiResponse<TvShowDetailsApiModel>
+    suspend fun getTvShowDetails(tvShowId: Long): ApiResponse<TvShowDetailsApiModel>
 
-    fun getTvShowCredits(tvShowId: Long, apiKey: String): ApiResponse<CreditsApiModel>
+    suspend fun getTvShowCredits(tvShowId: Long): ApiResponse<CreditsApiModel>
 
-    fun getTvShowVideos(tvShowId: Long, season: Int, apiKey: String): ApiResponse<VideoListApiModel>
+    suspend fun getTvShowVideos(tvShowId: Long, season: Int): ApiResponse<VideoListApiModel>
 
-    fun getTvShowReviews(tvShowId: Long, apiKey: String, page: Int): ApiResponse<ReviewListApiModel>
+    suspend fun getTvShowReviews(tvShowId: Long, page: Int): ApiResponse<ReviewListApiModel>
 
-    fun getRelatedTvShows(
+    suspend fun getRelatedTvShows(
         tvShowId: Long,
         relation: String,
-        apiKey: String,
         page: Int
     ): ApiResponse<TvListApiModel>
 }

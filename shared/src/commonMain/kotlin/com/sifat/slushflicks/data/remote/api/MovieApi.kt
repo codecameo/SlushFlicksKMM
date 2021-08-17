@@ -8,18 +8,18 @@ import com.sifat.slushflicks.data.remote.model.ReviewListApiModel
 import com.sifat.slushflicks.data.remote.model.VideoListApiModel
 
 interface MovieApi {
-    fun getMoviesList(collection: String, apiKey: String, page: Int): ApiResponse<MovieListApiModel>
+    suspend fun getTrendingMovies(page: Int): ApiResponse<MovieListApiModel>
 
-    fun getTrendingMovies(apiKey: String, page: Int): ApiResponse<MovieListApiModel>
+    suspend fun getMoviesList(collection: String, page: Int): ApiResponse<MovieListApiModel>
 
-    fun getMovieDetails(movieId: Long, apiKey: String): ApiResponse<MovieDetailsApiModel>
+    suspend fun getMovieDetails(movieId: Long): ApiResponse<MovieDetailsApiModel>
 
-    fun getMovieVideos(movieId: Long, apiKey: String): ApiResponse<VideoListApiModel>
+    suspend fun getMovieVideos(movieId: Long): ApiResponse<VideoListApiModel>
 
-    fun getMovieCredits(movieId: Long, apiKey: String): ApiResponse<CreditsApiModel>
+    suspend fun getMovieCredits(movieId: Long): ApiResponse<CreditsApiModel>
 
-    fun getMovieReviews(movieId: Long, apiKey: String, page: Int): ApiResponse<ReviewListApiModel>
+    suspend fun getMovieReviews(movieId: Long, page: Int): ApiResponse<ReviewListApiModel>
 
-    fun getRelatedMovies(movieId: Long, relation: String, apiKey: String, page: Int):
+    suspend fun getRelatedMovies(movieId: Long, relation: String, page: Int):
         ApiResponse<MovieListApiModel>
 }
