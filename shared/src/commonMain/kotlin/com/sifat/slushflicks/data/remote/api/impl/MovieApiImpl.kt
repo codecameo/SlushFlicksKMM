@@ -1,12 +1,12 @@
 package com.sifat.slushflicks.data.remote.api.impl
 
 import com.sifat.slushflicks.data.remote.ApiEndPoint
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_COLLECTION_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_CREDITS_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_DETAILS_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_REVIEWS_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_VIDEOS_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TRENDING_MOVIE_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_COLLECTION_URL
 import com.sifat.slushflicks.data.remote.ApiErrorParser
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_API_KEY
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_PAGE
@@ -47,7 +47,7 @@ class MovieApiImpl(
     ): ApiResponse<MovieListApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(TV_SHOW_COLLECTION_URL, collection))
+                path(listOf(MOVIE_COLLECTION_URL, collection))
                 parameters.run {
                     append(QUERY_KEY_API_KEY, apiKey)
                     append(QUERY_KEY_PAGE, page.toString())
