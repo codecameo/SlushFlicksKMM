@@ -26,6 +26,10 @@ dependencies {
 
     implementation(Coil.coilAccompanist)
 
+    implementation(Koin.core)
+    implementation(Koin.android)
+    implementation(Koin.compose)
+
     debugImplementation(SquareUp.leakCanary)
 }
 
