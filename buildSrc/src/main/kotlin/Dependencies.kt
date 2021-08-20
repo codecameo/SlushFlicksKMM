@@ -1,7 +1,7 @@
 object Versions {
     const val dateTime = "0.2.1"
     const val kotlin = "1.5.21"
-    const val gradle = "7.0.0"
+    const val gradle = "7.1.0-alpha03"
     const val kotlinCoroutines = "1.4.3-native-mt"
     const val ktor = "1.5.3"
     const val kotlinxSerialization = "1.1.0"
@@ -102,11 +102,7 @@ object Ktor {
     const val clientSerialization = "io.ktor:ktor-client-serialization:${Versions.ktor}"
 
     const val clientAndroid = "io.ktor:ktor-client-android:${Versions.ktor}"
-    const val clientApache = "io.ktor:ktor-client-apache:${Versions.ktor}"
-    const val slf4j = "org.slf4j:slf4j-simple:${Versions.slf4j}"
     const val clientIos = "io.ktor:ktor-client-ios:${Versions.ktor}"
-    const val clientCio = "io.ktor:ktor-client-cio:${Versions.ktor}"
-    const val clientJs = "io.ktor:ktor-client-js:${Versions.ktor}"
 }
 
 object Coil {

@@ -14,7 +14,7 @@ class SlushFlickApplication : Application(), KoinComponent {
     override fun onCreate() {
         super.onCreate()
 
-        initKoin {
+        initKoin(enableNetworkLogs = BuildConfig.DEBUG) {
             androidLogger()
             androidContext(this@SlushFlickApplication)
             // modules(appModule)

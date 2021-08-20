@@ -96,3 +96,10 @@ android {
         targetSdk = AndroidSdk.target
     }
 }
+
+sqldelight {
+    database("SlushFlickDb") {
+        packageName = "com.sifat.slushflicks.data.cache"
+        sourceFolders = listOf("sqldelight")
+    }
+}

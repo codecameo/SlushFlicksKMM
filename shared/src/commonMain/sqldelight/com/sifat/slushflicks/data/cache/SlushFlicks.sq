@@ -1,0 +1,268 @@
+import com.sifat.slushflicks.data.cache.column.CastColumn;
+import com.sifat.slushflicks.data.cache.column.EpisodeColumn;
+import com.sifat.slushflicks.data.cache.column.GenreColumn;
+import com.sifat.slushflicks.data.cache.column.SeasonColumn;
+import kotlin.collections.List;
+
+CREATE TABLE GenreEntity(
+id INTEGER NOT NULL PRIMARY KEY,
+name TEXT NOT NULL
+);
+
+CREATE TABLE MovieCollectionEntity(
+id INTEGER NOT NULL,
+collection TEXT NOT NULL,
+position INTEGER AS Int NOT NULL,
+PRIMARY KEY (id, collection),
+FOREIGN KEY (id) REFERENCES MovieEntity(id) ON DELETE CASCADE
+);
+
+CREATE TABLE MovieEntity(
+id INTEGER NOT NULL PRIMARY KEY,
+voteCount INTEGER AS Int NOT NULL,
+voteAvg REAL NOT NULL,
+title TEXT NOT NULL,
+releaseData TEXT NOT NULL,
+backdropPath TEXT NOT NULL,
+overview TEXT NOT NULL,
+posterPath TEXT NOT NULL,
+status TEXT NOT NULL,
+tagline TEXT NOT NULL,
+video TEXT NOT NULL,
+popularity REAL NOT NULL,
+budget INTEGER NOT NULL,
+revenue INTEGER NOT NULL,
+runtime INTEGER AS Int NOT NULL,
+genres TEXT AS List<GenreColumn> NOT NULL,
+casts TEXT AS List<CastColumn> NOT NULL
+);
+
+CREATE TABLE TvCollectionEntity(
+id INTEGER NOT NULL,
+collection TEXT NOT NULL,
+position INTEGER AS Int NOT NULL,
+PRIMARY KEY (id, collection),
+FOREIGN KEY (id) REFERENCES TvShowEntity(id) ON DELETE CASCADE
+);
+
+CREATE TABLE TvShowEntity(
+id INTEGER NOT NULL PRIMARY KEY,
+voteCount INTEGER AS Int NOT NULL,
+voteAvg REAL NOT NULL,
+title TEXT NOT NULL,
+releaseData TEXT NOT NULL,
+backdropPath TEXT NOT NULL,
+overview TEXT NOT NULL,
+posterPath TEXT NOT NULL,
+status TEXT NOT NULL,
+video TEXT NOT NULL,
+popularity REAL NOT NULL,
+runtime INTEGER AS Int NOT NULL,
+directors TEXT NOT NULL,
+numOfEpisode INTEGER AS Int NOT NULL,
+numOfSeason INTEGER AS Int NOT NULL,
+genres TEXT AS List<GenreColumn> NOT NULL,
+casts TEXT AS List<CastColumn> NOT NULL,
+nextEpisode TEXT AS EpisodeColumn,
+lastEpisode TEXT AS EpisodeColumn,
+seasons TEXT AS List<SeasonColumn>
+);
+
+insertGenre:
+INSERT OR REPLACE INTO GenreEntity(id, name) VALUES(:id,:name);
+
+selectAllGenre:
+SELECT * FROM GenreEntity;
+
+deleteAllGenre:
+DELETE FROM GenreEntity;
+
+insertMovieCollection:
+INSERT OR REPLACE INTO MovieCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+
+selectAllMovieCollection:
+SELECT * FROM MovieCollectionEntity;
+
+deleteAllMovieCollection:
+DELETE FROM MovieCollectionEntity;
+
+deleteMovieCollection:
+DELETE FROM MovieCollectionEntity WHERE collection = :label;
+
+resetMovieCollection {
+DELETE FROM MovieCollectionEntity;
+INSERT OR REPLACE INTO MovieCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+}
+
+insertTvCollection:
+INSERT OR REPLACE INTO TvCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+
+selectAllTvCollection:
+SELECT * FROM TvCollectionEntity;
+
+deleteAllTvCollection:
+DELETE FROM TvCollectionEntity;
+
+deleteTvCollection:
+DELETE FROM TvCollectionEntity WHERE collection = :label;
+
+resetTvCollection {
+DELETE FROM TvCollectionEntity;
+INSERT OR REPLACE INTO TvCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+}
+
+-- MovieEntity
+insertMovie:
+INSERT OR REPLACE INTO MovieEntity(id, voteCount,voteAvg,title,releaseData,backdropPath,overview,posterPath,status,tagline,video,popularity,budget,revenue,runtime,genres,casts)
+VALUES(:id,
+:voteCount,
+:voteAvg,
+:title,
+:releaseData,
+:backdropPath,
+:overview,
+:posterPath,
+:status,:tagline,
+:video,
+:popularity,
+:budget,
+:revenue,
+:runtime,
+:genres,
+:casts);
+
+selectMovieList:
+SELECT MovieEntity.id, title, overview, voteAvg, backdropPath, genres FROM MovieEntity INNER JOIN MovieCollectionEntity
+        ON MovieEntity.id = MovieCollectionEntity.id
+        WHERE MovieCollectionEntity.collection= :collection
+        ORDER BY MovieCollectionEntity.position
+        LIMIT :pageSize OFFSET :offset;
+
+selectMovie:
+SELECT * FROM MovieEntity WHERE id = :movieId;
+
+selectMovieId:
+SELECT id FROM MovieEntity WHERE id = :movieId;
+
+updateMovieVideo:
+UPDATE MovieEntity SET video = :key WHERE id = :movieId;
+
+updateMovieCasts:
+UPDATE MovieEntity SET casts = :cast WHERE id = :movieId;
+
+updateMovie:
+UPDATE MovieEntity
+    SET voteCount = :voteCount, voteAvg = :voteAvg, releaseData = :releaseData,
+    popularity = :popularity, genres = :genres, budget = :budget, revenue = :revenue,
+    runtime = :runtime, status = :status, tagline = :tagline
+    WHERE id = :id;
+
+upsertMovie {
+UPDATE MovieEntity
+    SET voteCount = :voteCount, voteAvg = :voteAvg, releaseData = :releaseData,
+    popularity = :popularity, genres = :genres, budget = :budget, revenue = :revenue,
+    runtime = :runtime, status = :status, tagline = :tagline
+    WHERE id = :id;
+
+INSERT OR IGNORE INTO MovieEntity(id, voteCount,voteAvg,title,releaseData,backdropPath,overview,posterPath,status,tagline,video,popularity,budget,revenue,runtime,genres,casts)
+VALUES(:id,
+:voteCount,
+:voteAvg,
+:title,
+:releaseData,
+:backdropPath,
+:overview,
+:posterPath,
+:status,:tagline,
+:video,
+:popularity,
+:budget,
+:revenue,
+:runtime,
+:genres,
+:casts);
+}
+
+--TvShowEntity
+insertTvShow:
+INSERT OR REPLACE INTO TvShowEntity(id,voteCount,voteAvg,title,releaseData,backdropPath,overview,
+posterPath,status,video,popularity,runtime,directors,numOfEpisode,numOfSeason,genres,casts,nextEpisode,lastEpisode,seasons)
+VALUES(:id,
+:voteCount,
+:voteAvg,
+:title,
+:releaseData,
+:backdropPath,
+:overview,
+:posterPath,
+:status,
+:video,
+:popularity,
+:runtime,
+:directors,
+:numOfEpisode,
+:numOfSeason,
+:genres,
+:casts,
+:nextEpisode,
+:lastEpisode,
+:seasons);
+
+selectTvShowList:
+SELECT TvShowEntity.id, title, overview, voteAvg, backdropPath, genres
+        FROM TvShowEntity INNER JOIN TvCollectionEntity
+        ON TvShowEntity.id = TvCollectionEntity.id
+        WHERE TvCollectionEntity.collection= :collection
+        ORDER BY TvCollectionEntity.position;
+
+selectTvShow:
+SELECT * FROM TvShowEntity WHERE id = :tvShowId;
+
+selectTvShowId:
+SELECT id FROM TvShowEntity WHERE id = :tvShowId;
+
+updateTvShowVideo:
+UPDATE TvShowEntity SET video = :key WHERE id = :tvShowId;
+
+updateTvShowCasts:
+UPDATE TvShowEntity SET casts = :cast WHERE id = :tvShowId;
+
+updateTvShow:
+UPDATE TvShowEntity
+    SET voteCount = :voteCount, voteAvg = :voteAvg, releaseData = :releaseData,
+    popularity = :popularity, genres = :genres, runtime = :runtime, status = :status,
+    nextEpisode = :nextEpisode, lastEpisode = :lastEpisode, seasons = :seasons,
+    numOfEpisode = :numOfEpisode, numOfSeason = :numOfSeason, directors = :directors
+    WHERE id = :id;
+
+upsertTvShow {
+UPDATE TvShowEntity
+    SET voteCount = :voteCount, voteAvg = :voteAvg, releaseData = :releaseData,
+    popularity = :popularity, genres = :genres, runtime = :runtime, status = :status,
+    nextEpisode = :nextEpisode, lastEpisode = :lastEpisode, seasons = :seasons,
+    numOfEpisode = :numOfEpisode, numOfSeason = :numOfSeason, directors = :directors
+    WHERE id = :id;
+
+INSERT OR IGNORE INTO TvShowEntity(id,voteCount,voteAvg,title,releaseData,backdropPath,overview,
+posterPath,status,video,popularity,runtime,directors,numOfEpisode,numOfSeason,genres,casts,nextEpisode,lastEpisode,seasons)
+VALUES(:id,
+:voteCount,
+:voteAvg,
+:title,
+:releaseData,
+:backdropPath,
+:overview,
+:posterPath,
+:status,
+:video,
+:popularity,
+:runtime,
+:directors,
+:numOfEpisode,
+:numOfSeason,
+:genres,
+:casts,
+:nextEpisode,
+:lastEpisode,
+:seasons);
+}
