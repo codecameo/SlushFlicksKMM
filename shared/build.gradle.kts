@@ -52,6 +52,11 @@ kotlin {
                 implementation(SqlDelight.runtime)
                 implementation(SqlDelight.coroutineExtensions)
 
+                // Firestore
+                // implementation(Firebase.analytics)
+                // implementation(Firebase.crashlytics)
+                // implementation(Firebase.dynamicLink)
+
                 // koin
                 api(Koin.core)
                 api(Koin.test)
@@ -70,6 +75,9 @@ kotlin {
             dependencies {
                 implementation(Ktor.clientAndroid)
                 implementation(SqlDelight.androidDriver)
+                implementation(Firebase.firestore)
+                implementation(Grpc.grpc)
+                // implementation("com.google.firebase:firebase-bom:28.4.0")
             }
         }
         val androidTest by getting {

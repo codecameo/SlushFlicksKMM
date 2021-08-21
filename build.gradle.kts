@@ -8,6 +8,7 @@ buildscript {
         classpath(ClassPath.kotlinPlugin)
         classpath(ClassPath.buildTool)
         classpath(ClassPath.sqlDelight)
+        classpath(ClassPath.googleServices)
     }
 }
 

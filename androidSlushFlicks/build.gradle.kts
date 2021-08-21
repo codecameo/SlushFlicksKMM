@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
     kotlin("android")
 }
 
@@ -29,6 +30,7 @@ dependencies {
     implementation(Koin.core)
     implementation(Koin.android)
     implementation(Koin.compose)
+    // implementation("com.google.firebase:firebase-common-ktx:19.5.0")
 
     debugImplementation(SquareUp.leakCanary)
 }

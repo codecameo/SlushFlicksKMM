@@ -6,6 +6,10 @@ import com.sifat.slushflicks.data.cache.DB_NAME
 import com.sifat.slushflicks.data.cache.MovieEntity
 import com.sifat.slushflicks.data.cache.SlushFlickDb
 import com.sifat.slushflicks.data.cache.TvShowEntity
+import com.sifat.slushflicks.data.cache.manager.DatabaseManager
+import com.sifat.slushflicks.data.cache.manager.SessionDataManager
+import com.sifat.slushflicks.data.cache.manager.impl.DatabaseManagerImpl
+import com.sifat.slushflicks.data.cache.manager.impl.SessionDataManagerImpl
 import com.sifat.slushflicks.data.remote.API_KEY
 import com.sifat.slushflicks.di.DiConstants.API_KEY_NAME
 import com.sifat.slushflicks.di.DiConstants.DATABASE_NAME
@@ -18,6 +22,8 @@ fun appModule() = module {
     single(named(name = API_KEY_NAME)) { API_KEY }
     single(named(name = DATABASE_NAME)) { DB_NAME }
     single { ColumnTypeAdapter(get()) }
+    single<DatabaseManager> { DatabaseManagerImpl(get()) }
+    single<SessionDataManager> { SessionDataManagerImpl() }
     single {
         val adapter = get<ColumnTypeAdapter>()
         SlushFlickDb(
@@ -33,6 +39,6 @@ fun appModule() = module {
                 lastEpisodeAdapter = adapter.episodeAdapter,
                 nextEpisodeAdapter = adapter.episodeAdapter
             )
-        )
+        ).slushFlicksQueries
     }
 }

@@ -12,7 +12,6 @@ name TEXT NOT NULL
 CREATE TABLE MovieCollectionEntity(
 id INTEGER NOT NULL,
 collection TEXT NOT NULL,
-position INTEGER AS Int NOT NULL,
 PRIMARY KEY (id, collection),
 FOREIGN KEY (id) REFERENCES MovieEntity(id) ON DELETE CASCADE
 );
@@ -40,7 +39,6 @@ casts TEXT AS List<CastColumn> NOT NULL
 CREATE TABLE TvCollectionEntity(
 id INTEGER NOT NULL,
 collection TEXT NOT NULL,
-position INTEGER AS Int NOT NULL,
 PRIMARY KEY (id, collection),
 FOREIGN KEY (id) REFERENCES TvShowEntity(id) ON DELETE CASCADE
 );
@@ -77,8 +75,11 @@ SELECT * FROM GenreEntity;
 deleteAllGenre:
 DELETE FROM GenreEntity;
 
-insertMovieCollection:
-INSERT OR REPLACE INTO MovieCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+insertReplaceMovieCollection:
+INSERT OR REPLACE INTO MovieCollectionEntity(id, collection) VALUES(:id,:collection);
+
+insertIgnoreMovieCollection:
+INSERT OR IGNORE INTO MovieCollectionEntity(id, collection) VALUES(:id,:collection);
 
 selectAllMovieCollection:
 SELECT * FROM MovieCollectionEntity;
@@ -91,11 +92,14 @@ DELETE FROM MovieCollectionEntity WHERE collection = :label;
 
 resetMovieCollection {
 DELETE FROM MovieCollectionEntity;
-INSERT OR REPLACE INTO MovieCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+INSERT OR REPLACE INTO MovieCollectionEntity(id, collection) VALUES(:id,:collection);
 }
 
-insertTvCollection:
-INSERT OR REPLACE INTO TvCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+insertReplaceTvCollection:
+INSERT OR REPLACE INTO TvCollectionEntity(id, collection) VALUES(:id,:collection);
+
+insertIgnoreTvCollection:
+INSERT OR IGNORE INTO TvCollectionEntity(id, collection) VALUES(:id,:collection);
 
 selectAllTvCollection:
 SELECT * FROM TvCollectionEntity;
@@ -108,11 +112,11 @@ DELETE FROM TvCollectionEntity WHERE collection = :label;
 
 resetTvCollection {
 DELETE FROM TvCollectionEntity;
-INSERT OR REPLACE INTO TvCollectionEntity(id, collection, position) VALUES(:id,:collection,:position);
+INSERT OR REPLACE INTO TvCollectionEntity(id, collection) VALUES(:id,:collection);
 }
 
 -- MovieEntity
-insertMovie:
+insertMovieReplace:
 INSERT OR REPLACE INTO MovieEntity(id, voteCount,voteAvg,title,releaseData,backdropPath,overview,posterPath,status,tagline,video,popularity,budget,revenue,runtime,genres,casts)
 VALUES(:id,
 :voteCount,
@@ -131,12 +135,35 @@ VALUES(:id,
 :genres,
 :casts);
 
-selectMovieList:
+insertMovieIgnore:
+INSERT OR IGNORE INTO MovieEntity(id, voteCount,voteAvg,title,releaseData,backdropPath,overview,posterPath,status,tagline,video,popularity,budget,revenue,runtime,genres,casts)
+VALUES(:id,
+:voteCount,
+:voteAvg,
+:title,
+:releaseData,
+:backdropPath,
+:overview,
+:posterPath,
+:status,:tagline,
+:video,
+:popularity,
+:budget,
+:revenue,
+:runtime,
+:genres,
+:casts);
+
+selectPagedMovieList:
 SELECT MovieEntity.id, title, overview, voteAvg, backdropPath, genres FROM MovieEntity INNER JOIN MovieCollectionEntity
         ON MovieEntity.id = MovieCollectionEntity.id
         WHERE MovieCollectionEntity.collection= :collection
-        ORDER BY MovieCollectionEntity.position
         LIMIT :pageSize OFFSET :offset;
+
+selectMovieList:
+SELECT MovieEntity.id, title, overview, voteAvg, backdropPath, genres FROM MovieEntity INNER JOIN MovieCollectionEntity
+        ON MovieEntity.id = MovieCollectionEntity.id
+        WHERE MovieCollectionEntity.collection= :collection;
 
 selectMovie:
 SELECT * FROM MovieEntity WHERE id = :movieId;
@@ -184,7 +211,7 @@ VALUES(:id,
 }
 
 --TvShowEntity
-insertTvShow:
+insertTvShowReplace:
 INSERT OR REPLACE INTO TvShowEntity(id,voteCount,voteAvg,title,releaseData,backdropPath,overview,
 posterPath,status,video,popularity,runtime,directors,numOfEpisode,numOfSeason,genres,casts,nextEpisode,lastEpisode,seasons)
 VALUES(:id,
@@ -208,12 +235,43 @@ VALUES(:id,
 :lastEpisode,
 :seasons);
 
+insertTvShowIgnore:
+INSERT OR IGNORE INTO TvShowEntity(id,voteCount,voteAvg,title,releaseData,backdropPath,overview,
+posterPath,status,video,popularity,runtime,directors,numOfEpisode,numOfSeason,genres,casts,nextEpisode,lastEpisode,seasons)
+VALUES(:id,
+:voteCount,
+:voteAvg,
+:title,
+:releaseData,
+:backdropPath,
+:overview,
+:posterPath,
+:status,
+:video,
+:popularity,
+:runtime,
+:directors,
+:numOfEpisode,
+:numOfSeason,
+:genres,
+:casts,
+:nextEpisode,
+:lastEpisode,
+:seasons);
+
+
+selectPagedTvShowList:
+SELECT TvShowEntity.id, title, overview, voteAvg, backdropPath, genres
+    FROM TvShowEntity INNER JOIN TvCollectionEntity
+    ON TvShowEntity.id = TvCollectionEntity.id
+    WHERE TvCollectionEntity.collection= :collection
+    LIMIT :pageSize OFFSET :offset;
+
 selectTvShowList:
 SELECT TvShowEntity.id, title, overview, voteAvg, backdropPath, genres
-        FROM TvShowEntity INNER JOIN TvCollectionEntity
-        ON TvShowEntity.id = TvCollectionEntity.id
-        WHERE TvCollectionEntity.collection= :collection
-        ORDER BY TvCollectionEntity.position;
+    FROM TvShowEntity INNER JOIN TvCollectionEntity
+    ON TvShowEntity.id = TvCollectionEntity.id
+    WHERE TvCollectionEntity.collection= :collection;
 
 selectTvShow:
 SELECT * FROM TvShowEntity WHERE id = :tvShowId;

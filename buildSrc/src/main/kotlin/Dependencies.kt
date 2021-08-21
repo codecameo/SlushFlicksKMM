@@ -12,16 +12,26 @@ object Versions {
     const val slf4j = "1.7.30"
     const val compose = "1.0.1"
     const val nav_compose = "1.0.0-alpha10"
-    const val constraint_compose = "1.0.0-beta02"
-    const val activity_compose = "1.3.1"
+    const val constraintCompose = "1.0.0-beta02"
+    const val activityCompose = "1.3.1"
 
     const val junit = "4.13"
     const val testRunner = "1.3.0"
     const val material = "1.3.0"
     const val appCompact = "1.3.0"
     const val coil = "0.8.1"
-    const val accompanist_coil = "0.15.0"
+    const val accompanistCoil = "0.15.0"
     const val leakCanaryVersion = "2.7"
+
+    const val analytics = "17.4.1"
+    const val crashlytics = "17.0.0"
+    const val firestore = "23.0.3"
+    const val dynamicLinks = "19.1.0"
+
+    const val googleServices = "4.3.10"
+
+    const val firebaseBom = "28.4.0"
+    const val grpc = "1.40.0"
 }
 
 object Application {
@@ -40,6 +50,7 @@ object ClassPath {
     const val sqlDelight = "com.squareup.sqldelight:gradle-plugin:${Versions.sqlDelight}"
     const val buildTool = "com.android.tools.build:gradle:${Versions.gradle}"
     const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    const val googleServices = "com.google.gms:google-services:${Versions.googleServices}"
 }
 
 object Plugin {
@@ -84,8 +95,8 @@ object Compose {
     const val runtimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
     const val compiler = "androidx.compose.compiler:compiler:${Versions.compose}"
     const val constraintLayout =
-        "androidx.constraintlayout:constraintlayout-compose:${Versions.constraint_compose}"
-    const val activity = "androidx.activity:activity-compose:${Versions.activity_compose}"
+        "androidx.constraintlayout:constraintlayout-compose:${Versions.constraintCompose}"
+    const val activity = "androidx.activity:activity-compose:${Versions.activityCompose}"
 }
 
 object Koin {
@@ -107,12 +118,24 @@ object Ktor {
 
 object Coil {
     const val coilAccompanist =
-        "com.google.accompanist:accompanist-coil:${Versions.accompanist_coil}"
+        "com.google.accompanist:accompanist-coil:${Versions.accompanistCoil}"
+}
+
+object Grpc {
+    const val grpc = "io.grpc:grpc-okhttp:${Versions.grpc}"
 }
 
 object Serialization {
     const val core =
         "org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.kotlinxSerialization}"
+}
+
+object Firebase {
+    const val analytics = "com.google.firebase:firebase-analytics:${Versions.analytics}"
+    const val crashlytics = "com.google.firebase:firebase-crashlytics:${Versions.crashlytics}"
+    const val firestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firestore}"
+    const val dynamicLink = "com.google.firebase:firebase-dynamic-links:${Versions.dynamicLinks}"
+    const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
 }
 
 object SqlDelight {
