@@ -1,6 +1,8 @@
 package com.sifat.slushflicks.di.modules
 
 import co.touchlab.kermit.Kermit
+import com.sifat.slushflicks.data.broadcaster.Broadcaster
+import com.sifat.slushflicks.data.broadcaster.impl.NetworkStateBroadcaster
 import com.sifat.slushflicks.data.cache.ColumnTypeAdapter
 import com.sifat.slushflicks.data.cache.DB_NAME
 import com.sifat.slushflicks.data.cache.MovieEntity
@@ -10,6 +12,7 @@ import com.sifat.slushflicks.data.cache.manager.DatabaseManager
 import com.sifat.slushflicks.data.cache.manager.SessionDataManager
 import com.sifat.slushflicks.data.cache.manager.impl.DatabaseManagerImpl
 import com.sifat.slushflicks.data.cache.manager.impl.SessionDataManagerImpl
+import com.sifat.slushflicks.data.getAppDispatcher
 import com.sifat.slushflicks.data.remote.API_KEY
 import com.sifat.slushflicks.di.DiConstants.API_KEY_NAME
 import com.sifat.slushflicks.di.DiConstants.DATABASE_NAME
@@ -24,6 +27,8 @@ fun appModule() = module {
     single { ColumnTypeAdapter(get()) }
     single<DatabaseManager> { DatabaseManagerImpl(get()) }
     single<SessionDataManager> { SessionDataManagerImpl() }
+    single { getAppDispatcher() }
+    single<Broadcaster<Boolean>> { NetworkStateBroadcaster(get()) }
     single {
         val adapter = get<ColumnTypeAdapter>()
         SlushFlickDb(

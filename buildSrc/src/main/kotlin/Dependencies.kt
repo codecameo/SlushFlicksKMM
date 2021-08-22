@@ -149,3 +149,8 @@ object SqlDelight {
         "com.squareup.sqldelight:native-driver-macosx64:${Versions.sqlDelight}"
     const val sqlliteDriver = "com.squareup.sqldelight:sqlite-driver:${Versions.sqlDelight}"
 }
+
+object Coroutine {
+    const val coroutineCore =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}"
+}

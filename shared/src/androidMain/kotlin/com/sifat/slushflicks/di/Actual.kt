@@ -8,6 +8,8 @@ import com.google.firebase.ktx.Firebase
 import com.sifat.slushflicks.data.cache.SlushFlickDb
 import com.sifat.slushflicks.data.cache.manager.FireStoreManager
 import com.sifat.slushflicks.data.cache.manager.FireStoreManagerImpl
+import com.sifat.slushflicks.data.manager.NetworkStateManager
+import com.sifat.slushflicks.data.manager.NetworkStateManagerImpl
 import com.sifat.slushflicks.di.DiConstants.DATABASE_NAME
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
@@ -22,6 +24,8 @@ actual fun platformModule() = module {
     single<SqlDriver> {
         AndroidSqliteDriver(SlushFlickDb.Schema, get(), get(named(name = DATABASE_NAME)))
     }
+
+    single<NetworkStateManager> { NetworkStateManagerImpl(get(), get()) }
 
     single {
         val fireStore = Firebase.firestore

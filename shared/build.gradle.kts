@@ -33,9 +33,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 // Coroutines
-                /*implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}") {
-                    isForce = true
-                }*/
+                implementation(Coroutine.coroutineCore)
 
                 implementation(Deps.datetime)
 
