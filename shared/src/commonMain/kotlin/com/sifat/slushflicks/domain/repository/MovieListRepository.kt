@@ -4,7 +4,5 @@ import com.sifat.slushflicks.data.cache.model.ShowEntity
 import com.sifat.slushflicks.data.state.DataState
 
 interface MovieListRepository {
-    val collection: String
-
-    fun getMovieList(nextPage: Int): DataState<List<ShowEntity>>
+    suspend fun getMovieList(collection: String, page: Int): DataState<List<ShowEntity>>
 }

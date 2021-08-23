@@ -34,15 +34,15 @@ class DatabaseManagerImpl(
         slushFlicksQueries.run {
             transaction {
                 deleteMovieCollection(collection)
-                for ((id, _) in collectionModels) {
-                    insertReplaceMovieCollection(id, collection)
+                for ((id, _, position) in collectionModels) {
+                    insertReplaceMovieCollection(id, collection, position)
                 }
             }
         }
     }
 
     override suspend fun insertNewMovieCollection(movie: MovieCollectionEntity) {
-        slushFlicksQueries.insertReplaceMovieCollection(movie.id, movie.collection)
+        slushFlicksQueries.insertReplaceMovieCollection(movie.id, movie.collection, movie.position)
     }
 
     override suspend fun insertNewTvCollection(
@@ -52,15 +52,15 @@ class DatabaseManagerImpl(
         slushFlicksQueries.run {
             transaction {
                 deleteTvCollection(collection)
-                for ((id, _) in collectionModels) {
-                    insertReplaceTvCollection(id, collection)
+                for ((id, _, position) in collectionModels) {
+                    insertReplaceTvCollection(id, collection, position)
                 }
             }
         }
     }
 
     override suspend fun insertNewTvCollection(tvShow: TvCollectionEntity) {
-        slushFlicksQueries.insertReplaceTvCollection(tvShow.id, tvShow.collection)
+        slushFlicksQueries.insertReplaceTvCollection(tvShow.id, tvShow.collection, tvShow.position)
     }
 
     override suspend fun softInsertMovie(movies: List<MovieEntity>) {
@@ -122,13 +122,13 @@ class DatabaseManagerImpl(
 
     override suspend fun addMovieCollection(collectionModels: List<MovieCollectionEntity>) {
         collectionModels.forEach {
-            slushFlicksQueries.insertReplaceTvCollection(it.id, it.collection)
+            slushFlicksQueries.insertReplaceTvCollection(it.id, it.collection, it.position)
         }
     }
 
     override suspend fun addTvCollection(collectionModels: List<TvCollectionEntity>) {
         collectionModels.forEach {
-            slushFlicksQueries.insertReplaceTvCollection(it.id, it.collection)
+            slushFlicksQueries.insertReplaceTvCollection(it.id, it.collection, it.position)
         }
     }
 

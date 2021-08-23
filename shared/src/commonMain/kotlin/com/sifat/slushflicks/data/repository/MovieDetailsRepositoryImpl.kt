@@ -2,13 +2,17 @@ package com.sifat.slushflicks.data.repository
 
 import com.sifat.slushflicks.data.cache.MovieEntity
 import com.sifat.slushflicks.data.cache.column.CastColumn
+import com.sifat.slushflicks.data.cache.manager.LocalDataManager
 import com.sifat.slushflicks.data.cache.model.ShowEntity
 import com.sifat.slushflicks.data.manager.NetworkStateManager
+import com.sifat.slushflicks.data.remote.api.MovieApi
 import com.sifat.slushflicks.data.remote.model.ReviewApiModel
 import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.repository.MovieDetailsRepository
 
 class MovieDetailsRepositoryImpl(
+    private val movieApi: MovieApi,
+    private val localDataManager: LocalDataManager,
     networkStateManager: NetworkStateManager
 ) : BaseRepository(networkStateManager), MovieDetailsRepository {
     override fun getMovieDetails(movieId: Long): DataState<MovieEntity> {

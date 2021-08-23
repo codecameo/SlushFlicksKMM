@@ -12,6 +12,7 @@ name TEXT NOT NULL
 CREATE TABLE MovieCollectionEntity(
 id INTEGER NOT NULL,
 collection TEXT NOT NULL,
+position INTEGER AS Int NOT NULL,
 PRIMARY KEY (id, collection),
 FOREIGN KEY (id) REFERENCES MovieEntity(id) ON DELETE CASCADE
 );
@@ -39,6 +40,7 @@ casts TEXT AS List<CastColumn> NOT NULL
 CREATE TABLE TvCollectionEntity(
 id INTEGER NOT NULL,
 collection TEXT NOT NULL,
+position INTEGER AS Int NOT NULL,
 PRIMARY KEY (id, collection),
 FOREIGN KEY (id) REFERENCES TvShowEntity(id) ON DELETE CASCADE
 );
@@ -76,10 +78,10 @@ deleteAllGenre:
 DELETE FROM GenreEntity;
 
 insertReplaceMovieCollection:
-INSERT OR REPLACE INTO MovieCollectionEntity(id, collection) VALUES(:id,:collection);
+INSERT OR REPLACE INTO MovieCollectionEntity(id, collection, position) VALUES(:id,:collection, :position);
 
 insertIgnoreMovieCollection:
-INSERT OR IGNORE INTO MovieCollectionEntity(id, collection) VALUES(:id,:collection);
+INSERT OR IGNORE INTO MovieCollectionEntity(id, collection, position) VALUES(:id,:collection, :position);
 
 selectAllMovieCollection:
 SELECT * FROM MovieCollectionEntity;
@@ -92,14 +94,14 @@ DELETE FROM MovieCollectionEntity WHERE collection = :label;
 
 resetMovieCollection {
 DELETE FROM MovieCollectionEntity;
-INSERT OR REPLACE INTO MovieCollectionEntity(id, collection) VALUES(:id,:collection);
+INSERT OR REPLACE INTO MovieCollectionEntity(id, collection,position) VALUES(:id,:collection,:position);
 }
 
 insertReplaceTvCollection:
-INSERT OR REPLACE INTO TvCollectionEntity(id, collection) VALUES(:id,:collection);
+INSERT OR REPLACE INTO TvCollectionEntity(id, collection,position) VALUES(:id,:collection,:position);
 
 insertIgnoreTvCollection:
-INSERT OR IGNORE INTO TvCollectionEntity(id, collection) VALUES(:id,:collection);
+INSERT OR IGNORE INTO TvCollectionEntity(id, collection,position) VALUES(:id,:collection,:position);
 
 selectAllTvCollection:
 SELECT * FROM TvCollectionEntity;
@@ -112,7 +114,7 @@ DELETE FROM TvCollectionEntity WHERE collection = :label;
 
 resetTvCollection {
 DELETE FROM TvCollectionEntity;
-INSERT OR REPLACE INTO TvCollectionEntity(id, collection) VALUES(:id,:collection);
+INSERT OR REPLACE INTO TvCollectionEntity(id, collection,position) VALUES(:id,:collection,:position);
 }
 
 -- MovieEntity

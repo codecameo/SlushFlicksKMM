@@ -26,7 +26,8 @@ class SearchRepositoryImpl(
                 SearchResult(
                     query = query,
                     page = page,
-                    result = it?.results?.map { it.toEntity() } ?: emptyList()
+                    result = it?.results?.map { it.toEntity(localDataManager.getGenres()) }
+                        ?: emptyList()
                 )
             }
         }
@@ -41,7 +42,8 @@ class SearchRepositoryImpl(
                 SearchResult(
                     query = query,
                     page = page,
-                    result = it?.results?.map { it.toEntity() } ?: emptyList()
+                    result = it?.results?.map { it.toEntity(localDataManager.getGenres()) }
+                        ?: emptyList()
                 )
             }
         }

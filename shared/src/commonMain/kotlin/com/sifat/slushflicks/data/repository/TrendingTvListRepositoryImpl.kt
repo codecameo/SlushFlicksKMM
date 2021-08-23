@@ -10,14 +10,14 @@ import com.sifat.slushflicks.data.remote.api.TvShowApi
 import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.repository.TvListRepository
 
-class TvListRepositoryImpl(
+class TrendingTvListRepositoryImpl(
     private val tvShowApi: TvShowApi,
     private val localDataManager: LocalDataManager,
     networkStateManager: NetworkStateManager
 ) : BaseRepository(networkStateManager), TvListRepository {
     override suspend fun getTvList(collection: String, page: Int): DataState<List<ShowEntity>> {
         return execute {
-            getDataState(tvShowApi.getTvShowList(collection, page)) {
+            getDataState(tvShowApi.getTrendingTvShow(page)) {
                 it?.results?.map { it.toEntity(localDataManager.getGenres()) } ?: emptyList()
             }.also {
                 (it as? DataState.Success)?.data?.let { data ->
