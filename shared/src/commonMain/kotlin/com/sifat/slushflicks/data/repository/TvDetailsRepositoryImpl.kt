@@ -2,11 +2,14 @@ package com.sifat.slushflicks.data.repository
 
 import com.sifat.slushflicks.data.cache.TvShowEntity
 import com.sifat.slushflicks.data.cache.model.ShowEntity
+import com.sifat.slushflicks.data.manager.NetworkStateManager
 import com.sifat.slushflicks.data.remote.model.ReviewApiModel
 import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.repository.TvDetailsRepository
 
-class TvDetailsRepositoryImpl : TvDetailsRepository {
+class TvDetailsRepositoryImpl(
+    networkStateManager: NetworkStateManager
+) : BaseRepository(networkStateManager), TvDetailsRepository {
     override fun getTvShowDetails(tvShowId: Long): DataState<TvShowEntity> {
         TODO("Not yet implemented")
     }

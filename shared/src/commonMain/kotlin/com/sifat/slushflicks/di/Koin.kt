@@ -2,7 +2,9 @@ package com.sifat.slushflicks.di
 
 import com.sifat.slushflicks.di.modules.apiModule
 import com.sifat.slushflicks.di.modules.appModule
+import com.sifat.slushflicks.di.modules.dataModule
 import com.sifat.slushflicks.di.modules.networkModule
+import com.sifat.slushflicks.di.modules.repositoryModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.core.context.startKoin
@@ -17,6 +19,8 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
             networkModule(enableNetworkLogs = enableNetworkLogs),
             apiModule(),
             appModule(),
+            dataModule(),
+            repositoryModule(),
             platformModule()
         )
     }
