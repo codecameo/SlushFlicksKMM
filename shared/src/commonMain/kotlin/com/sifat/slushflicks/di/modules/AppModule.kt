@@ -9,6 +9,8 @@ import com.sifat.slushflicks.data.cache.MovieEntity
 import com.sifat.slushflicks.data.cache.SlushFlickDb
 import com.sifat.slushflicks.data.cache.TvShowEntity
 import com.sifat.slushflicks.data.getAppDispatcher
+import com.sifat.slushflicks.data.manager.TimeManager
+import com.sifat.slushflicks.data.manager.impl.TimeManagerImpl
 import com.sifat.slushflicks.data.remote.API_KEY
 import com.sifat.slushflicks.di.DiConstants.API_KEY_NAME
 import com.sifat.slushflicks.di.DiConstants.DATABASE_NAME
@@ -23,6 +25,7 @@ fun appModule() = module {
     single { ColumnTypeAdapter(get()) }
     single { getAppDispatcher() }
     single<Broadcaster<Boolean>> { NetworkStateBroadcaster(get()) }
+    single<TimeManager> { TimeManagerImpl() }
     single {
         val adapter = get<ColumnTypeAdapter>()
         SlushFlickDb(

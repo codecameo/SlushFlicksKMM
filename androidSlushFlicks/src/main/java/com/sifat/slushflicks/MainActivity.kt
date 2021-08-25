@@ -10,8 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
-import com.sifat.slushflicks.data.cache.manager.FireStoreManager
 import com.sifat.slushflicks.data.state.DataState
+import com.sifat.slushflicks.domain.repository.MovieDetailsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -20,7 +21,7 @@ fun greet(): String {
 }
 
 class MainActivity : AppCompatActivity() {
-    val firestore by inject<FireStoreManager>()
+    val movieRepo by inject<MovieDetailsRepository>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -31,10 +32,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            firestore.getTvCollections().let {
+        lifecycleScope.launch(Dispatchers.IO) {
+            movieRepo.getMovieDetails(1001).let {
                 when (it) {
-                    is DataState.Success -> println("Movie Type ${it.data}")
+                    is DataState.Success -> println("Movie ${it.data?.title}")
+                    is DataState.Error -> println("Movie Error ${it.errorMessage} ${it.statusCode}")
                 }
             }
         }

@@ -65,7 +65,7 @@ class LocalDataManagerImpl(
         databaseManager.addTvCollection(collectionModels)
     }
 
-    override suspend fun getMovieDetails(movieId: Long): MovieEntity {
+    override suspend fun getMovieDetails(movieId: Long): MovieEntity? {
         return databaseManager.getMovieDetails(movieId)
     }
 
@@ -89,7 +89,7 @@ class LocalDataManagerImpl(
         databaseManager.insertTvShowDetails(tvShow)
     }
 
-    override suspend fun getTvShowDetails(tvShowId: Long): TvShowEntity {
+    override suspend fun getTvShowDetails(tvShowId: Long): TvShowEntity? {
         return databaseManager.getTvShowDetails(tvShowId)
     }
 

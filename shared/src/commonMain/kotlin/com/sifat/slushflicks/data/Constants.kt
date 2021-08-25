@@ -28,3 +28,7 @@ class Label {
         const val TV_LABEL = "tv"
     }
 }
+
+const val YOUTUBE_SITE = "YouTube"
+const val VIDEO_TYPE_TRAILER = "Trailer"
+const val BULLET_SIGN = "\u2022"

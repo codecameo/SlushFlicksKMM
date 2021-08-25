@@ -43,7 +43,7 @@ fun networkModule(enableNetworkLogs: Boolean) = module {
         }
     }
 
-    single<ApiErrorParser> { ApiErrorParserImpl() }
+    single<ApiErrorParser> { ApiErrorParserImpl(get()) }
 
     single {
         HttpClient {

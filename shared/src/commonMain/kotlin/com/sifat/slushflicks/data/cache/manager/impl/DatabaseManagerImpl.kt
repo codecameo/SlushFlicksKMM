@@ -132,8 +132,8 @@ class DatabaseManagerImpl(
         }
     }
 
-    override suspend fun getMovieDetails(movieId: Long): MovieEntity {
-        return slushFlicksQueries.selectMovie(movieId).executeAsOne()
+    override suspend fun getMovieDetails(movieId: Long): MovieEntity? {
+        return slushFlicksQueries.selectMovie(movieId).executeAsOneOrNull()
     }
 
     override suspend fun insertMovieDetails(movie: MovieEntity) {
@@ -213,8 +213,8 @@ class DatabaseManagerImpl(
         )
     }
 
-    override suspend fun getTvShowDetails(tvShowId: Long): TvShowEntity {
-        return slushFlicksQueries.selectTvShow(tvShowId).executeAsOne()
+    override suspend fun getTvShowDetails(tvShowId: Long): TvShowEntity? {
+        return slushFlicksQueries.selectTvShow(tvShowId).executeAsOneOrNull()
     }
 
     override suspend fun updateTvDetails(model: TvShowEntity) {

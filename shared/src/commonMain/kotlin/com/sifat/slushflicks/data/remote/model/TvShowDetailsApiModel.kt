@@ -34,9 +34,9 @@ data class TvShowDetailsApiModel(
     @SerialName("popularity")
     val popularity: Double? = null,
     @SerialName("seasons")
-    val seasonApiModels: List<SeasonApiModel>? = null,
+    val seasons: List<SeasonApiModel>? = null,
     @SerialName("vote_average")
-    val voteAvg: Double? = null,
+    val voteAverage: Double? = null,
     @SerialName("status")
     val status: String? = null,
     @SerialName("vote_count")

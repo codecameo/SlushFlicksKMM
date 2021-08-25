@@ -58,6 +58,6 @@ fun repositoryModule() = module {
             get()
         )
     }
-    factory<MovieDetailsRepository> { MovieDetailsRepositoryImpl(get(), get(), get()) }
-    factory<TvDetailsRepository> { TvDetailsRepositoryImpl(get(), get(), get()) }
+    factory<MovieDetailsRepository> { MovieDetailsRepositoryImpl(get(), get(), get(), get()) }
+    factory<TvDetailsRepository> { TvDetailsRepositoryImpl(get(), get(), get(), get()) }
 }

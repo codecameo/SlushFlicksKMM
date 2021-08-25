@@ -36,7 +36,7 @@ interface DatabaseManager {
 
     suspend fun addTvCollection(collectionModels: List<TvCollectionEntity>)
 
-    suspend fun getMovieDetails(movieId: Long): MovieEntity
+    suspend fun getMovieDetails(movieId: Long): MovieEntity?
 
     suspend fun insertMovieDetails(movie: MovieEntity)
 
@@ -48,7 +48,7 @@ interface DatabaseManager {
 
     suspend fun insertTvShowDetails(tvShow: TvShowEntity)
 
-    suspend fun getTvShowDetails(tvShowId: Long): TvShowEntity
+    suspend fun getTvShowDetails(tvShowId: Long): TvShowEntity?
 
     suspend fun updateTvDetails(model: TvShowEntity)
 

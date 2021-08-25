@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CastApiModel(
     @SerialName("cast_id")
-    val castId: Int? = null,
+    val castId: Long? = null,
     @SerialName("character")
     val character: String? = null,
     @SerialName("name")

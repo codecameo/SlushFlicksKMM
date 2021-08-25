@@ -14,7 +14,7 @@ interface ApiErrorParser {
     ): ApiErrorResponse<Data>
 }
 
-class ApiErrorParserImpl : ApiErrorParser {
+class ApiErrorParserImpl(private val json: Json) : ApiErrorParser {
     override fun <Data> getApiErrorResponse(
         statusCode: Int,
         url: String?,
@@ -25,7 +25,7 @@ class ApiErrorParserImpl : ApiErrorParser {
             errorResponse?.let {
                 ApiErrorResponse(
                     statusCode = statusCode,
-                    errorMessage = Json.decodeFromString<ErrorResponse>(errorResponse).message
+                    errorMessage = json.decodeFromString<ErrorResponse>(errorResponse).message
                         ?: EMPTY_STRING
                 )
             } ?: ApiErrorResponse()

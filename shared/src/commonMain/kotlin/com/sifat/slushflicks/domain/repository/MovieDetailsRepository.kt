@@ -7,11 +7,11 @@ import com.sifat.slushflicks.data.remote.model.ReviewApiModel
 import com.sifat.slushflicks.data.state.DataState
 
 interface MovieDetailsRepository {
-    fun getMovieDetails(movieId: Long): DataState<MovieEntity>
-    fun getMovieVideo(movieId: Long): DataState<String>
-    fun getMovieCast(movieId: Long): DataState<CastColumn>
-    fun getSimilarMovies(movieId: Long): DataState<List<ShowEntity>>
-    fun getRecommendationMovies(movieId: Long): DataState<List<ShowEntity>>
-    fun getReviews(movieId: Long): DataState<List<ReviewApiModel>>
-    fun updateRecentMovie(movieId: Long)
+    suspend fun getMovieDetails(movieId: Long): DataState<MovieEntity>
+    suspend fun getMovieVideo(movieId: Long): DataState<String>
+    suspend fun getMovieCast(movieId: Long): DataState<List<CastColumn>>
+    suspend fun getSimilarMovies(movieId: Long, page: Int = 1): DataState<List<ShowEntity>>
+    suspend fun getRecommendMovies(movieId: Long, page: Int = 1): DataState<List<ShowEntity>>
+    suspend fun getReviews(movieId: Long, page: Int): DataState<List<ReviewApiModel>>
+    suspend fun updateRecentMovie(movieId: Long)
 }
