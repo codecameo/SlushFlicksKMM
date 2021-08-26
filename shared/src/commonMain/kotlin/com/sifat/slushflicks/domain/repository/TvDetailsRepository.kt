@@ -13,5 +13,4 @@ interface TvDetailsRepository {
     suspend fun getSimilarTvShows(tvShowId: Long, page: Int): DataState<List<ShowEntity>>
     suspend fun getRecommendationTvShows(tvShowId: Long, page: Int): DataState<List<ShowEntity>>
     suspend fun getTvShowReviews(tvShowId: Long, page: Int): DataState<List<ReviewApiModel>>
-    suspend fun updateRecentTvShow(tvShowId: Long)
 }

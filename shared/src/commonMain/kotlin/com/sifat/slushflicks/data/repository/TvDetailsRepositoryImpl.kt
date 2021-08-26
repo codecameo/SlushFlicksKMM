@@ -1,17 +1,14 @@
 package com.sifat.slushflicks.data.repository
 
 import com.sifat.slushflicks.data.Constants
-import com.sifat.slushflicks.data.Label
 import com.sifat.slushflicks.data.Label.Companion.RECOMMENDATION_LABEL
 import com.sifat.slushflicks.data.Label.Companion.SIMILAR_LABEL
-import com.sifat.slushflicks.data.cache.TvCollectionEntity
 import com.sifat.slushflicks.data.cache.TvShowEntity
 import com.sifat.slushflicks.data.cache.column.CastColumn
 import com.sifat.slushflicks.data.cache.manager.LocalDataManager
 import com.sifat.slushflicks.data.cache.model.ShowEntity
 import com.sifat.slushflicks.data.isYoutubeModel
 import com.sifat.slushflicks.data.manager.NetworkStateManager
-import com.sifat.slushflicks.data.manager.TimeManager
 import com.sifat.slushflicks.data.mapper.toColumn
 import com.sifat.slushflicks.data.mapper.toEntity
 import com.sifat.slushflicks.data.remote.api.TvShowApi
@@ -22,7 +19,6 @@ import com.sifat.slushflicks.domain.repository.TvDetailsRepository
 class TvDetailsRepositoryImpl(
     private val tvShowApi: TvShowApi,
     private val localDataManager: LocalDataManager,
-    private val timeManager: TimeManager,
     networkStateManager: NetworkStateManager
 ) : BaseRepository(networkStateManager), TvDetailsRepository {
     override suspend fun getTvShowDetails(tvShowId: Long): DataState<TvShowEntity> {
@@ -81,17 +77,6 @@ class TvDetailsRepositoryImpl(
         return execute {
             getDataState(tvShowApi.getTvShowReviews(tvShowId, page))
         }
-    }
-
-    override suspend fun updateRecentTvShow(tvShowId: Long) {
-        val time = (timeManager.getCurrentTime() / 1000).toInt()
-        localDataManager.insertNewTvCollection(
-            TvCollectionEntity(
-                collection = Label.RECENTLY_VISITED_MOVIE,
-                id = tvShowId,
-                position = -1 * time // Reversing the order
-            )
-        )
     }
 
     private suspend fun fetchTvShowDetails(tvShowId: Long): DataState<TvShowEntity> {

@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            movieRepo.getMovieDetails(1001).let {
+            movieRepo.getMovieDetails(436969).let {
                 when (it) {
                     is DataState.Success -> println("Movie ${it.data?.title}")
                     is DataState.Error -> println("Movie Error ${it.errorMessage} ${it.statusCode}")

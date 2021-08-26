@@ -13,5 +13,4 @@ interface MovieDetailsRepository {
     suspend fun getSimilarMovies(movieId: Long, page: Int = 1): DataState<List<ShowEntity>>
     suspend fun getRecommendMovies(movieId: Long, page: Int = 1): DataState<List<ShowEntity>>
     suspend fun getReviews(movieId: Long, page: Int): DataState<List<ReviewApiModel>>
-    suspend fun updateRecentMovie(movieId: Long)
 }

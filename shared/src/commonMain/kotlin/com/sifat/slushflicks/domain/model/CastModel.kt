@@ -1,7 +1,7 @@
 package com.sifat.slushflicks.domain.model
 
 data class CastModel(
-    val castId: Int,
+    val castId: Long,
     val character: String,
     val name: String,
     val order: Int,

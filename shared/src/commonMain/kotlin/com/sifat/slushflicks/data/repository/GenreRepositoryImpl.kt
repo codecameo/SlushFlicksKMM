@@ -22,8 +22,10 @@ class GenreRepositoryImpl(
 
     override suspend fun updateGenres(): DataState<List<GenreEntity>> {
         return execute(fallback = {
-            updateGenresSessionData()
-            Error(statusCode = NO_INTERNET_ERROR)
+            localDataManager.loadGenres().let { genres ->
+                updateGenresSessionData(genres)
+                Error(statusCode = NO_INTERNET_ERROR, data = genres)
+            }
         }) {
             coroutineScope {
                 val movieGenre = async {
@@ -36,14 +38,14 @@ class GenreRepositoryImpl(
                 (movieGenre.await() as? ApiSuccessResponse)?.let { genres.addAll(getGenreList(it)) }
                 (tvGenreGenre.await() as? ApiSuccessResponse)?.let { genres.addAll(getGenreList(it)) }
                 localDataManager.saveGenre(genres)
-                updateGenresSessionData()
+                updateGenresSessionData(genres)
                 DataState.Success(data = genres)
             }
         }
     }
 
-    private suspend fun updateGenresSessionData() {
-        localDataManager.initGenres(localDataManager.loadGenres())
+    private fun updateGenresSessionData(list: List<GenreEntity>?) {
+        localDataManager.initGenres(list)
     }
 
     private fun getGenreList(response: ApiSuccessResponse<GenreListApiModel>): List<GenreEntity> {

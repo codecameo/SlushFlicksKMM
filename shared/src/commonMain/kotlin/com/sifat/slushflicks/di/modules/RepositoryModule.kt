@@ -4,6 +4,7 @@ import com.sifat.slushflicks.data.repository.GenreRepositoryImpl
 import com.sifat.slushflicks.data.repository.MovieDetailsRepositoryImpl
 import com.sifat.slushflicks.data.repository.MovieHomeRepositoryImpl
 import com.sifat.slushflicks.data.repository.MovieListRepositoryImpl
+import com.sifat.slushflicks.data.repository.RecentRepositoryImpl
 import com.sifat.slushflicks.data.repository.SearchRepositoryImpl
 import com.sifat.slushflicks.data.repository.TrendingMovieListRepositoryImpl
 import com.sifat.slushflicks.data.repository.TrendingTvListRepositoryImpl
@@ -18,6 +19,7 @@ import com.sifat.slushflicks.domain.repository.GenreRepository
 import com.sifat.slushflicks.domain.repository.MovieDetailsRepository
 import com.sifat.slushflicks.domain.repository.MovieHomeRepository
 import com.sifat.slushflicks.domain.repository.MovieListRepository
+import com.sifat.slushflicks.domain.repository.RecentRepository
 import com.sifat.slushflicks.domain.repository.SearchRepository
 import com.sifat.slushflicks.domain.repository.TvDetailsRepository
 import com.sifat.slushflicks.domain.repository.TvHomeRepository
@@ -58,6 +60,7 @@ fun repositoryModule() = module {
             get()
         )
     }
-    factory<MovieDetailsRepository> { MovieDetailsRepositoryImpl(get(), get(), get(), get()) }
-    factory<TvDetailsRepository> { TvDetailsRepositoryImpl(get(), get(), get(), get()) }
+    factory<MovieDetailsRepository> { MovieDetailsRepositoryImpl(get(), get(), get()) }
+    factory<TvDetailsRepository> { TvDetailsRepositoryImpl(get(), get(), get()) }
+    factory<RecentRepository> { RecentRepositoryImpl(get(), get()) }
 }

@@ -5,6 +5,7 @@ import com.sifat.slushflicks.di.modules.appModule
 import com.sifat.slushflicks.di.modules.dataModule
 import com.sifat.slushflicks.di.modules.networkModule
 import com.sifat.slushflicks.di.modules.repositoryModule
+import com.sifat.slushflicks.di.modules.useCaseModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.core.context.startKoin
@@ -21,6 +22,7 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
             appModule(),
             dataModule(),
             repositoryModule(),
+            useCaseModule(),
             platformModule()
         )
     }

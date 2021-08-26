@@ -8,8 +8,4 @@ interface SearchRepository {
     suspend fun searchMovies(query: String, page: Int): DataState<SearchResult<ShowEntity>>
 
     suspend fun searchTvShows(query: String, page: Int): DataState<SearchResult<ShowEntity>>
-
-    suspend fun getRecentMovieList(page: Int): DataState<List<ShowEntity>>
-
-    suspend fun getRecentTvShowList(page: Int): DataState<List<ShowEntity>>
 }
