@@ -2,22 +2,34 @@ package com.sifat.slushflicks.di.modules
 
 import com.sifat.slushflicks.domain.usecase.GenreUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieListUseCase
+import com.sifat.slushflicks.domain.usecase.GetMovieReviewUseCase
+import com.sifat.slushflicks.domain.usecase.GetTvReviewUseCase
 import com.sifat.slushflicks.domain.usecase.GetTvShowListUseCase
 import com.sifat.slushflicks.domain.usecase.MovieCollectionUseCase
 import com.sifat.slushflicks.domain.usecase.MovieSearchUseCase
 import com.sifat.slushflicks.domain.usecase.RecentMovieUseCase
 import com.sifat.slushflicks.domain.usecase.RecentTvShowUseCase
+import com.sifat.slushflicks.domain.usecase.RecommendedMovieUseCase
+import com.sifat.slushflicks.domain.usecase.RecommendedTvShowUseCase
+import com.sifat.slushflicks.domain.usecase.SimilarMovieUseCase
+import com.sifat.slushflicks.domain.usecase.SimilarTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.TvCollectionUseCase
 import com.sifat.slushflicks.domain.usecase.TvShowSearchUseCase
 import com.sifat.slushflicks.domain.usecase.UpdateRecentMovieUseCase
 import com.sifat.slushflicks.domain.usecase.UpdateRecentTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.impl.GenreUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetMovieListUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.GetMovieReviewUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.GetTvReviewUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetTvShowListUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.MovieCollectionUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.MovieSearchUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.RecentMovieUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.RecentTvShowUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.RecommendedMovieUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.RecommendedTvShowUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.SimilarMovieUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.SimilarTvShowUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.TvCollectionUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.TvShowSearchUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.UpdateRecentMovieUseCaseImpl
@@ -36,4 +48,10 @@ fun useCaseModule() = module {
     factory<TvShowSearchUseCase> { TvShowSearchUseCaseImpl(get()) }
     factory<UpdateRecentMovieUseCase> { UpdateRecentMovieUseCaseImpl(get()) }
     factory<UpdateRecentTvShowUseCase> { UpdateRecentTvShowUseCaseImpl(get()) }
+    factory<SimilarMovieUseCase> { SimilarMovieUseCaseImpl(get()) }
+    factory<SimilarTvShowUseCase> { SimilarTvShowUseCaseImpl(get()) }
+    factory<RecommendedTvShowUseCase> { RecommendedTvShowUseCaseImpl(get()) }
+    factory<RecommendedMovieUseCase> { RecommendedMovieUseCaseImpl(get()) }
+    factory<GetTvReviewUseCase> { GetTvReviewUseCaseImpl(get()) }
+    factory<GetMovieReviewUseCase> { GetMovieReviewUseCaseImpl(get()) }
 }
