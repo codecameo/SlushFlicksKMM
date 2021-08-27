@@ -1,41 +1,58 @@
 package com.sifat.slushflicks.domain.mapper
 
-/*
-fun getEpisode(model: Episode?): EpisodeApiModel? {
-    return model?.run {
-        EpisodeModel(
-            id = id,
-            airDate = airDate ?: Constants.EMPTY_STRING,
-            name = name,
-            stillPath = stillPath ?: Constants.EMPTY_STRING,
-            overview = overview,
-            voteAvg = voteAvg,
-            seasonNumber = seasonNumber,
-            episodeNumber = episodeNumber
-        )
-    }
-}
+import com.sifat.slushflicks.data.Constants.DEFAULT_DOUBLE
+import com.sifat.slushflicks.data.Constants.DEFAULT_INT
+import com.sifat.slushflicks.data.Constants.EMPTY_STRING
+import com.sifat.slushflicks.data.Constants.INVALID_ID_LONG
+import com.sifat.slushflicks.data.cache.TvShowEntity
+import com.sifat.slushflicks.data.cache.column.EpisodeColumn
+import com.sifat.slushflicks.data.cache.column.SeasonColumn
+import com.sifat.slushflicks.domain.model.CastModel
+import com.sifat.slushflicks.domain.model.EpisodeModel
+import com.sifat.slushflicks.domain.model.SeasonModel
+import com.sifat.slushflicks.domain.model.TvShowModel
 
-fun getSeasons(models: List<Season>?): List<SeasonApiModel> {
-    return models?.let { seasons ->
-        val seasonModels = mutableListOf<SeasonApiModel>()
-        for (season in seasons) {
-            if (season.seasonNumber != 0) seasonModels.add(getSeason(season))
-        }
-        seasonModels
-    } ?: emptyList()
-}
+fun TvShowEntity.toModel(videoKey: String? = null, movieCasts: List<CastModel>? = null) =
+    TvShowModel(
+        id = id,
+        backdropPath = backdropPath,
+        posterPath = posterPath,
+        popularity = popularity,
+        voteAvg = voteAvg,
+        voteCount = voteCount,
+        genres = genres.map { it.toModel() },
+        status = status,
+        nextEpisode = nextEpisode?.toModel(),
+        lastEpisode = lastEpisode?.toModel(),
+        seasons = seasons?.map { it.toModel() },
+        numOfSeason = numOfSeason,
+        numOfEpisode = numOfEpisode,
+        title = title,
+        overview = overview,
+        releaseData = releaseData,
+        directors = directors,
+        runtime = runtime,
+        video = videoKey ?: video,
+        casts = movieCasts ?: casts.map { it.toModel() }
+    )
 
-fun getSeason(season: Season): SeasonApiModel {
-    return season.run {
-        SeasonModel(
-            id = id,
-            airDate = airDate ?: Constants.EMPTY_STRING,
-            name = name,
-            posterPath = posterPath ?: Constants.EMPTY_STRING,
-            overview = overview,
-            seasonNumber = seasonNumber,
-            episodeCount = episodeCount
-        )
-    }
-}*/
+fun SeasonColumn.toModel() = SeasonModel(
+    id = INVALID_ID_LONG,
+    airDate = airDate ?: EMPTY_STRING,
+    name = name ?: EMPTY_STRING,
+    posterPath = posterPath ?: EMPTY_STRING,
+    overview = overview ?: EMPTY_STRING,
+    seasonNumber = seasonNumber ?: DEFAULT_INT,
+    episodeCount = episodeCount ?: DEFAULT_INT
+)
+
+fun EpisodeColumn.toModel() = EpisodeModel(
+    id = id ?: INVALID_ID_LONG,
+    airDate = airDate ?: EMPTY_STRING,
+    name = name ?: EMPTY_STRING,
+    stillPath = stillPath ?: EMPTY_STRING,
+    overview = overview ?: EMPTY_STRING,
+    voteAvg = voteAvg ?: DEFAULT_DOUBLE,
+    seasonNumber = seasonNumber ?: DEFAULT_INT,
+    episodeNumber = episodeNumber ?: DEFAULT_INT
+)
