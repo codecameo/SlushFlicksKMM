@@ -5,13 +5,13 @@ object Versions {
     const val kotlinCoroutines = "1.4.3-native-mt"
     const val ktor = "1.5.3"
     const val kotlinxSerialization = "1.1.0"
-    const val koin = "3.0.2"
+    const val koin = "3.1.2"
     const val sqlDelight = "1.5.0"
     const val kermit = "0.1.9"
 
     const val slf4j = "1.7.30"
-    const val compose = "1.0.1"
-    const val nav_compose = "1.0.0-alpha10"
+    const val compose = "1.0.2"
+    const val nav_compose = "2.4.0-alpha07"
     const val constraintCompose = "1.0.0-beta02"
     const val activityCompose = "1.3.1"
 
@@ -32,6 +32,8 @@ object Versions {
 
     const val firebaseBom = "28.4.0"
     const val grpc = "1.40.0"
+
+    const val accompanistVersion = "0.16.0"
 }
 
 object Application {
@@ -42,7 +44,7 @@ object Application {
 
 object AndroidSdk {
     const val min = 21
-    const val compile = 30
+    const val compile = 31
     const val target = compile
 }
 
@@ -73,6 +75,11 @@ object AndroidX {
 
 object Google {
     const val material = "com.google.android.material:material:${Versions.material}"
+    const val swiperefresh =
+        "com.google.accompanist:accompanist-swiperefresh:${Versions.accompanistVersion}"
+    const val insets = "com.google.accompanist:accompanist-insets:${Versions.accompanistVersion}"
+    const val systemUiController =
+        "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanistVersion}"
 }
 
 object SquareUp {
@@ -103,7 +110,7 @@ object Koin {
     const val core = "io.insert-koin:koin-core:${Versions.koin}"
     const val test = "io.insert-koin:koin-test:${Versions.koin}"
     const val android = "io.insert-koin:koin-android:${Versions.koin}"
-    const val compose = "io.insert-koin:koin-androidx-compose:3.0.1"
+    const val compose = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
 }
 
 object Ktor {
@@ -114,6 +121,7 @@ object Ktor {
 
     const val clientAndroid = "io.ktor:ktor-client-android:${Versions.ktor}"
     const val clientIos = "io.ktor:ktor-client-ios:${Versions.ktor}"
+    const val slf4j = "org.slf4j:slf4j-simple:${Versions.slf4j}"
 }
 
 object Coil {

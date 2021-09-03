@@ -4,6 +4,7 @@ import android.app.Application
 import co.touchlab.kermit.Kermit
 import com.sifat.slushflicks.di.appModule
 import com.sifat.slushflicks.di.initKoin
+import com.sifat.slushflicks.di.viewModelModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.koin.androidContext
@@ -21,7 +22,7 @@ class SlushFlickApplication : Application(), KoinComponent {
         initKoin(enableNetworkLogs = BuildConfig.DEBUG) {
             androidLogger()
             androidContext(this@SlushFlickApplication)
-            modules(appModule())
+            modules(appModule(), viewModelModule())
         }
 
         logger.d { "SlushFlickApplication" }

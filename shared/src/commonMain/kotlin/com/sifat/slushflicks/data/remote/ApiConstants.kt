@@ -153,6 +153,6 @@ data class ErrorResponse(
 const val TIMEOUT = 20 * 1000L
 const val CONTENT_TYPE = "Content-Type"
 const val APPLICATION_JSON = "application/json"
-const val BASE_URL = "api.themoviedb.org/3/"
+const val BASE_URL = "api.themoviedb.org/3"
 const val IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
 const val API_KEY = "5bd74c7a7bbfad5678fe1acd33fe732a"

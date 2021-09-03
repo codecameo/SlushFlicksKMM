@@ -23,6 +23,9 @@ dependencies {
     implementation(Compose.uiGraphics)
 
     implementation(Google.material)
+    implementation(Google.swiperefresh)
+    implementation(Google.insets)
+    implementation(Google.systemUiController)
     implementation(Deps.datetime)
 
     implementation(Coil.coilAccompanist)

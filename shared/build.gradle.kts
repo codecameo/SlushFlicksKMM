@@ -75,6 +75,7 @@ kotlin {
                 implementation(SqlDelight.androidDriver)
                 implementation(Firebase.firestore)
                 implementation(Grpc.grpc)
+                implementation(Ktor.slf4j)
                 // implementation("com.google.firebase:firebase-bom:28.4.0")
             }
         }
