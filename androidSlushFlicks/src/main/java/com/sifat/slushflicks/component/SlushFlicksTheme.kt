@@ -19,7 +19,7 @@ private val LightThemeColors = lightColors(
     error = Color(0xffe52346),
     onBackground = Color.White,
     surface = Color(0xff121212),
-    onSurface = Color.White,
+    onSurface = Color.White
 )
 
 private val DarkThemeColors = darkColors(
