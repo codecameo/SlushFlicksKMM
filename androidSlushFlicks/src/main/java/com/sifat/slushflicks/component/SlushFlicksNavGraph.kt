@@ -1,5 +1,6 @@
 package com.sifat.slushflicks.component
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -10,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sifat.slushflicks.Route
 import com.sifat.slushflicks.component.home.HomeScreen
 
+@ExperimentalAnimationApi
 @Composable
 fun SlushFlicksNavGraph(
     modifier: Modifier = Modifier,

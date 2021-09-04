@@ -29,6 +29,7 @@ dependencies {
     implementation(Deps.datetime)
 
     implementation(Coil.coilAccompanist)
+    implementation(Accompanist.navigationAnimation)
 
     implementation(Koin.core)
     implementation(Koin.android)

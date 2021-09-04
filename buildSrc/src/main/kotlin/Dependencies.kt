@@ -33,7 +33,7 @@ object Versions {
     const val firebaseBom = "28.4.0"
     const val grpc = "1.40.0"
 
-    const val accompanistVersion = "0.16.0"
+    const val accompanistVersion = "0.17.0"
 }
 
 object Application {
@@ -80,6 +80,10 @@ object Google {
     const val insets = "com.google.accompanist:accompanist-insets:${Versions.accompanistVersion}"
     const val systemUiController =
         "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanistVersion}"
+}
+
+object Accompanist {
+    const val navigationAnimation = "com.google.accompanist:accompanist-navigation-animation:${Versions.accompanistVersion}"
 }
 
 object SquareUp {
