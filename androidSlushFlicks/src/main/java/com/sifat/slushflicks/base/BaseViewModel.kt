@@ -16,10 +16,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 abstract class BaseViewModel<VS>(
-    protected val dispatchers: AppDispatchers
+    private val dispatchers: AppDispatchers
 ) : ViewModel() {
 
-    private val _viewActionState = MutableStateFlow<ViewAction>(InitAction)
+    protected val _viewActionState = MutableStateFlow<ViewAction>(InitAction)
     val viewActionState: StateFlow<ViewAction> = _viewActionState
     val viewEventState = MutableStateFlow<ViewEvent>(InitEvent)
 
@@ -47,8 +47,22 @@ abstract class BaseViewModel<VS>(
         )
     }
 
-    protected fun <Data> getSuccessState(state: DataState.Success<Data>): ViewState<Data> {
-        return state.run { ViewState.Success(data = data, message = message) }
+    protected inline fun <Data, reified ViewData> getSuccessState(
+        state: DataState.Success<Data>,
+        convert: (Data?) -> ViewData? = { state.data as? ViewData }
+    ): ViewState<ViewData> {
+        return state.run { ViewState.Success(data = convert(data), message = message) }
+    }
+
+    protected inline fun <Data, reified ViewData> getViewState(
+        state: DataState<Data>,
+        errorConvert: (Data?) -> ViewData? = { (state as? DataState.Error)?.data as? ViewData },
+        successConvert: (Data?) -> ViewData? = { (state as? DataState.Success)?.data as? ViewData }
+    ): ViewState<ViewData> {
+        return when (state) {
+            is DataState.Success -> getSuccessState(state, successConvert)
+            is DataState.Error -> getErrorState(state, errorConvert)
+        }
     }
 
     protected fun throwEventNotSupported(event: ViewEvent) {
@@ -64,5 +78,5 @@ abstract class BaseViewModel<VS>(
 
     protected abstract suspend fun handleViewEvent(event: ViewEvent)
 
-    protected abstract val viewState: VS
+    abstract val viewState: VS
 }

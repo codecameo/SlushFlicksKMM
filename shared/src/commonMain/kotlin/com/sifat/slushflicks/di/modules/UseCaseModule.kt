@@ -1,5 +1,6 @@
 package com.sifat.slushflicks.di.modules
 
+import com.sifat.slushflicks.di.DiConstants.MOVIE_LIST_OTHER_NAME
 import com.sifat.slushflicks.domain.usecase.GenreUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieListUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieReviewUseCase
@@ -38,11 +39,12 @@ import com.sifat.slushflicks.domain.usecase.impl.TvShowDetailsUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.TvShowSearchUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.UpdateRecentMovieUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.UpdateRecentTvShowUseCaseImpl
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 fun useCaseModule() = module {
     factory<GenreUseCase> { GenreUseCaseImpl(get()) }
-    factory<GetMovieListUseCase> { GetMovieListUseCaseImpl(get()) }
+    factory<GetMovieListUseCase> { GetMovieListUseCaseImpl(get(named(name = MOVIE_LIST_OTHER_NAME))) }
     factory<GetTvShowListUseCase> { GetTvShowListUseCaseImpl(get()) }
     factory<MovieCollectionUseCase> { MovieCollectionUseCaseImpl(get()) }
     factory<MovieSearchUseCase> { MovieSearchUseCaseImpl(get()) }

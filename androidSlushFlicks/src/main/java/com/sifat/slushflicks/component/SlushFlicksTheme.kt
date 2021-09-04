@@ -11,7 +11,7 @@ import com.sifat.slushflicks.theme.SlushFlicksTypography
 
 private val LightThemeColors = lightColors(
     primary = Color(0xff1d1f2b),
-    primaryVariant = Color(0xff1d1f2b),
+    primaryVariant = Color(0xFF1B1F20),
     onPrimary = Color.White,
     secondary = Color(0xffFE9224),
     secondaryVariant = Color(0xffFE9224),
@@ -24,14 +24,14 @@ private val LightThemeColors = lightColors(
 
 private val DarkThemeColors = darkColors(
     primary = Color(0xff1d1f2b),
-    primaryVariant = Color(0xff121212),
+    primaryVariant = Color(0xFF1B1F20),
     onPrimary = Color.White,
     secondary = Color(0xffFE9224),
     secondaryVariant = Color(0xffFE9224),
     onSecondary = Color.White,
     error = Color(0xffe52346),
     onBackground = Color.White,
-    surface = Color(0xff1d1f2b),
+    surface = Color(0xff121212),
     onSurface = Color.White
 )
 

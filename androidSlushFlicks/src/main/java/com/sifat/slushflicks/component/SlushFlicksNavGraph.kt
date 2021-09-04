@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sifat.slushflicks.Route
 import com.sifat.slushflicks.component.home.HomeScreen
+import com.sifat.slushflicks.component.splash.SplashScreen
 
 @ExperimentalAnimationApi
 @Composable

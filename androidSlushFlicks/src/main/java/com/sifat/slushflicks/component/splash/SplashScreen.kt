@@ -1,4 +1,4 @@
-package com.sifat.slushflicks.component
+package com.sifat.slushflicks.component.splash
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
