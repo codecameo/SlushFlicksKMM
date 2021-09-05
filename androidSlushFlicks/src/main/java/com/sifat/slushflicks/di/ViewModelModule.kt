@@ -16,5 +16,12 @@ fun viewModelModule() = module {
             trendingMovieListUseCase = get()
         )
     }
-    viewModel { TvShowViewModel(collectionUseCase = get(), appDispatchers = get()) }
+    viewModel {
+        TvShowViewModel(
+            collectionUseCase = get(),
+            appDispatchers = get(),
+            trendingTvListUseCase = get(),
+            tvShowListUseCase = get()
+        )
+    }
 }

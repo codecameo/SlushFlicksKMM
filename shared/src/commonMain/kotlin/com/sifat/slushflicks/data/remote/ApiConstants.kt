@@ -78,8 +78,8 @@ class ApiEndPoint {
 
         const val GENRES_TV_URL = "genre/tv/list"
         const val TRENDING_TV_SHOW_URL = "trending/tv/day"
-        const val TV_SHOW_DETAILS_URL = "tv/{$PATH_TV_SHOW_ID}"
-        const val TV_SHOW_COLLECTION_URL = "tv/{$PATH_COLLECTION}"
+        const val TV_SHOW_DETAILS_URL = "tv/"
+        const val TV_SHOW_COLLECTION_URL = "tv"
         const val POPULAR_TV_URL = "tv/popular"
         const val AIRING_TODAY_TV_URL = "tv/airing_today"
         const val TOP_RATED_TV_URL = "tv/top_rated"

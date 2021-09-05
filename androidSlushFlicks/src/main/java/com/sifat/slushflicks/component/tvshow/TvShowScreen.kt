@@ -18,27 +18,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.ViewState
+import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.ShowTypeChip
 import com.sifat.slushflicks.component.home.model.CollectionListModel
+import com.sifat.slushflicks.component.movie.ShowListComponent
+import com.sifat.slushflicks.domain.model.ShowModel
 import com.sifat.slushflicks.viewaction.TvCollectionViewAction.FetchCollectionViewAction
+import com.sifat.slushflicks.viewaction.TvCollectionViewAction.FetchTvListViewAction
 import com.sifat.slushflicks.viewevents.TvCollectionViewEvent.FetchCollectionViewEvent
+import com.sifat.slushflicks.viewevents.TvCollectionViewEvent.FetchTvShowListViewEvent
+import com.sifat.slushflicks.viewevents.TvCollectionViewEvent.LoadMoreTvShowListViewEvent
+import com.sifat.slushflicks.viewevents.TvCollectionViewEvent.UpdateCollectionViewEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.compose.getViewModel
 
+@ExperimentalCoilApi
 @Composable
 fun TvShowScreen() {
     val tvShowViewModel = getViewModel<TvShowViewModel>()
     val collectionItems = remember { mutableStateOf(emptyList<CollectionListModel>()) }
+    val showList = remember { mutableStateOf(emptyList<ShowModel>()) }
     LaunchedEffect(true) {
         tvShowViewModel.viewActionState.onEach { action ->
             when (action) {
                 is FetchCollectionViewAction -> {
-                    (action.viewState as? ViewState.Success)?.data?.let {
+                    (action.viewState as? Success)?.data?.let {
                         collectionItems.value = it
+                        tvShowViewModel.viewEventState.value = FetchTvShowListViewEvent
+                    }
+                }
+                is FetchTvListViewAction -> {
+                    (action.viewState as? Success)?.data?.let {
+                        showList.value = it
                     }
                 }
             }
@@ -66,13 +81,18 @@ fun TvShowScreen() {
                 .background(color = MaterialTheme.colors.surface),
             contentPadding = PaddingValues(8.dp)
         ) {
-            items(collectionItems.value, key = {
-                it.toString()
-            }) {
+            items(collectionItems.value, key = { it.toString() }) {
                 ShowTypeChip(it) { label ->
-                    tvShowViewModel.updateLabel(label)
+                    tvShowViewModel.viewEventState.value = UpdateCollectionViewEvent(label = label)
+                    tvShowViewModel.viewEventState.value = FetchTvShowListViewEvent
                 }
             }
+        }
+        ShowListComponent(
+            label = tvShowViewModel.viewState.currentSelectedLabel,
+            showList = showList.value
+        ) {
+            tvShowViewModel.viewEventState.value = LoadMoreTvShowListViewEvent()
         }
     }
 }
