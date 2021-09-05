@@ -4,5 +4,5 @@ import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.model.ShowModel
 
 interface SimilarTvShowUseCase {
-    suspend fun getSimilarTvShow(tvShowId: Long, page: Int): DataState<List<ShowModel>>
+    suspend fun execute(tvShowId: Long, page: Int): DataState<List<ShowModel>>
 }

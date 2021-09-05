@@ -9,7 +9,7 @@ import com.sifat.slushflicks.domain.usecase.GetTvReviewUseCase
 class GetTvReviewUseCaseImpl(
     private val tvDetailsRepository: TvDetailsRepository
 ) : BaseUseCase(), GetTvReviewUseCase {
-    override suspend fun getTvShowReview(tvShowId: Long, page: Int): DataState<List<ReviewModel>> {
+    override suspend fun execute(tvShowId: Long, page: Int): DataState<List<ReviewModel>> {
         return getDataState(tvDetailsRepository.getTvShowReviews(tvShowId, page)) { list ->
             list?.map { it.toModel() }
         }

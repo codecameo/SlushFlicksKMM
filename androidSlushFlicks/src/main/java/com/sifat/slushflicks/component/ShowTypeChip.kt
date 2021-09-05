@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sifat.slushflicks.component.movie.model.CollectionListModel
+import com.sifat.slushflicks.component.home.model.CollectionListModel
 
 @Composable
 fun ShowTypeChip(collectionModel: CollectionListModel, onTypeSelected: (String) -> Unit = {}) {

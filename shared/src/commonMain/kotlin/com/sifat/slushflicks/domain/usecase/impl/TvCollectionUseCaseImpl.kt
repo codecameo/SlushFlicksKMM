@@ -9,7 +9,7 @@ import com.sifat.slushflicks.domain.usecase.TvCollectionUseCase
 class TvCollectionUseCaseImpl(
     private val tvHomeRepository: TvHomeRepository
 ) : BaseUseCase(), TvCollectionUseCase {
-    override suspend fun getTvShowCollection(): DataState<List<CollectionModel>> {
+    override suspend fun execute(): DataState<List<CollectionModel>> {
         return getDataState(tvHomeRepository.getTvCollection()) { list ->
             list?.map { it.toModel() }
         }

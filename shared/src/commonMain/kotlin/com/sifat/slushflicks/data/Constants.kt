@@ -2,7 +2,7 @@ package com.sifat.slushflicks.data
 
 object Constants {
     const val EMPTY_STRING = ""
-    const val INVALID_ID = -1
+    const val INVALID_INT = -1
     const val DEFAULT_INT = 0
     const val INVALID_ID_LONG = -1L
     const val DEFAULT_LONG = 0L

@@ -4,7 +4,7 @@ import com.sifat.slushflicks.data.Constants.DEFAULT_DOUBLE
 import com.sifat.slushflicks.data.Constants.DEFAULT_INT
 import com.sifat.slushflicks.data.Constants.DEFAULT_LONG
 import com.sifat.slushflicks.data.Constants.EMPTY_STRING
-import com.sifat.slushflicks.data.Constants.INVALID_ID
+import com.sifat.slushflicks.data.Constants.INVALID_INT
 import com.sifat.slushflicks.data.Constants.PAGE_SIZE
 import com.sifat.slushflicks.data.cache.GenreEntity
 import com.sifat.slushflicks.data.cache.MovieCollectionEntity
@@ -16,7 +16,7 @@ import com.sifat.slushflicks.data.cache.column.GenreColumn
 import com.sifat.slushflicks.data.cache.model.ShowEntity
 
 fun GenreColumn.toEntity() = GenreEntity(
-    id = id ?: INVALID_ID.toLong(),
+    id = id ?: INVALID_INT.toLong(),
     name = name ?: EMPTY_STRING
 )
 

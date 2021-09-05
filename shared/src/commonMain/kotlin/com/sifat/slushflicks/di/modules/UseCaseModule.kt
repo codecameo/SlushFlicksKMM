@@ -1,9 +1,14 @@
 package com.sifat.slushflicks.di.modules
 
 import com.sifat.slushflicks.di.DiConstants.MOVIE_LIST_OTHER_NAME
+import com.sifat.slushflicks.di.DiConstants.MOVIE_LIST_TRENDING_NAME
+import com.sifat.slushflicks.di.DiConstants.TV_SHOW_LIST_OTHER_NAME
+import com.sifat.slushflicks.di.DiConstants.TV_SHOW_LIST_TRENDING_NAME
 import com.sifat.slushflicks.domain.usecase.GenreUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieListUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieReviewUseCase
+import com.sifat.slushflicks.domain.usecase.GetTrendingMovieListUseCase
+import com.sifat.slushflicks.domain.usecase.GetTrendingTvListUseCase
 import com.sifat.slushflicks.domain.usecase.GetTvReviewUseCase
 import com.sifat.slushflicks.domain.usecase.GetTvShowListUseCase
 import com.sifat.slushflicks.domain.usecase.MovieCollectionUseCase
@@ -23,6 +28,8 @@ import com.sifat.slushflicks.domain.usecase.UpdateRecentTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.impl.GenreUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetMovieListUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetMovieReviewUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.GetTrendingMovieListUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.GetTrendingTvListUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetTvReviewUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetTvShowListUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.MovieCollectionUseCaseImpl
@@ -45,7 +52,9 @@ import org.koin.dsl.module
 fun useCaseModule() = module {
     factory<GenreUseCase> { GenreUseCaseImpl(get()) }
     factory<GetMovieListUseCase> { GetMovieListUseCaseImpl(get(named(name = MOVIE_LIST_OTHER_NAME))) }
-    factory<GetTvShowListUseCase> { GetTvShowListUseCaseImpl(get()) }
+    factory<GetTvShowListUseCase> { GetTvShowListUseCaseImpl(get(named(name = TV_SHOW_LIST_OTHER_NAME))) }
+    factory<GetTrendingMovieListUseCase> { GetTrendingMovieListUseCaseImpl(get(named(name = MOVIE_LIST_TRENDING_NAME))) }
+    factory<GetTrendingTvListUseCase> { GetTrendingTvListUseCaseImpl(get(named(name = TV_SHOW_LIST_TRENDING_NAME))) }
     factory<MovieCollectionUseCase> { MovieCollectionUseCaseImpl(get()) }
     factory<MovieSearchUseCase> { MovieSearchUseCaseImpl(get()) }
     factory<RecentMovieUseCase> { RecentMovieUseCaseImpl(get()) }

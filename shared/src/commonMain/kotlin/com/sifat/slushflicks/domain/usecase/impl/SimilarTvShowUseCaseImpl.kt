@@ -9,7 +9,7 @@ import com.sifat.slushflicks.domain.usecase.SimilarTvShowUseCase
 class SimilarTvShowUseCaseImpl(
     private val tvDetailsRepository: TvDetailsRepository
 ) : BaseUseCase(), SimilarTvShowUseCase {
-    override suspend fun getSimilarTvShow(tvShowId: Long, page: Int): DataState<List<ShowModel>> {
+    override suspend fun execute(tvShowId: Long, page: Int): DataState<List<ShowModel>> {
         return getDataState(tvDetailsRepository.getSimilarTvShows(tvShowId, page)) { list ->
             list?.map { it.toModel() }
         }

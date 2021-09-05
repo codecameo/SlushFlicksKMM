@@ -5,5 +5,5 @@ import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.model.ShowModel
 
 interface TvShowSearchUseCase {
-    suspend fun searchMovie(query: String, page: Int): DataState<SearchResult<ShowModel>>
+    suspend fun execute(query: String, page: Int): DataState<SearchResult<ShowModel>>
 }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.coroutineScope
 class MovieDetailsUseCaseImpl(
     private val movieDetailsRepository: MovieDetailsRepository
 ) : BaseUseCase(), MovieDetailsUseCase {
-    override suspend fun getMovieDetails(movieId: Long): DataState<MovieModel> {
+    override suspend fun execute(movieId: Long): DataState<MovieModel> {
         return movieDetailsRepository.getMovieDetails(movieId).let { state ->
             when (state) {
                 is Error -> getErrorResponse(state) {

@@ -4,5 +4,5 @@ import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.model.CollectionModel
 
 interface MovieCollectionUseCase {
-    suspend fun getMovieCollection(): DataState<List<CollectionModel>>
+    suspend fun execute(): DataState<List<CollectionModel>>
 }

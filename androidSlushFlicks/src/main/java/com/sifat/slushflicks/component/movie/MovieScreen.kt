@@ -18,29 +18,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.ViewState
+import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.ShowTypeChip
-import com.sifat.slushflicks.component.movie.model.CollectionListModel
-import com.sifat.slushflicks.viewaction.MovieListViewAction.FetchCollectionViewAction
-import com.sifat.slushflicks.viewevents.MovieListViewEvent.FetchCollectionViewEvent
+import com.sifat.slushflicks.component.home.model.CollectionListModel
+import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchCollectionViewAction
+import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchMovieListViewAction
+import com.sifat.slushflicks.viewevents.MovieCollectionViewEvent.FetchCollectionViewEvent
+import com.sifat.slushflicks.viewevents.MovieCollectionViewEvent.FetchMovieListViewEvent
+import com.sifat.slushflicks.viewevents.MovieCollectionViewEvent.LoadMoreMovieListViewEvent
+import com.sifat.slushflicks.viewevents.MovieCollectionViewEvent.UpdateCollectionViewEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.compose.getViewModel
 
+@ExperimentalCoilApi
 @Composable
 fun MovieScreen() {
     val movieViewModel = getViewModel<MovieViewModel>()
     val collectionItems = remember {
         mutableStateOf(emptyList<CollectionListModel>())
     }
+    val showList = remember {
+        mutableStateOf(emptyList<ShowModel>())
+    }
     LaunchedEffect(true) {
         movieViewModel.viewActionState.onEach { action ->
             when (action) {
                 is FetchCollectionViewAction -> {
-                    (action.viewState as? ViewState.Success)?.data?.let {
+                    (action.viewState as? Success)?.data?.let {
                         collectionItems.value = it
+                        movieViewModel.viewEventState.value = FetchMovieListViewEvent
+                    }
+                }
+                is FetchMovieListViewAction -> {
+                    (action.viewState as? Success)?.data?.let {
+                        showList.value = it
                     }
                 }
             }
@@ -72,9 +88,16 @@ fun MovieScreen() {
                 it.toString()
             }) {
                 ShowTypeChip(it) { label ->
-                    movieViewModel.updateLabel(label)
+                    movieViewModel.viewEventState.value = UpdateCollectionViewEvent(label = label)
+                    movieViewModel.viewEventState.value = FetchMovieListViewEvent
                 }
             }
+        }
+        ShowListComponent(
+            label = movieViewModel.viewState.currentSelectedLabel,
+            showList = showList.value
+        ) {
+            movieViewModel.viewEventState.value = LoadMoreMovieListViewEvent()
         }
     }
 }

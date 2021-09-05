@@ -9,7 +9,7 @@ import com.sifat.slushflicks.domain.usecase.MovieCollectionUseCase
 class MovieCollectionUseCaseImpl(
     private val movieHomeRepository: MovieHomeRepository
 ) : BaseUseCase(), MovieCollectionUseCase {
-    override suspend fun getMovieCollection(): DataState<List<CollectionModel>> {
+    override suspend fun execute(): DataState<List<CollectionModel>> {
         return getDataState(movieHomeRepository.getMovieCollection()) { list ->
             list?.map { it.toModel() }
         }

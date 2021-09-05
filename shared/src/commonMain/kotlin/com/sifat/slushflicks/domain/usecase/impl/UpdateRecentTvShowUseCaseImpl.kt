@@ -6,7 +6,7 @@ import com.sifat.slushflicks.domain.usecase.UpdateRecentTvShowUseCase
 class UpdateRecentTvShowUseCaseImpl(
     private val recentRepository: RecentRepository
 ) : BaseUseCase(), UpdateRecentTvShowUseCase {
-    override suspend fun updateRecentTvShow(tvShowId: Long) {
+    override suspend fun execute(tvShowId: Long) {
         recentRepository.updateRecentTvShow(tvShowId = tvShowId)
     }
 }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.coroutineScope
 class TvShowDetailsUseCaseImpl(
     private val tvDetailsRepository: TvDetailsRepository
 ) : BaseUseCase(), TvShowDetailsUseCase {
-    override suspend fun getTvShowDetails(tvShowId: Long): DataState<TvShowModel> {
+    override suspend fun execute(tvShowId: Long): DataState<TvShowModel> {
         return tvDetailsRepository.getTvShowDetails(tvShowId).let { state ->
             when (state) {
                 is Error -> getErrorResponse(state) {

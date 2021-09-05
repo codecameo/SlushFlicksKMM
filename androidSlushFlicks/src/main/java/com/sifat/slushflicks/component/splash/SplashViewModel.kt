@@ -19,7 +19,7 @@ class SplashViewModel(
         when (event) {
             is UpdateGenreEvent -> {
                 applicationScope.launch(getAppDispatcher().getIODispatcher()) {
-                    genreUseCase.updateGenre()
+                    genreUseCase.execute()
                 }
             }
             else -> throwEventNotSupported(event)

@@ -9,7 +9,7 @@ import com.sifat.slushflicks.domain.usecase.GenreUseCase
 class GenreUseCaseImpl(
     private val genreRepository: GenreRepository
 ) : BaseUseCase(), GenreUseCase {
-    override suspend fun updateGenre(): DataState<List<GenreModel>> {
+    override suspend fun execute(): DataState<List<GenreModel>> {
         return getDataState(genreRepository.updateGenres()) { list ->
             list?.map { it.toModel() }
         }

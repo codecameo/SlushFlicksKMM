@@ -9,7 +9,7 @@ import com.sifat.slushflicks.domain.usecase.RecommendedTvShowUseCase
 class RecommendedTvShowUseCaseImpl(
     private val tvDetailsRepository: TvDetailsRepository
 ) : BaseUseCase(), RecommendedTvShowUseCase {
-    override suspend fun getRecommendedTvShow(
+    override suspend fun execute(
         tvShowId: Long,
         page: Int
     ): DataState<List<ShowModel>> {

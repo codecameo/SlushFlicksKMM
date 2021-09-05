@@ -67,7 +67,7 @@ val SlushFlicksTypography = Typography(
         letterSpacing = 0.5.sp
     ),
     body2 = TextStyle(
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         letterSpacing = 0.25.sp
     ),

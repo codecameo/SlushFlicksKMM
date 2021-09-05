@@ -9,7 +9,7 @@ import com.sifat.slushflicks.domain.usecase.RecentTvShowUseCase
 class RecentTvShowUseCaseImpl(
     private val recentRepository: RecentRepository
 ) : BaseUseCase(), RecentTvShowUseCase {
-    override suspend fun getRecentTvShows(page: Int): DataState<List<ShowModel>> {
+    override suspend fun execute(page: Int): DataState<List<ShowModel>> {
         return getDataState(recentRepository.getRecentTvShowList(page)) { list ->
             list?.map { it.toModel() }
         }

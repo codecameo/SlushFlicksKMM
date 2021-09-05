@@ -10,7 +10,7 @@ import com.sifat.slushflicks.domain.usecase.TvShowSearchUseCase
 class TvShowSearchUseCaseImpl(
     private val searchRepository: SearchRepository
 ) : BaseUseCase(), TvShowSearchUseCase {
-    override suspend fun searchMovie(query: String, page: Int): DataState<SearchResult<ShowModel>> {
+    override suspend fun execute(query: String, page: Int): DataState<SearchResult<ShowModel>> {
         return getDataState(searchRepository.searchTvShows(query, page)) { result ->
             SearchResult(
                 query = query,

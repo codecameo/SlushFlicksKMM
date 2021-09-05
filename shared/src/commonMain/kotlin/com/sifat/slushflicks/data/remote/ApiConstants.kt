@@ -62,7 +62,7 @@ class ApiEndPoint {
     companion object {
         const val TRENDING_MOVIE_URL = "trending/movie/day"
         const val MOVIE_DETAILS_URL = "movie/"
-        const val MOVIE_COLLECTION_URL = "movie/{$PATH_COLLECTION}"
+        const val MOVIE_COLLECTION_URL = "movie"
         const val MOVIE_VIDEOS_URL = "movie/{$PATH_MOVIE_ID}/videos"
         const val MOVIE_CREDITS_URL = "movie/{$PATH_MOVIE_ID}/credits"
         const val MOVIE_RECOMMENDATION_URL = "movie/{$PATH_MOVIE_ID}/recommendations"

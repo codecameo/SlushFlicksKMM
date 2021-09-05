@@ -56,13 +56,14 @@ abstract class BaseViewModel<VS>(
 
     protected inline fun <Data, reified ViewData> getViewState(
         state: DataState<Data>,
+        callback: (ViewState<ViewData>) -> Unit = {},
         errorConvert: (Data?) -> ViewData? = { (state as? DataState.Error)?.data as? ViewData },
         successConvert: (Data?) -> ViewData? = { (state as? DataState.Success)?.data as? ViewData }
     ): ViewState<ViewData> {
         return when (state) {
             is DataState.Success -> getSuccessState(state, successConvert)
             is DataState.Error -> getErrorState(state, errorConvert)
-        }
+        }.also(callback)
     }
 
     protected fun throwEventNotSupported(event: ViewEvent) {

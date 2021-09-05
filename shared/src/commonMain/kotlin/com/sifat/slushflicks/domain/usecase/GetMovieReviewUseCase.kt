@@ -4,5 +4,5 @@ import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.model.ReviewModel
 
 interface GetMovieReviewUseCase {
-    suspend fun getMovieReview(movieId: Long, page: Int): DataState<List<ReviewModel>>
+    suspend fun execute(movieId: Long, page: Int): DataState<List<ReviewModel>>
 }

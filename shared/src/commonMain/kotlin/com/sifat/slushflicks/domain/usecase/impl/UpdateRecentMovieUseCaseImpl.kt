@@ -6,7 +6,7 @@ import com.sifat.slushflicks.domain.usecase.UpdateRecentMovieUseCase
 class UpdateRecentMovieUseCaseImpl(
     private val recentRepository: RecentRepository
 ) : BaseUseCase(), UpdateRecentMovieUseCase {
-    override suspend fun updateRecentMovie(movieId: Long) {
+    override suspend fun execute(movieId: Long) {
         recentRepository.updateRecentMovie(movieId = movieId)
     }
 }

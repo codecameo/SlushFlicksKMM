@@ -4,5 +4,5 @@ import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.model.ShowModel
 
 interface RecentTvShowUseCase {
-    suspend fun getRecentTvShows(page: Int): DataState<List<ShowModel>>
+    suspend fun execute(page: Int): DataState<List<ShowModel>>
 }

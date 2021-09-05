@@ -4,10 +4,10 @@ import com.sifat.slushflicks.data.Constants.DEFAULT_DOUBLE
 import com.sifat.slushflicks.data.Constants.DEFAULT_INT
 import com.sifat.slushflicks.data.Constants.DEFAULT_LONG
 import com.sifat.slushflicks.data.Constants.EMPTY_STRING
-import com.sifat.slushflicks.data.Constants.INVALID_ID
+import com.sifat.slushflicks.data.Constants.INVALID_INT
 
 data class MovieModel(
-    val id: Long = INVALID_ID.toLong(),
+    val id: Long = INVALID_INT.toLong(),
     val voteCount: Int = DEFAULT_INT,
     val voteAvg: Double = DEFAULT_DOUBLE,
     val title: String = EMPTY_STRING,
