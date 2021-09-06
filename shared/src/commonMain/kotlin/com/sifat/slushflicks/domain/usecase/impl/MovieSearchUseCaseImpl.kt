@@ -11,12 +11,22 @@ class MovieSearchUseCaseImpl(
     private val searchRepository: SearchRepository
 ) : BaseUseCase(), MovieSearchUseCase {
     override suspend fun execute(query: String, page: Int): DataState<SearchResult<ShowModel>> {
-        return getDataState(searchRepository.searchMovies(query, page)) { result ->
-            SearchResult(
-                query = query,
-                page = page,
-                result = result?.result?.map { it.toModel() } ?: emptyList()
+        return if (query.isBlank()) {
+            DataState.Success(
+                data = SearchResult(
+                    query = query,
+                    page = page,
+                    result = emptyList()
+                )
             )
+        } else {
+            getDataState(searchRepository.searchMovies(query, page)) { result ->
+                SearchResult(
+                    query = query,
+                    page = page,
+                    result = result?.result?.map { it.toModel() } ?: emptyList()
+                )
+            }
         }
     }
 }
