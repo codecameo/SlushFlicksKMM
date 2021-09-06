@@ -122,7 +122,7 @@ class DatabaseManagerImpl(
 
     override suspend fun addMovieCollection(collectionModels: List<MovieCollectionEntity>) {
         collectionModels.forEach {
-            slushFlicksQueries.insertReplaceTvCollection(it.id, it.collection, it.position)
+            slushFlicksQueries.insertReplaceMovieCollection(it.id, it.collection, it.position)
         }
     }
 

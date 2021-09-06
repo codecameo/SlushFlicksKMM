@@ -12,6 +12,7 @@ import com.sifat.slushflicks.data.cache.MovieEntity
 import com.sifat.slushflicks.data.cache.SelectPagedMovieList
 import com.sifat.slushflicks.data.cache.SelectPagedTvShowList
 import com.sifat.slushflicks.data.cache.TvCollectionEntity
+import com.sifat.slushflicks.data.cache.TvShowEntity
 import com.sifat.slushflicks.data.cache.column.GenreColumn
 import com.sifat.slushflicks.data.cache.model.ShowEntity
 
@@ -70,6 +71,29 @@ fun ShowEntity.toMovieEntity() = MovieEntity(
     revenue = DEFAULT_LONG,
     runtime = DEFAULT_INT,
     casts = emptyList()
+)
+
+fun ShowEntity.toTvShowEntity() = TvShowEntity(
+    id = id,
+    voteAvg = voteAvg,
+    title = title,
+    overview = overview,
+    backdropPath = backdropPath,
+    genres = genres.map { it.toColumn() },
+    releaseData = EMPTY_STRING,
+    voteCount = DEFAULT_INT,
+    popularity = DEFAULT_DOUBLE,
+    posterPath = EMPTY_STRING,
+    status = EMPTY_STRING,
+    video = EMPTY_STRING,
+    runtime = DEFAULT_INT,
+    casts = emptyList(),
+    numOfEpisode = DEFAULT_INT,
+    numOfSeason = DEFAULT_INT,
+    lastEpisode = null,
+    nextEpisode = null,
+    seasons = null,
+    directors = EMPTY_STRING
 )
 
 fun GenreEntity.toColumn() = GenreColumn(id, name)
