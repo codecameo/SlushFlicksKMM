@@ -160,6 +160,7 @@ selectPagedMovieList:
 SELECT MovieEntity.id, title, overview, voteAvg, backdropPath, genres FROM MovieEntity INNER JOIN MovieCollectionEntity
         ON MovieEntity.id = MovieCollectionEntity.id
         WHERE MovieCollectionEntity.collection= :collection
+        ORDER BY MovieCollectionEntity.position
         LIMIT :pageSize OFFSET :offset;
 
 selectMovieList:
@@ -267,6 +268,7 @@ SELECT TvShowEntity.id, title, overview, voteAvg, backdropPath, genres
     FROM TvShowEntity INNER JOIN TvCollectionEntity
     ON TvShowEntity.id = TvCollectionEntity.id
     WHERE TvCollectionEntity.collection= :collection
+    ORDER BY TvCollectionEntity.position
     LIMIT :pageSize OFFSET :offset;
 
 selectTvShowList:
