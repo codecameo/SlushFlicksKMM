@@ -35,7 +35,7 @@ class SearchRepositoryImpl(
         page: Int
     ): DataState<SearchResult<ShowEntity>> {
         return execute {
-            getDataState(searchApi.getSearchMovies(query, page)) {
+            getDataState(searchApi.getSearchTvShows(query, page)) {
                 SearchResult(
                     query = query,
                     page = page,

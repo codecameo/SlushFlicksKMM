@@ -1,8 +1,10 @@
 package com.sifat.slushflicks.component
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,6 +14,8 @@ import com.sifat.slushflicks.Route
 import com.sifat.slushflicks.component.home.HomeScreen
 import com.sifat.slushflicks.component.splash.SplashScreen
 
+@ExperimentalMaterialApi
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun SlushFlicksNavGraph(

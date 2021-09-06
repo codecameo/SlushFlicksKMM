@@ -5,8 +5,10 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -16,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController.OnDestinationChangedListener
@@ -31,6 +34,8 @@ import com.sifat.slushflicks.component.movie.MovieScreen
 import com.sifat.slushflicks.component.search.SearchScreen
 import com.sifat.slushflicks.component.tvshow.TvShowScreen
 
+@ExperimentalComposeUiApi
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreen() {
@@ -63,7 +68,11 @@ fun HomeScreen() {
             }
         }
     ) {
-        AnimatedNavHost(navController = navController, startDestination = Route.MOVIE) {
+        AnimatedNavHost(
+            modifier = Modifier.padding(it),
+            navController = navController,
+            startDestination = Route.MOVIE
+        ) {
             composable(
                 Route.MOVIE,
                 enterTransition = { _, _ ->
@@ -167,22 +176,6 @@ fun HomeBottomNav(currentRoute: String, onItemSelected: (String) -> Unit) {
                 }
             )
         }
-    }
-}
-
-@ExperimentalAnimationApi
-fun NavGraphBuilder.addHomeGraph() {
-    composable(Route.MOVIE) {
-        MovieScreen()
-    }
-    composable(Route.TV_SHOW) {
-        TvShowScreen()
-    }
-    composable(Route.SEARCH) {
-        SearchScreen()
-    }
-    composable(Route.ABOUT) {
-        AboutScreen()
     }
 }
 

@@ -40,6 +40,7 @@
     <string name="error_no_app_found">No application found to share.</string>
     <string name="error_failed_to_short_link">Failed to create sharable link. Try again</string>
     <string name="text_search">Search</string>
+    <string name="hint_search">Search…</string>
     <string name="text_search_show">Search your show</string>
     <string name="text_filter">Filter</string>
     <string name="text_done">Done</string>
@@ -50,11 +51,11 @@
     <string name="developed_by">Developed by:</string>
     <string name="email">code.cameo92@gmail.com</string>
     <string name="text_architecture">Architecture</string>
-    <string name="mvvm_nmvi">MVVM\nMVI</string>
+    <string name="mvvm_mvi_clean_code">MVVM\nMVI\nClean Architecture</string>
     <string name="kotlin">Kotlin</string>
     <string name="text_language">Language</string>
     <string name="text_libraries_and_components">Libraries and Components</string>
-    <string name="libraries_components_list">ViewModel\nLiveData\nRoom\nCorotuine\nPaging Library\nNavigation Component\nDataBinding\nDagger2\nRetrofit\nFirebase</string>
+    <string name="libraries_components_list">Kotlin Multiplatform Mobile (KMM)\nJetpack Compose\nViewModel\nSqlDelight\nKotlin Coroutines\nNavigation Component\nKoin\nKtor\nFirebase</string>
     <string name="text_appreciation">In Appreciation</string>
-    <string name="reference_list">Architecture Components Samples\nSunflower App from Google\nCodingWithMitch.com</string>
+    <string name="reference_list">Architecture Components Samples\nJetpack sample Apps from Google\nCodingWithMitch.com\ngithub.com/joreilly/PeopleInSpace</string>
 </resources>
