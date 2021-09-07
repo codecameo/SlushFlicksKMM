@@ -25,7 +25,6 @@ import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_REVIEWS_U
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_SIMILAR_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_VIDEO_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.UPCOMING_MOVIE_URL
-import com.sifat.slushflicks.data.remote.ApiRequest.Companion.PATH_COLLECTION
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.PATH_MOVIE_ID
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.PATH_RELATION_TYPE
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.PATH_TV_SEASON_NUMBER
@@ -36,13 +35,13 @@ import kotlinx.serialization.Serializable
 
 enum class ImageDimension(val dimension: String) {
     // "w92", "w154", "w185", "w342", "w500", "w780", or "original"
-    W92("/w92"),
-    W154("/w154"),
-    W185("/w185"),
+    W92("w92/"),
+    W154("w154/"),
+    W185("w185/"),
     W342("w342"),
-    W500("/w500"),
-    W780("/w780"),
-    Original("/original")
+    W500("w500/"),
+    W780("w780/"),
+    Original("original/")
 }
 
 class ApiRequest {
@@ -154,5 +153,5 @@ const val TIMEOUT = 20 * 1000L
 const val CONTENT_TYPE = "Content-Type"
 const val APPLICATION_JSON = "application/json"
 const val BASE_URL = "api.themoviedb.org/3"
-const val IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
+const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/"
 const val API_KEY = "5bd74c7a7bbfad5678fe1acd33fe732a"

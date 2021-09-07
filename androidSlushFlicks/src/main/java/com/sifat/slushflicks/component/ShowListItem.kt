@@ -20,20 +20,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush.Companion.verticalGradient
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.sifat.slushflicks.R
+import com.sifat.slushflicks.data.BULLET_SIGN
 import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.slushflicks.theme.Black10
+import com.sifat.slushflicks.theme.Black85
+import com.sifat.slushflicks.theme.Transparent
 
 @ExperimentalCoilApi
 @Composable
 fun ShowListItem(showModel: ShowModel) {
+    val colors = listOf(Transparent, Black10, Black85)
+    val genreList = showModel.genres.joinToString(separator = " $BULLET_SIGN ") { it.name }
+
     Card(
         modifier = Modifier
             .wrapContentSize()
@@ -53,7 +63,7 @@ fun ShowListItem(showModel: ShowModel) {
                     .aspectRatio(2f)
                     .background(MaterialTheme.colors.primaryVariant),
                 painter = rememberImagePainter(
-                    data = "https://image.tmdb.org/t/p/w342/${showModel.backdropPath}",
+                    data = showModel.backdropPath,
                     builder = {
                         crossfade(false)
                         placeholder(R.drawable.placeholder)
@@ -62,6 +72,26 @@ fun ShowListItem(showModel: ShowModel) {
                 contentDescription = showModel.title,
                 contentScale = ContentScale.Crop
             )
+
+            Spacer(
+                modifier = Modifier
+                    .aspectRatio(2f)
+                    .layoutId("overlay")
+                    .background(brush = verticalGradient(colors))
+            )
+
+            Text(
+                text = genreList,
+                style = MaterialTheme.typography.caption.copy(
+                    color = MaterialTheme.colors.onSecondary,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium
+                ),
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .layoutId("genre")
+            )
+
             Row(
                 modifier = Modifier
                     .layoutId("rating")
@@ -120,6 +150,7 @@ private fun showItemConstraints(): ConstraintSet {
         val title = createRefFor("title")
         val overview = createRefFor("overview")
         val overlay = createRefFor("overlay")
+        val genre = createRefFor("genre")
 
         constrain(poster) {
             top.linkTo(parent.top)
@@ -142,10 +173,13 @@ private fun showItemConstraints(): ConstraintSet {
             bottom.linkTo(poster.bottom, margin = 12.dp)
         }
         constrain(overlay) {
-            top.linkTo(poster.top)
-            bottom.linkTo(poster.bottom)
-            start.linkTo(poster.start)
-            end.linkTo(poster.end)
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+        constrain(genre) {
+            linkTo(start = parent.start, end = rating.start, bias = 0f)
+            bottom.linkTo(rating.bottom)
         }
     }
 }
