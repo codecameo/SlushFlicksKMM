@@ -22,23 +22,30 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController.OnDestinationChangedListener
-import androidx.navigation.NavGraphBuilder
+import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.Route
+import com.sifat.slushflicks.Route.MOVIE_DETAILS
+import com.sifat.slushflicks.Route.TV_SHOW_DETAILS
 import com.sifat.slushflicks.component.about.AboutScreen
 import com.sifat.slushflicks.component.movie.MovieScreen
 import com.sifat.slushflicks.component.search.SearchScreen
 import com.sifat.slushflicks.component.tvshow.TvShowScreen
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
+@ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    showSelected: (String, Long) -> Unit
+) {
     var currentRoute by remember { mutableStateOf(Route.MOVIE) }
     val navController = rememberAnimatedNavController()
     val navigationListener = OnDestinationChangedListener { _, destination, _ ->
@@ -88,7 +95,9 @@ fun HomeScreen() {
                     slideInHorizontally(initialOffsetX = { -1000 })
                 }
             ) {
-                MovieScreen()
+                MovieScreen { show ->
+                    showSelected(MOVIE_DETAILS, show.id)
+                }
             }
             composable(
                 Route.TV_SHOW,
@@ -105,7 +114,9 @@ fun HomeScreen() {
                     slideInHorizontally(initialOffsetX = { -1000 })
                 }
             ) {
-                TvShowScreen()
+                TvShowScreen { show ->
+                    showSelected(TV_SHOW_DETAILS, show.id)
+                }
             }
             composable(
                 Route.SEARCH,
@@ -122,7 +133,14 @@ fun HomeScreen() {
                     slideInHorizontally(initialOffsetX = { -1000 })
                 }
             ) {
-                SearchScreen()
+                SearchScreen(
+                    movieSelected = { show ->
+                        showSelected(MOVIE_DETAILS, show.id)
+                    },
+                    tvShowSelected = { show ->
+                        showSelected(TV_SHOW_DETAILS, show.id)
+                    }
+                )
             }
             composable(
                 Route.ABOUT,

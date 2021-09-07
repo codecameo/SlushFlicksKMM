@@ -65,7 +65,10 @@ import org.koin.androidx.compose.getViewModel
 @FlowPreview
 @ExperimentalCoilApi
 @Composable
-fun SearchScreen() {
+fun SearchScreen(
+    movieSelected: (ShowModel) -> Unit = {},
+    tvShowSelected: (ShowModel) -> Unit = {}
+) {
     val inputDelay = 500L
     val searchViewModel = getViewModel<SearchViewModel>()
     var searchResult by remember { mutableStateOf(emptyList<ShowModel>()) }
@@ -159,7 +162,8 @@ fun SearchScreen() {
                 ShowListComponent(
                     listState = listState,
                     label = query,
-                    showList = searchResult
+                    showList = searchResult,
+                    showSelected = if (showType == MOVIE) movieSelected else tvShowSelected
                 ) {
                     searchViewModel.viewEventState.value = LoadMoreShowViewEvent()
                 }

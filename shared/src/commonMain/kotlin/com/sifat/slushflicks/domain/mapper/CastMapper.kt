@@ -4,6 +4,8 @@ import com.sifat.slushflicks.data.Constants.DEFAULT_INT
 import com.sifat.slushflicks.data.Constants.EMPTY_STRING
 import com.sifat.slushflicks.data.Constants.INVALID_ID_LONG
 import com.sifat.slushflicks.data.cache.column.CastColumn
+import com.sifat.slushflicks.data.remote.IMAGE_BASE_URL
+import com.sifat.slushflicks.data.remote.ImageDimension.W185
 import com.sifat.slushflicks.domain.model.CastModel
 
 fun CastColumn.toModel() = CastModel(
@@ -11,5 +13,6 @@ fun CastColumn.toModel() = CastModel(
     character = character ?: EMPTY_STRING,
     name = name ?: EMPTY_STRING,
     order = order ?: DEFAULT_INT,
-    profileImage = profileImage ?: EMPTY_STRING
+    profileImage = profileImage?.let { "$IMAGE_BASE_URL${W185.dimension}$profileImage" }
+        ?: EMPTY_STRING
 )

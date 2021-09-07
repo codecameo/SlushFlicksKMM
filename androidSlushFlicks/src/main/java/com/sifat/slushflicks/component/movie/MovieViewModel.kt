@@ -1,8 +1,8 @@
 package com.sifat.slushflicks.component.movie
 
 import com.sifat.slushflicks.AppDispatchers
-import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Loading
+import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.component.home.CollectionViewState
 import com.sifat.slushflicks.data.Constants.INVALID_INT
@@ -62,12 +62,17 @@ class MovieViewModel(
             is DataState.Success -> {
                 viewState.addShowList(state.data ?: emptyList())
                 viewState.isLoadingMore = false
-                FetchMovieListViewAction(ViewState.Success(data = viewState.showList.toList()))
+                FetchMovieListViewAction(Success(data = viewState.showList.distinctBy { it.id }))
             }
         }
     }
 
     private suspend fun handleCollectionEvent() {
+        if (viewState.collectionItems.isNotEmpty()) {
+            _viewActionState.value =
+                FetchCollectionViewAction(Success(data = viewState.collectionItems))
+            return
+        }
         _viewActionState.value = FetchCollectionViewAction(Loading())
         getViewState(collectionUseCase.execute()) {
             viewState.initCollectionList(it)
@@ -80,6 +85,6 @@ class MovieViewModel(
     private fun updateLabel(label: String) {
         viewState.updateSelectedLabel(label)
         _viewActionState.value =
-            FetchCollectionViewAction(ViewState.Success(viewState.collectionItems))
+            FetchCollectionViewAction(Success(viewState.collectionItems))
     }
 }

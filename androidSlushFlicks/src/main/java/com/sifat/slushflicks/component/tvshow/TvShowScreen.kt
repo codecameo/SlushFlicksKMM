@@ -38,7 +38,7 @@ import org.koin.androidx.compose.getViewModel
 
 @ExperimentalCoilApi
 @Composable
-fun TvShowScreen() {
+fun TvShowScreen(showSelected: (ShowModel) -> Unit = {}) {
     val tvShowViewModel = getViewModel<TvShowViewModel>()
     val collectionItems = remember { mutableStateOf(emptyList<CollectionListModel>()) }
     val showList = remember { mutableStateOf(emptyList<ShowModel>()) }
@@ -90,7 +90,8 @@ fun TvShowScreen() {
         }
         ShowListComponent(
             label = tvShowViewModel.viewState.currentSelectedLabel,
-            showList = showList.value
+            showList = showList.value,
+            showSelected = showSelected
         ) {
             tvShowViewModel.viewEventState.value = LoadMoreTvShowListViewEvent()
         }

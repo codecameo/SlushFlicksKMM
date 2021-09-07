@@ -58,18 +58,22 @@ class MovieDetailsRepositoryImpl(
     override suspend fun getSimilarMovies(movieId: Long, page: Int): DataState<List<ShowEntity>> {
         return execute {
             getDataState(
-                movieApi.getRelatedMovies(
-                    movieId = movieId,
-                    relation = SIMILAR_LABEL,
-                    page = page
-                )
-            )
+                movieApi.getRelatedMovies(movieId = movieId, relation = SIMILAR_LABEL, page = page)
+            ) {
+                it?.results?.map { it.toEntity(localDataManager.getGenres()) } ?: emptyList()
+            }
         }
     }
 
     override suspend fun getRecommendMovies(movieId: Long, page: Int): DataState<List<ShowEntity>> {
         return execute {
-            getDataState(movieApi.getRelatedMovies(movieId, RECOMMENDATION_LABEL, page))
+            getDataState(
+                movieApi.getRelatedMovies(
+                    movieId = movieId, relation = RECOMMENDATION_LABEL, page = page
+                )
+            ) {
+                it?.results?.map { it.toEntity(localDataManager.getGenres()) } ?: emptyList()
+            }
         }
     }
 

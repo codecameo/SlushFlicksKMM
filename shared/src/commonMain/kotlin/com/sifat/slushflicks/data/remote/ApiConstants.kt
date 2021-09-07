@@ -3,12 +3,12 @@ package com.sifat.slushflicks.data.remote
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.AIRING_TODAY_TV_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.GENRES_MOVIE_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.GENRES_TV_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_CREDITS_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_CREDITS_PATH
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_DETAILS_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_RECOMMENDATION_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.RECOMMENDATION_PATH
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_REVIEWS_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_SIMILAR_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_VIDEOS_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_VIDEOS_PATH
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.NOW_PLAYING_MOVIE_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.POPULAR_MOVIE_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.POPULAR_TV_URL
@@ -60,11 +60,11 @@ class ApiRequest {
 class ApiEndPoint {
     companion object {
         const val TRENDING_MOVIE_URL = "trending/movie/day"
-        const val MOVIE_DETAILS_URL = "movie/"
+        const val MOVIE_DETAILS_URL = "movie"
         const val MOVIE_COLLECTION_URL = "movie"
-        const val MOVIE_VIDEOS_URL = "movie/{$PATH_MOVIE_ID}/videos"
-        const val MOVIE_CREDITS_URL = "movie/{$PATH_MOVIE_ID}/credits"
-        const val MOVIE_RECOMMENDATION_URL = "movie/{$PATH_MOVIE_ID}/recommendations"
+        const val MOVIE_VIDEOS_PATH = "videos"
+        const val MOVIE_CREDITS_PATH = "credits"
+        const val RECOMMENDATION_PATH = "recommendations"
         const val MOVIE_SIMILAR_URL = "movie/{$PATH_MOVIE_ID}/similar"
         const val RELATED_MOVIE_URL = "movie/{$PATH_MOVIE_ID}/{$PATH_RELATION_TYPE}"
         const val MOVIE_REVIEWS_URL = "movie/{$PATH_MOVIE_ID}/reviews"
@@ -108,9 +108,9 @@ class ApiTag {
         const val UPCOMING_MOVIE_API_TAG = UPCOMING_MOVIE_URL + GET
         const val TOP_RATED_MOVIE_API_TAG = TOP_RATED_MOVIE_URL + GET
         const val MOVIE_DETAIL_API_TAG = MOVIE_DETAILS_URL + GET
-        const val MOVIE_VIDEO_API_TAG = MOVIE_VIDEOS_URL + GET
-        const val MOVIE_CREDITS_API_TAG = MOVIE_CREDITS_URL + GET
-        const val MOVIE_RECOMMENDATION_API_TAG = MOVIE_RECOMMENDATION_URL + GET
+        const val MOVIE_VIDEO_API_TAG = MOVIE_VIDEOS_PATH + GET
+        const val MOVIE_CREDITS_API_TAG = MOVIE_CREDITS_PATH + GET
+        const val MOVIE_RECOMMENDATION_API_TAG = RECOMMENDATION_PATH + GET
         const val MOVIE_SIMILAR_API_TAG = MOVIE_SIMILAR_URL + GET
         const val MOVIE_REVIEWS_API_TAG = MOVIE_REVIEWS_URL + GET
         const val MOVIE_SEARCH_API_TAG = SEARCH_MOVIE_URL + GET

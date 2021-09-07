@@ -58,4 +58,7 @@
     <string name="libraries_components_list">Kotlin Multiplatform Mobile (KMM)\nJetpack Compose\nViewModel\nSqlDelight\nKotlin Coroutines\nNavigation Component\nKoin\nKtor\nFirebase</string>
     <string name="text_appreciation">In Appreciation</string>
     <string name="reference_list">Architecture Components Samples\nJetpack sample Apps from Google\nCodingWithMitch.com\ngithub.com/joreilly/PeopleInSpace</string>
+    <string name="text_back">Back</string>
+    <string name="text_trailer">Trailer</string>
+    <string name="text_popularity">Popularity</string>
 </resources>

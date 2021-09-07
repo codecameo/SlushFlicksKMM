@@ -66,7 +66,7 @@ class SearchViewModel(
                         viewState.addShowList(state.data?.result ?: emptyList())
                         viewState.isLoading = false
                     }
-                    SearchResultViewAction(Success(data = viewState.searchResult.toList()))
+                    SearchResultViewAction(Success(data = viewState.searchResult.distinctBy { it.id }))
                 }
             }
         }

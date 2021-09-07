@@ -2,10 +2,10 @@ package com.sifat.slushflicks.data.remote.api.impl
 
 import com.sifat.slushflicks.data.remote.ApiEndPoint
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_COLLECTION_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_CREDITS_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_CREDITS_PATH
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_DETAILS_URL
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_REVIEWS_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_VIDEOS_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.MOVIE_VIDEOS_PATH
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TRENDING_MOVIE_URL
 import com.sifat.slushflicks.data.remote.ApiErrorParser
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_API_KEY
@@ -70,7 +70,7 @@ class MovieApiImpl(
     override suspend fun getMovieVideos(movieId: Long): ApiResponse<VideoListApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(MOVIE_VIDEOS_URL, movieId.toString()))
+                path(listOf(MOVIE_DETAILS_URL, movieId.toString(), MOVIE_VIDEOS_PATH))
                 parameters.append(QUERY_KEY_API_KEY, apiKey)
             }
             client.get(urlString = urlBuilder.buildString())
@@ -80,7 +80,7 @@ class MovieApiImpl(
     override suspend fun getMovieCredits(movieId: Long): ApiResponse<CreditsApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(MOVIE_CREDITS_URL, movieId.toString()))
+                path(listOf(MOVIE_DETAILS_URL, movieId.toString(), MOVIE_CREDITS_PATH))
                 parameters.append(QUERY_KEY_API_KEY, apiKey)
             }
             client.get(urlString = urlBuilder.buildString())
@@ -110,7 +110,7 @@ class MovieApiImpl(
     ): ApiResponse<MovieListApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(ApiEndPoint.RELATED_MOVIE_URL, movieId.toString(), relation))
+                path(listOf(MOVIE_DETAILS_URL, movieId.toString(), relation))
                 parameters.run {
                     append(QUERY_KEY_API_KEY, apiKey)
                     append(QUERY_KEY_PAGE, page.toString())

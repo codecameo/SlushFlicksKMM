@@ -1,5 +1,6 @@
 package com.sifat.slushflicks.di
 
+import com.sifat.slushflicks.component.details.movie.MovieDetailsViewModel
 import com.sifat.slushflicks.component.movie.MovieViewModel
 import com.sifat.slushflicks.component.search.SearchViewModel
 import com.sifat.slushflicks.component.splash.SplashViewModel
@@ -30,6 +31,14 @@ fun viewModelModule() = module {
             movieSearchUseCase = get(),
             appDispatchers = get(),
             tvShowSearchUseCase = get()
+        )
+    }
+    viewModel {
+        MovieDetailsViewModel(
+            movieDetailsUseCase = get(),
+            appDispatchers = get(),
+            similarMovieUseCase = get(),
+            recommendedMovieUseCase = get()
         )
     }
 }

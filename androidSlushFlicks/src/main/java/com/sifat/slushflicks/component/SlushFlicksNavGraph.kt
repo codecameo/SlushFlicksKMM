@@ -10,10 +10,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.annotation.ExperimentalCoilApi
+import com.sifat.slushflicks.Arguments.MOVIE_ID
 import com.sifat.slushflicks.Route
+import com.sifat.slushflicks.Route.MOVIE_DETAILS
+import com.sifat.slushflicks.component.details.movie.MovieDetailsScreen
 import com.sifat.slushflicks.component.home.HomeScreen
 import com.sifat.slushflicks.component.splash.SplashScreen
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoilApi
+@FlowPreview
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -33,7 +40,12 @@ fun SlushFlicksNavGraph(
             SplashScreen(navigation::navigateTo)
         }
         composable(Route.HOME) {
-            HomeScreen()
+            HomeScreen(navigation::navigateTo)
+        }
+        composable("$MOVIE_DETAILS{$MOVIE_ID}") {
+            (it.arguments?.get(MOVIE_ID) as? String)?.let { movieId ->
+                MovieDetailsScreen(onBack = navigation::popBack, movieId = movieId.toLong())
+            }
         }
     }
 }
@@ -45,5 +57,13 @@ class Navigation(private val navController: NavHostController) {
                 inclusive = true
             }
         }
+    }
+
+    fun navigateTo(route: String, showId: Long) {
+        navController.navigate(route = "$route$showId")
+    }
+
+    fun popBack() {
+        navController.popBackStack()
     }
 }

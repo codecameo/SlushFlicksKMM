@@ -25,30 +25,36 @@ private val Montserrat = FontFamily(
 
 val SlushFlicksTypography = Typography(
     defaultFontFamily = Montserrat,
-    h2 = TextStyle(
+    h1 = TextStyle(
         fontFamily = Domine,
         fontWeight = FontWeight.Bold,
         fontSize = 40.sp,
         letterSpacing = 0.sp
     ),
-    h3 = TextStyle(
+    h2 = TextStyle(
+        fontFamily = Domine,
         fontWeight = FontWeight.Bold,
         fontSize = 36.sp,
         letterSpacing = 0.sp
     ),
-    h4 = TextStyle(
-        fontWeight = FontWeight.SemiBold,
+    h3 = TextStyle(
+        fontWeight = FontWeight.Bold,
         fontSize = 30.sp,
         letterSpacing = 0.sp
     ),
-    h5 = TextStyle(
+    h4 = TextStyle(
         fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
         letterSpacing = 0.sp
     ),
-    h6 = TextStyle(
+    h5 = TextStyle(
         fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp,
+        letterSpacing = 0.sp
+    ),
+    h6 = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
         letterSpacing = 0.sp
     ),
     subtitle1 = TextStyle(

@@ -1,5 +1,6 @@
 package com.sifat.slushflicks.component.movie
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -22,17 +23,21 @@ fun ShowListComponent(
     listState: LazyListState = rememberLazyListState(),
     label: String,
     showList: List<ShowModel>,
+    showSelected: (ShowModel) -> Unit = {},
     loadMore: () -> Unit
 ) {
     val loadMoreCallback by rememberUpdatedState(newValue = loadMore)
+    val selectedShowCallback by rememberUpdatedState(newValue = showSelected)
 
     LaunchedEffect(label) {
         listState.animateScrollToItem(0)
     }
-
     LazyColumn(modifier = modifier.fillMaxSize(), state = listState) {
-        items(showList, key = { it.id }) {
-            ShowListItem(it)
+        items(showList, key = { it.id }) { show ->
+            ShowListItem(
+                modifier = Modifier.clickable { selectedShowCallback(show) },
+                showModel = show
+            )
         }
     }
 

@@ -61,7 +61,7 @@ class TvShowViewModel(
             is DataState.Success -> {
                 viewState.addShowList(state.data ?: emptyList())
                 viewState.isLoadingMore = false
-                FetchTvListViewAction(ViewState.Success(data = viewState.showList.toList()))
+                FetchTvListViewAction(ViewState.Success(data = viewState.showList.distinctBy { it.id }))
             }
         }
     }

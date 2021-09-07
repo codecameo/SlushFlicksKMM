@@ -2,28 +2,20 @@ package com.sifat.slushflicks.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush.Companion.verticalGradient
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,7 +24,6 @@ import androidx.constraintlayout.compose.ConstraintSet
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.data.BULLET_SIGN
 import com.sifat.slushflicks.domain.model.ShowModel
 import com.sifat.slushflicks.theme.Black10
 import com.sifat.slushflicks.theme.Black85
@@ -40,12 +31,12 @@ import com.sifat.slushflicks.theme.Transparent
 
 @ExperimentalCoilApi
 @Composable
-fun ShowListItem(showModel: ShowModel) {
+fun ShowListItem(modifier: Modifier = Modifier, showModel: ShowModel) {
     val colors = listOf(Transparent, Black10, Black85)
-    val genreList = showModel.genres.joinToString(separator = " $BULLET_SIGN ") { it.name }
+    val genreList = getGenreList(showModel.genres)
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentSize()
             .background(MaterialTheme.colors.primary)
             .padding(8.dp)
@@ -61,6 +52,7 @@ fun ShowListItem(showModel: ShowModel) {
                 modifier = Modifier
                     .layoutId("poster")
                     .aspectRatio(2f)
+                    .verticalGradientTint(colors = colors, blendMode = BlendMode.Darken)
                     .background(MaterialTheme.colors.primaryVariant),
                 painter = rememberImagePainter(
                     data = showModel.backdropPath,
@@ -72,14 +64,6 @@ fun ShowListItem(showModel: ShowModel) {
                 contentDescription = showModel.title,
                 contentScale = ContentScale.Crop
             )
-
-            Spacer(
-                modifier = Modifier
-                    .aspectRatio(2f)
-                    .layoutId("overlay")
-                    .background(brush = verticalGradient(colors))
-            )
-
             Text(
                 text = genreList,
                 style = MaterialTheme.typography.caption.copy(
@@ -91,37 +75,10 @@ fun ShowListItem(showModel: ShowModel) {
                     .padding(horizontal = 12.dp)
                     .layoutId("genre")
             )
-
-            Row(
-                modifier = Modifier
-                    .layoutId("rating")
-                    .shadow(elevation = 6.dp, clip = false)
-                    .background(
-                        color = MaterialTheme.colors.onPrimary,
-                        shape = RoundedCornerShape(
-                            topStart = CornerSize(10.dp),
-                            bottomStart = CornerSize(10.dp),
-                            bottomEnd = CornerSize(0.dp),
-                            topEnd = CornerSize(0.dp)
-                        )
-                    )
-                    .padding(horizontal = 6.dp, vertical = 2.dp)
-
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(12.dp)
-                        .align(Alignment.CenterVertically),
-                    painter = painterResource(id = R.drawable.ic_star_orange),
-                    contentDescription = "Rating${showModel.voteAvg}",
-                    tint = MaterialTheme.colors.secondary
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                Text(
-                    text = showModel.voteAvg.toString(),
-                    style = MaterialTheme.typography.overline.copy(color = MaterialTheme.colors.primary)
-                )
-            }
+            RatingComponent(
+                voteAvg = showModel.voteAvg,
+                modifier = Modifier.layoutId("rating")
+            )
             Text(
                 text = showModel.title,
                 modifier = Modifier
@@ -149,7 +106,6 @@ private fun showItemConstraints(): ConstraintSet {
         val rating = createRefFor("rating")
         val title = createRefFor("title")
         val overview = createRefFor("overview")
-        val overlay = createRefFor("overlay")
         val genre = createRefFor("genre")
 
         constrain(poster) {
@@ -171,11 +127,6 @@ private fun showItemConstraints(): ConstraintSet {
         constrain(rating) {
             end.linkTo(parent.end)
             bottom.linkTo(poster.bottom, margin = 12.dp)
-        }
-        constrain(overlay) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
         }
         constrain(genre) {
             linkTo(start = parent.start, end = rating.start, bias = 0f)
