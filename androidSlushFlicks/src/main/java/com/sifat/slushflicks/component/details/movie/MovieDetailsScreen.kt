@@ -103,151 +103,154 @@ fun MovieDetailsScreen(onBack: () -> Unit, movieId: Long) {
         }.launchIn(this)
     }
 
-    Column(
+    Box(
         modifier = Modifier
+            .fillMaxSize()
             .navigationBarsPadding()
-            .verticalScroll(state = scrollState)
     ) {
-        Box(modifier = Modifier.aspectRatio(0.95f)) {
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalGradientTint(gradientColor),
-                painter = rememberImagePainter(
-                    data = movieModel.posterPath,
-                    builder = {
-                        crossfade(false)
-                        placeholder(R.drawable.placeholder)
-                        error(R.drawable.placeholder)
+        Column(
+            modifier = Modifier.verticalScroll(state = scrollState)
+        ) {
+            Box(modifier = Modifier.aspectRatio(0.95f)) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalGradientTint(gradientColor),
+                    painter = rememberImagePainter(
+                        data = movieModel.posterPath,
+                        builder = {
+                            crossfade(false)
+                            placeholder(R.drawable.placeholder)
+                            error(R.drawable.placeholder)
+                        }
+                    ),
+                    contentDescription = movieModel.title,
+                    contentScale = ContentScale.Crop
+                )
+
+                if (movieModel.video.isNotEmpty()) {
+                    IconButton(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .background(
+                                color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f),
+                                shape = CircleShape
+                            )
+                            .padding(6.dp),
+                        onClick = {
+                        }
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(30.dp),
+                            imageVector = Icons.Filled.PlayArrow,
+                            tint = MaterialTheme.colors.onPrimary,
+                            contentDescription = stringResource(id = R.string.text_trailer)
+                        )
                     }
-                ),
-                contentDescription = movieModel.title,
-                contentScale = ContentScale.Crop
+                }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomStart)
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    text = movieModel.title,
+                    style = MaterialTheme.typography.h5.copy(color = MaterialTheme.colors.onPrimary),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            if (movieModel.tagline.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    text = movieModel.tagline,
+                    style = MaterialTheme.typography.overline.copy(
+                        color = MaterialTheme.colors.onSecondary
+                    )
+                )
+            }
+
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = getGenreList(movieModel.genres),
+                style = MaterialTheme.typography.caption.copy(
+                    fontSize = 11.sp,
+                    color = MaterialTheme.colors.secondary
+                )
             )
 
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.text_overview),
+                    style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onPrimary)
+                )
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 4.dp)
+                        .align(Alignment.CenterVertically),
+                    painter = painterResource(id = R.drawable.ic_popularity),
+                    contentDescription = stringResource(id = R.string.text_popularity),
+                    tint = MaterialTheme.colors.secondary
+                )
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = movieModel.popularity.toString(),
+                    style = MaterialTheme.typography.caption.copy(
+                        color = MaterialTheme.colors.onSecondary,
+                        fontSize = 10.sp
+                    )
+                )
+            }
+
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
+                text = movieModel.overview,
+                style = MaterialTheme.typography.caption.copy(MaterialTheme.colors.onSecondary)
+            )
+
+            CastComponent(casts = movieModel.casts)
+            RelatedShowComponent(
+                showModels = recommendation,
+                title = stringResource(id = R.string.text_recommended)
+            ) {
+                coroutineScope.launch { scrollState.animateScrollTo(0) }
+                currentMovieId = it.id
+            }
+            RelatedShowComponent(
+                showModels = similar,
+                title = stringResource(id = R.string.text_similar)
+            ) {
+                coroutineScope.launch { scrollState.animateScrollTo(0) }
+                currentMovieId = it.id
+            }
+        }
+        Icon(
+            modifier = Modifier
+                .statusBarsPadding()
+                .padding(16.dp)
+                .clickable {
+                    onBack()
+                },
+            imageVector = Icons.Filled.ArrowBack,
+            tint = MaterialTheme.colors.onPrimary,
+            contentDescription = stringResource(id = R.string.text_back)
+        )
+
+        if (canShare) {
             Icon(
                 modifier = Modifier
                     .statusBarsPadding()
                     .padding(16.dp)
+                    .align(Alignment.TopEnd)
                     .clickable {
                         onBack()
                     },
-                imageVector = Icons.Filled.ArrowBack,
+                imageVector = Icons.Filled.Share,
                 tint = MaterialTheme.colors.onPrimary,
-                contentDescription = stringResource(id = R.string.text_back)
+                contentDescription = stringResource(id = R.string.title_share)
             )
-
-            if (canShare) {
-                Icon(
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .padding(16.dp)
-                        .align(Alignment.TopEnd)
-                        .clickable {
-                            onBack()
-                        },
-                    imageVector = Icons.Filled.Share,
-                    tint = MaterialTheme.colors.onPrimary,
-                    contentDescription = stringResource(id = R.string.title_share)
-                )
-            }
-
-            if (movieModel.video.isNotEmpty()) {
-                IconButton(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .background(
-                            color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f),
-                            shape = CircleShape
-                        )
-                        .padding(6.dp),
-                    onClick = {
-                    }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(30.dp),
-                        imageVector = Icons.Filled.PlayArrow,
-                        tint = MaterialTheme.colors.onPrimary,
-                        contentDescription = stringResource(id = R.string.text_trailer)
-                    )
-                }
-            }
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomStart)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                text = movieModel.title,
-                style = MaterialTheme.typography.h5.copy(color = MaterialTheme.colors.onPrimary),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        if (movieModel.tagline.isNotEmpty()) {
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                text = movieModel.tagline,
-                style = MaterialTheme.typography.overline.copy(
-                    color = MaterialTheme.colors.onSecondary
-                )
-            )
-        }
-
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = getGenreList(movieModel.genres),
-            style = MaterialTheme.typography.caption.copy(
-                fontSize = 11.sp,
-                color = MaterialTheme.colors.secondary
-            )
-        )
-
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.text_overview),
-                style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onPrimary)
-            )
-            Icon(
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 4.dp)
-                    .align(Alignment.CenterVertically),
-                painter = painterResource(id = R.drawable.ic_popularity),
-                contentDescription = stringResource(id = R.string.text_popularity),
-                tint = MaterialTheme.colors.secondary
-            )
-            Text(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                text = movieModel.popularity.toString(),
-                style = MaterialTheme.typography.caption.copy(
-                    color = MaterialTheme.colors.onSecondary,
-                    fontSize = 10.sp
-                )
-            )
-        }
-
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
-            text = movieModel.overview,
-            style = MaterialTheme.typography.caption.copy(MaterialTheme.colors.onSecondary)
-        )
-
-        CastComponent(casts = movieModel.casts)
-        RelatedShowComponent(
-            showModels = recommendation,
-            title = stringResource(id = R.string.text_recommended)
-        ) {
-            coroutineScope.launch { scrollState.animateScrollTo(0) }
-            currentMovieId = it.id
-        }
-        RelatedShowComponent(
-            showModels = similar,
-            title = stringResource(id = R.string.text_similar)
-        ) {
-            coroutineScope.launch { scrollState.animateScrollTo(0) }
-            currentMovieId = it.id
         }
     }
 }
