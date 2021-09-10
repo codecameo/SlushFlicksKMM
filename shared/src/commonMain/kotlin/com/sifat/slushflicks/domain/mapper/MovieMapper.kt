@@ -14,7 +14,7 @@ fun MovieEntity.toModel(videoKey: String? = null, movieCasts: List<CastModel>? =
     backdropPath = getBackdropImage(backdropPath),
     title = title,
     genres = genres.map { it.toModel() },
-    releaseData = releaseData,
+    releaseDate = releaseData,
     posterPath = getPosterImage(posterPath),
     popularity = popularity,
     budget = budget,

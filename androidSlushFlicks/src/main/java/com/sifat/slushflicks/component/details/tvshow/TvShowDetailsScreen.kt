@@ -44,9 +44,11 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.ViewState
+import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.ReviewListComponent
 import com.sifat.slushflicks.component.details.CastComponent
 import com.sifat.slushflicks.component.details.RelatedShowComponent
+import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.getGenreList
 import com.sifat.slushflicks.component.verticalGradientTint
 import com.sifat.slushflicks.domain.model.ReviewModel
@@ -85,23 +87,23 @@ fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
         viewModel.viewActionState.onEach { action ->
             when (action) {
                 is FetchTvShowDetailsViewAction -> {
-                    (action.viewState as? ViewState.Success)?.data?.let { movie ->
+                    (action.viewState as? Success)?.data?.let { movie ->
                         canShare = true
                         tvShowModel = movie
                     }
                 }
                 is FetchSimilarTvShowViewAction -> {
-                    (action.viewState as? ViewState.Success)?.data?.let { shows ->
+                    (action.viewState as? Success)?.data?.let { shows ->
                         similar = shows
                     }
                 }
                 is FetchRecommendedTvShowViewAction -> {
-                    (action.viewState as? ViewState.Success)?.data?.let { shows ->
+                    (action.viewState as? Success)?.data?.let { shows ->
                         recommendation = shows
                     }
                 }
                 is FetchReviewViewAction -> {
-                    (action.viewState as? ViewState.Success)?.data?.let { reviews ->
+                    (action.viewState as? Success)?.data?.let { reviews ->
                         userReviews = reviews
                     }
                 }
@@ -180,6 +182,13 @@ fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
                 )
             )
 
+            ShowInfoComponent(
+                voteAvg = tvShowModel.voteAvg,
+                voteCount = tvShowModel.voteCount,
+                releaseDate = tvShowModel.releaseDate,
+                runtime = tvShowModel.runtime
+            )
+
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
@@ -243,10 +252,8 @@ fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
         Icon(
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(16.dp)
-                .clickable {
-                    onBack()
-                },
+                .clickable { onBack() }
+                .padding(16.dp),
             imageVector = Icons.Filled.ArrowBack,
             tint = MaterialTheme.colors.onPrimary,
             contentDescription = stringResource(id = R.string.text_back)
@@ -256,11 +263,9 @@ fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
             Icon(
                 modifier = Modifier
                     .statusBarsPadding()
-                    .padding(16.dp)
                     .align(Alignment.TopEnd)
-                    .clickable {
-                        onBack()
-                    },
+                    .clickable { onBack() }
+                    .padding(16.dp),
                 imageVector = Icons.Filled.Share,
                 tint = MaterialTheme.colors.onPrimary,
                 contentDescription = stringResource(id = R.string.title_share)

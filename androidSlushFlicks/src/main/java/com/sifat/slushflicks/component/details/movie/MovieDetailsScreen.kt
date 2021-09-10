@@ -47,6 +47,7 @@ import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.ReviewListComponent
 import com.sifat.slushflicks.component.details.CastComponent
 import com.sifat.slushflicks.component.details.RelatedShowComponent
+import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.getGenreList
 import com.sifat.slushflicks.component.verticalGradientTint
 import com.sifat.slushflicks.domain.model.MovieModel
@@ -190,6 +191,13 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
                 )
             )
 
+            ShowInfoComponent(
+                voteAvg = movieModel.voteAvg,
+                voteCount = movieModel.voteCount,
+                releaseDate = movieModel.releaseDate,
+                runtime = movieModel.runtime
+            )
+
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
@@ -254,10 +262,8 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
         Icon(
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(16.dp)
-                .clickable {
-                    onBack()
-                },
+                .clickable { onBack() }
+                .padding(16.dp),
             imageVector = Icons.Filled.ArrowBack,
             tint = MaterialTheme.colors.onPrimary,
             contentDescription = stringResource(id = R.string.text_back)
@@ -267,11 +273,9 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
             Icon(
                 modifier = Modifier
                     .statusBarsPadding()
-                    .padding(16.dp)
                     .align(Alignment.TopEnd)
-                    .clickable {
-                        onBack()
-                    },
+                    .clickable { onBack() }
+                    .padding(16.dp),
                 imageVector = Icons.Filled.Share,
                 tint = MaterialTheme.colors.onPrimary,
                 contentDescription = stringResource(id = R.string.title_share)

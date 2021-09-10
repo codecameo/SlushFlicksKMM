@@ -10,7 +10,7 @@ data class TvShowModel(
     val voteCount: Int = DEFAULT_INT,
     val voteAvg: Double = DEFAULT_DOUBLE,
     val title: String = EMPTY_STRING,
-    val releaseData: String = EMPTY_STRING,
+    val releaseDate: String = EMPTY_STRING,
     val backdropPath: String = EMPTY_STRING,
     val overview: String = EMPTY_STRING,
     val posterPath: String = EMPTY_STRING,

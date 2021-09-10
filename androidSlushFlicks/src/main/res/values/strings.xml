@@ -61,4 +61,6 @@
     <string name="text_back">Back</string>
     <string name="text_trailer">Trailer</string>
     <string name="text_popularity">Popularity</string>
+    <string name="text_rating">%.2f (%d)</string>
+    <string name="text_runtime">%dh %dmin</string>
 </resources>
