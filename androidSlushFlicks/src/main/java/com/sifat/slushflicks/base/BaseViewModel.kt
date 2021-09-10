@@ -11,6 +11,7 @@ import com.sifat.slushflicks.viewevents.InitEvent
 import com.sifat.slushflicks.viewevents.ViewEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -18,16 +19,16 @@ import kotlinx.coroutines.withContext
 abstract class BaseViewModel<VS>(
     private val dispatchers: AppDispatchers
 ) : ViewModel() {
-
+    private val eventBufferSize = 5
     protected val _viewActionState = MutableStateFlow<ViewAction>(InitAction)
     val viewActionState: StateFlow<ViewAction> = _viewActionState
     val viewEventState = MutableStateFlow<ViewEvent>(InitEvent)
 
     init {
         viewEventState
-            .onEach {
-                onReceiveViewEvent(it)
-            }.launchIn(viewModelScope)
+            .buffer(eventBufferSize)
+            .onEach { onReceiveViewEvent(it) }
+            .launchIn(viewModelScope)
     }
 
     protected suspend fun postAction(viewAction: ViewAction) {

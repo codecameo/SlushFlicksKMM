@@ -1,12 +1,11 @@
 package com.sifat.slushflicks.data.remote.api.impl
 
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.RELATED_TV_SHOW_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.CREDITS_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.REVIEWS_PATH
 import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TRENDING_TV_SHOW_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_CREDITS_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_COLLECTION_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_DETAILS_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_REVIEWS_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_VIDEO_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SESSION_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.VIDEOS_PATH
 import com.sifat.slushflicks.data.remote.ApiErrorParser
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_API_KEY
 import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_PAGE
@@ -46,7 +45,7 @@ class TvShowApiImpl(
     ): ApiResponse<TvListApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(TV_SHOW_COLLECTION_URL, collection))
+                path(listOf(TV_SHOW_PATH, collection))
                 parameters.run {
                     append(QUERY_KEY_API_KEY, apiKey)
                     append(QUERY_KEY_PAGE, page.toString())
@@ -61,7 +60,7 @@ class TvShowApiImpl(
     ): ApiResponse<TvShowDetailsApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(TV_SHOW_DETAILS_URL, tvShowId.toString()))
+                path(listOf(TV_SHOW_PATH, tvShowId.toString()))
                 parameters.append(QUERY_KEY_API_KEY, apiKey)
             }
             client.get(urlString = urlBuilder.buildString())
@@ -73,7 +72,7 @@ class TvShowApiImpl(
     ): ApiResponse<CreditsApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(TV_CREDITS_URL, tvShowId.toString()))
+                path(listOf(TV_SHOW_PATH, tvShowId.toString(), CREDITS_PATH))
                 parameters.append(QUERY_KEY_API_KEY, apiKey)
             }
             client.get(urlString = urlBuilder.buildString())
@@ -86,7 +85,15 @@ class TvShowApiImpl(
     ): ApiResponse<VideoListApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(TV_VIDEO_URL, tvShowId.toString(), season.toString()))
+                path(
+                    listOf(
+                        TV_SHOW_PATH,
+                        tvShowId.toString(),
+                        TV_SESSION_PATH,
+                        season.toString(),
+                        VIDEOS_PATH
+                    )
+                )
                 parameters.append(QUERY_KEY_API_KEY, apiKey)
             }
             client.get(urlString = urlBuilder.buildString())
@@ -99,7 +106,7 @@ class TvShowApiImpl(
     ): ApiResponse<ReviewListApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(TV_SHOW_REVIEWS_URL, tvShowId.toString()))
+                path(listOf(TV_SHOW_PATH, tvShowId.toString(), REVIEWS_PATH))
                 parameters.run {
                     append(QUERY_KEY_API_KEY, apiKey)
                     append(QUERY_KEY_PAGE, page.toString())
@@ -116,7 +123,7 @@ class TvShowApiImpl(
     ): ApiResponse<TvListApiModel> {
         return execute {
             val urlBuilder = URLBuilder(baseUrlBuilder).apply {
-                path(listOf(RELATED_TV_SHOW_URL, tvShowId.toString(), relation))
+                path(listOf(TV_SHOW_PATH, tvShowId.toString(), relation))
                 parameters.run {
                     append(QUERY_KEY_API_KEY, apiKey)
                     append(QUERY_KEY_PAGE, page.toString())

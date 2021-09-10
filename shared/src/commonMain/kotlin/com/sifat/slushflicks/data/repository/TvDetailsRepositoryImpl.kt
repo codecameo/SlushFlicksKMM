@@ -57,7 +57,10 @@ class TvDetailsRepositoryImpl(
         return execute {
             getDataState(
                 tvShowApi.getRelatedTvShows(tvShowId, SIMILAR_LABEL, page)
-            )
+            ) {
+                val genres = localDataManager.getGenres()
+                it?.results?.map { it.toEntity(genres) } ?: emptyList()
+            }
         }
     }
 
@@ -66,7 +69,10 @@ class TvDetailsRepositoryImpl(
         page: Int
     ): DataState<List<ShowEntity>> {
         return execute {
-            getDataState(tvShowApi.getRelatedTvShows(tvShowId, RECOMMENDATION_LABEL, page))
+            getDataState(tvShowApi.getRelatedTvShows(tvShowId, RECOMMENDATION_LABEL, page)) {
+                val genres = localDataManager.getGenres()
+                it?.results?.map { it.toEntity(genres) } ?: emptyList()
+            }
         }
     }
 
@@ -75,7 +81,9 @@ class TvDetailsRepositoryImpl(
         page: Int
     ): DataState<List<ReviewApiModel>> {
         return execute {
-            getDataState(tvShowApi.getTvShowReviews(tvShowId, page))
+            getDataState(tvShowApi.getTvShowReviews(tvShowId, page)) {
+                it?.results ?: emptyList()
+            }
         }
     }
 

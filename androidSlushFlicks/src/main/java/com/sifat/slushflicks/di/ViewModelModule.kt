@@ -1,6 +1,7 @@
 package com.sifat.slushflicks.di
 
 import com.sifat.slushflicks.component.details.movie.MovieDetailsViewModel
+import com.sifat.slushflicks.component.details.tvshow.TvShowDetailsViewModel
 import com.sifat.slushflicks.component.movie.MovieViewModel
 import com.sifat.slushflicks.component.search.SearchViewModel
 import com.sifat.slushflicks.component.splash.SplashViewModel
@@ -30,7 +31,9 @@ fun viewModelModule() = module {
         SearchViewModel(
             movieSearchUseCase = get(),
             appDispatchers = get(),
-            tvShowSearchUseCase = get()
+            tvShowSearchUseCase = get(),
+            recentMovieUseCase = get(),
+            recentTvShowUseCase = get()
         )
     }
     viewModel {
@@ -38,7 +41,17 @@ fun viewModelModule() = module {
             movieDetailsUseCase = get(),
             appDispatchers = get(),
             similarMovieUseCase = get(),
-            recommendedMovieUseCase = get()
+            recommendedMovieUseCase = get(),
+            reviewUseCase = get()
+        )
+    }
+    viewModel {
+        TvShowDetailsViewModel(
+            tvShowDetailsUseCase = get(),
+            appDispatchers = get(),
+            similarTvShowUseCase = get(),
+            recommendedTvShowUseCase = get(),
+            reviewUseCase = get()
         )
     }
 }

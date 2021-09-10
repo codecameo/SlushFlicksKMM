@@ -2,6 +2,7 @@ package com.sifat.slushflicks.viewaction
 
 import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.domain.model.MovieModel
+import com.sifat.slushflicks.domain.model.ReviewModel
 import com.sifat.slushflicks.domain.model.ShowModel
 
 sealed class MovieDetailsViewAction : ViewAction() {
@@ -13,4 +14,7 @@ sealed class MovieDetailsViewAction : ViewAction() {
 
     class FetchRecommendedMovieViewAction(val viewState: ViewState<List<ShowModel>>) :
         MovieDetailsViewAction()
+
+    class FetchReviewViewAction(val viewState: ViewState<List<ReviewModel>>) :
+        MovieCollectionViewAction()
 }

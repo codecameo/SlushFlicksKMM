@@ -1,4 +1,4 @@
-package com.sifat.slushflicks.component.details.movie
+package com.sifat.slushflicks.component.details.tvshow
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,22 +43,22 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.ViewState.Success
+import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.component.ReviewListComponent
 import com.sifat.slushflicks.component.details.CastComponent
 import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.getGenreList
 import com.sifat.slushflicks.component.verticalGradientTint
-import com.sifat.slushflicks.domain.model.MovieModel
 import com.sifat.slushflicks.domain.model.ReviewModel
 import com.sifat.slushflicks.domain.model.ShowModel
-import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchMovieDetailsViewAction
-import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchRecommendedMovieViewAction
-import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchReviewViewAction
-import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchSimilarMovieViewAction
-import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchMovieDetailsViewEvent
-import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchRelatedMovieViewEvent
-import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchReviewViewEvent
+import com.sifat.slushflicks.domain.model.TvShowModel
+import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchRecommendedTvShowViewAction
+import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchReviewViewAction
+import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchSimilarTvShowViewAction
+import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchTvShowDetailsViewAction
+import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchRelatedTvShowViewEvent
+import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchReviewViewEvent
+import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchTvShowDetailsViewEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -66,14 +66,14 @@ import org.koin.androidx.compose.getViewModel
 
 @ExperimentalCoilApi
 @Composable
-fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
-    val viewModel = getViewModel<MovieDetailsViewModel>()
+fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
+    val viewModel = getViewModel<TvShowDetailsViewModel>()
     var similar by remember { mutableStateOf(emptyList<ShowModel>()) }
     var recommendation by remember { mutableStateOf(emptyList<ShowModel>()) }
-    var movieModel by remember { mutableStateOf(MovieModel()) }
+    var tvShowModel by remember { mutableStateOf(TvShowModel()) }
     val scrollState = rememberScrollState()
     var userReviews by remember { mutableStateOf(emptyList<ReviewModel>()) }
-    var currentMovieId by remember { mutableStateOf(movieId) }
+    var currentTvShowId by remember { mutableStateOf(tvShowId) }
     var canShare by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val gradientColor = listOf(
@@ -81,36 +81,36 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
         MaterialTheme.colors.primary
     )
-    LaunchedEffect(currentMovieId) {
+    LaunchedEffect(currentTvShowId) {
         viewModel.viewActionState.onEach { action ->
             when (action) {
-                is FetchMovieDetailsViewAction -> {
-                    (action.viewState as? Success)?.data?.let { movie ->
+                is FetchTvShowDetailsViewAction -> {
+                    (action.viewState as? ViewState.Success)?.data?.let { movie ->
                         canShare = true
-                        movieModel = movie
+                        tvShowModel = movie
                     }
                 }
-                is FetchSimilarMovieViewAction -> {
-                    (action.viewState as? Success)?.data?.let { shows ->
+                is FetchSimilarTvShowViewAction -> {
+                    (action.viewState as? ViewState.Success)?.data?.let { shows ->
                         similar = shows
                     }
                 }
-                is FetchRecommendedMovieViewAction -> {
-                    (action.viewState as? Success)?.data?.let { shows ->
+                is FetchRecommendedTvShowViewAction -> {
+                    (action.viewState as? ViewState.Success)?.data?.let { shows ->
                         recommendation = shows
                     }
                 }
                 is FetchReviewViewAction -> {
-                    (action.viewState as? Success)?.data?.let { reviews ->
+                    (action.viewState as? ViewState.Success)?.data?.let { reviews ->
                         userReviews = reviews
                     }
                 }
             }
         }.launchIn(this)
-        snapshotFlow { currentMovieId }.onEach {
-            viewModel.viewEventState.value = FetchMovieDetailsViewEvent(movieId = currentMovieId)
-            viewModel.viewEventState.value = FetchRelatedMovieViewEvent(movieId = currentMovieId)
-            viewModel.viewEventState.value = FetchReviewViewEvent(movieId = currentMovieId)
+        snapshotFlow { currentTvShowId }.onEach {
+            viewModel.viewEventState.value = FetchTvShowDetailsViewEvent(tvShowId = currentTvShowId)
+            viewModel.viewEventState.value = FetchRelatedTvShowViewEvent(tvShowId = currentTvShowId)
+            viewModel.viewEventState.value = FetchReviewViewEvent(tvShowId = currentTvShowId)
         }.launchIn(this)
     }
 
@@ -128,18 +128,18 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
                         .fillMaxSize()
                         .verticalGradientTint(gradientColor),
                     painter = rememberImagePainter(
-                        data = movieModel.posterPath,
+                        data = tvShowModel.posterPath,
                         builder = {
                             crossfade(false)
                             placeholder(R.drawable.placeholder)
                             error(R.drawable.placeholder)
                         }
                     ),
-                    contentDescription = movieModel.title,
+                    contentDescription = tvShowModel.title,
                     contentScale = ContentScale.Crop
                 )
 
-                if (movieModel.video.isNotEmpty()) {
+                if (tvShowModel.video.isNotEmpty()) {
                     IconButton(
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -164,26 +164,16 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
                         .fillMaxWidth()
                         .align(Alignment.BottomStart)
                         .padding(horizontal = 16.dp, vertical = 8.dp),
-                    text = movieModel.title,
+                    text = tvShowModel.title,
                     style = MaterialTheme.typography.h4.copy(color = MaterialTheme.colors.onPrimary),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
             }
 
-            if (movieModel.tagline.isNotEmpty()) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    text = movieModel.tagline,
-                    style = MaterialTheme.typography.overline.copy(
-                        color = MaterialTheme.colors.onSecondary
-                    )
-                )
-            }
-
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = getGenreList(movieModel.genres),
+                text = getGenreList(tvShowModel.genres),
                 style = MaterialTheme.typography.caption.copy(
                     fontSize = 11.sp,
                     color = MaterialTheme.colors.secondary
@@ -207,7 +197,7 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
                 )
                 Text(
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    text = movieModel.popularity.toString(),
+                    text = tvShowModel.popularity.toString(),
                     style = MaterialTheme.typography.caption.copy(
                         color = MaterialTheme.colors.onSecondary,
                         fontSize = 10.sp
@@ -217,12 +207,11 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
 
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
-                text = movieModel.overview,
+                text = tvShowModel.overview,
                 style = MaterialTheme.typography.caption.copy(MaterialTheme.colors.onSecondary)
             )
-
-            if (movieModel.casts.isNotEmpty()) {
-                CastComponent(casts = movieModel.casts)
+            if (tvShowModel.casts.isNotEmpty()) {
+                CastComponent(casts = tvShowModel.casts)
             }
             if (recommendation.isNotEmpty()) {
                 RelatedShowComponent(
@@ -230,7 +219,7 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
                     title = stringResource(id = R.string.text_recommended)
                 ) {
                     coroutineScope.launch { scrollState.animateScrollTo(0) }
-                    currentMovieId = it.id
+                    currentTvShowId = it.id
                 }
             }
             if (similar.isNotEmpty()) {
@@ -239,7 +228,7 @@ fun MovieDetailsScreen(movieId: Long, onBack: () -> Unit) {
                     title = stringResource(id = R.string.text_similar)
                 ) {
                     coroutineScope.launch { scrollState.animateScrollTo(0) }
-                    currentMovieId = it.id
+                    currentTvShowId = it.id
                 }
             }
             if (userReviews.isNotEmpty()) {

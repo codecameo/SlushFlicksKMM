@@ -69,6 +69,6 @@ fun useCaseModule() = module {
     factory<RecommendedMovieUseCase> { RecommendedMovieUseCaseImpl(get()) }
     factory<GetTvReviewUseCase> { GetTvReviewUseCaseImpl(get()) }
     factory<GetMovieReviewUseCase> { GetMovieReviewUseCaseImpl(get()) }
-    factory<MovieDetailsUseCase> { MovieDetailsUseCaseImpl(get()) }
-    factory<TvShowDetailsUseCase> { TvShowDetailsUseCaseImpl(get()) }
+    factory<MovieDetailsUseCase> { MovieDetailsUseCaseImpl(get(), get()) }
+    factory<TvShowDetailsUseCase> { TvShowDetailsUseCaseImpl(get(), get()) }
 }

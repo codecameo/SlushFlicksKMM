@@ -9,13 +9,15 @@ import com.sifat.slushflicks.domain.mapper.toModel
 import com.sifat.slushflicks.domain.model.CastModel
 import com.sifat.slushflicks.domain.model.MovieModel
 import com.sifat.slushflicks.domain.repository.MovieDetailsRepository
+import com.sifat.slushflicks.domain.repository.RecentRepository
 import com.sifat.slushflicks.domain.usecase.MovieDetailsUseCase
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
 class MovieDetailsUseCaseImpl(
-    private val movieDetailsRepository: MovieDetailsRepository
+    private val movieDetailsRepository: MovieDetailsRepository,
+    private val recentRepository: RecentRepository
 ) : BaseUseCase(), MovieDetailsUseCase {
     override suspend fun execute(movieId: Long): DataState<MovieModel> {
         return movieDetailsRepository.getMovieDetails(movieId).let { state ->
@@ -23,10 +25,13 @@ class MovieDetailsUseCaseImpl(
                 is Error -> getErrorResponse(state) {
                     it?.toModel()
                 }
-                is Success -> Success(
-                    data = getMovieDetails(state.data),
-                    message = state.message
-                )
+                is Success -> getMovieDetails(state.data).let { model ->
+                    recentRepository.updateRecentMovie(movieId)
+                    Success(
+                        data = model,
+                        message = state.message
+                    )
+                }
             }
         }
     }

@@ -45,11 +45,11 @@ import com.sifat.slushflicks.component.movie.ShowListComponent
 import com.sifat.slushflicks.component.search.ShowType.MOVIE
 import com.sifat.slushflicks.component.search.ShowType.TV_SHOW
 import com.sifat.slushflicks.domain.model.ShowModel
-import com.sifat.slushflicks.viewaction.SearchViewAction.SearchResultViewAction
+import com.sifat.slushflicks.viewaction.SearchViewAction.ShowResultViewAction
 import com.sifat.slushflicks.viewaction.SearchViewAction.UpdateShowTypeViewAction
 import com.sifat.slushflicks.viewevents.SearchViewEvent.LoadMoreShowViewEvent
+import com.sifat.slushflicks.viewevents.SearchViewEvent.QueryChangeViewEvent
 import com.sifat.slushflicks.viewevents.SearchViewEvent.RefreshShowViewEvent
-import com.sifat.slushflicks.viewevents.SearchViewEvent.SearchShowViewEvent
 import com.sifat.slushflicks.viewevents.SearchViewEvent.UpdateShowTypeViewEvent
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -72,24 +72,22 @@ fun SearchScreen(
     val inputDelay = 500L
     val searchViewModel = getViewModel<SearchViewModel>()
     var searchResult by remember { mutableStateOf(emptyList<ShowModel>()) }
-    val keyboardController = LocalSoftwareKeyboardController.current
     var query by remember { mutableStateOf(searchViewModel.viewState.query) }
     val bottomState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     var showType by remember { mutableStateOf(searchViewModel.viewState.showType) }
     var showEmptyState by remember { mutableStateOf(true) }
-    var searching by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     LaunchedEffect(query) {
         searchViewModel.viewActionState.onEach { action ->
             when (action) {
-                is SearchResultViewAction -> {
-                    searching = action.viewState is ViewState.Loading && searchResult.isEmpty()
+                is ShowResultViewAction -> {
+                    loading = action.viewState is ViewState.Loading && searchResult.isEmpty()
                     (action.viewState as? Success)?.data?.let { list ->
                         searchResult = list
                         showEmptyState = list.isEmpty()
-                        if (list.isNotEmpty()) keyboardController?.hide()
                         if (bottomState.bottomSheetState.isExpanded) {
                             coroutineScope.launch { bottomState.bottomSheetState.collapse() }
                         }
@@ -101,12 +99,13 @@ fun SearchScreen(
                 }
             }
         }.launchIn(this)
+        searchViewModel.viewEventState.value = RefreshShowViewEvent()
         snapshotFlow { query }
             .onEach { showEmptyState = false }
             .debounce(inputDelay)
             .distinctUntilChanged()
-            .collect {
-                searchViewModel.viewEventState.value = SearchShowViewEvent(it)
+            .collect { query ->
+                searchViewModel.viewEventState.value = QueryChangeViewEvent(query)
             }
     }
     BottomSheetScaffold(
@@ -128,7 +127,7 @@ fun SearchScreen(
             SearchBarComponent(query = query) { query = it }
             Box(modifier = Modifier.background(MaterialTheme.colors.primary)) {
                 val listState = rememberLazyListState()
-                if (!searching && showEmptyState) {
+                if (!loading && showEmptyState) {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -152,7 +151,7 @@ fun SearchScreen(
                     )
                 }
 
-                if (searching) {
+                if (loading) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center),
                         color = MaterialTheme.colors.secondary

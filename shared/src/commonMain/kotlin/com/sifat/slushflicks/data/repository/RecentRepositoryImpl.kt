@@ -20,7 +20,7 @@ class RecentRepositoryImpl(
     }
 
     override suspend fun getRecentTvShowList(page: Int): DataState<List<ShowEntity>> {
-        return Success(localDataManager.getPagingMovies(RECENTLY_VISITED_TV_SHOW, page))
+        return Success(localDataManager.getPagingTvShows(RECENTLY_VISITED_TV_SHOW, page))
     }
 
     override suspend fun updateRecentMovie(movieId: Long) {
@@ -38,7 +38,7 @@ class RecentRepositoryImpl(
         val time = (timeManager.getCurrentTime() / 1000).toInt()
         localDataManager.insertNewTvCollection(
             TvCollectionEntity(
-                collection = RECENTLY_VISITED_MOVIE,
+                collection = RECENTLY_VISITED_TV_SHOW,
                 id = tvShowId,
                 position = -1 * time // Reversing the order
             )

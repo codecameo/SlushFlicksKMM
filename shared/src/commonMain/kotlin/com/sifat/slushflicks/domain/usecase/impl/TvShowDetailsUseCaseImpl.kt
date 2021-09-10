@@ -8,6 +8,7 @@ import com.sifat.slushflicks.data.state.DataState.Success
 import com.sifat.slushflicks.domain.mapper.toModel
 import com.sifat.slushflicks.domain.model.CastModel
 import com.sifat.slushflicks.domain.model.TvShowModel
+import com.sifat.slushflicks.domain.repository.RecentRepository
 import com.sifat.slushflicks.domain.repository.TvDetailsRepository
 import com.sifat.slushflicks.domain.usecase.TvShowDetailsUseCase
 import kotlinx.coroutines.Deferred
@@ -15,6 +16,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
 class TvShowDetailsUseCaseImpl(
+    private val recentRepository: RecentRepository,
     private val tvDetailsRepository: TvDetailsRepository
 ) : BaseUseCase(), TvShowDetailsUseCase {
     override suspend fun execute(tvShowId: Long): DataState<TvShowModel> {
@@ -23,10 +25,13 @@ class TvShowDetailsUseCaseImpl(
                 is Error -> getErrorResponse(state) {
                     it?.toModel()
                 }
-                is Success -> Success(
-                    data = getTvShowDetails(state.data),
-                    message = state.message
-                )
+                is Success -> getTvShowDetails(state.data).let { model ->
+                    recentRepository.updateRecentTvShow(tvShowId)
+                    Success(
+                        data = model,
+                        message = state.message
+                    )
+                }
             }
         }
     }

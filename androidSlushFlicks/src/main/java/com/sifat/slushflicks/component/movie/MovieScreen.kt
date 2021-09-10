@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +27,7 @@ import com.sifat.slushflicks.R
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.ShowTypeChip
 import com.sifat.slushflicks.component.home.model.CollectionListModel
+import com.sifat.slushflicks.domain.model.ReviewModel
 import com.sifat.slushflicks.domain.model.ShowModel
 import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchCollectionViewAction
 import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchMovieListViewAction
@@ -42,7 +44,7 @@ import org.koin.androidx.compose.getViewModel
 fun MovieScreen(showSelected: (ShowModel) -> Unit = {}) {
     val movieViewModel = getViewModel<MovieViewModel>()
     val collectionItems = remember { mutableStateOf(emptyList<CollectionListModel>()) }
-    val showList = remember { mutableStateOf(emptyList<ShowModel>()) }
+    var showList by remember { mutableStateOf(emptyList<ShowModel>()) }
     val selectedShowCallback by rememberUpdatedState(newValue = showSelected)
     LaunchedEffect(true) {
         movieViewModel.viewActionState.onEach { action ->
@@ -55,7 +57,7 @@ fun MovieScreen(showSelected: (ShowModel) -> Unit = {}) {
                 }
                 is FetchMovieListViewAction -> {
                     (action.viewState as? Success)?.data?.let {
-                        showList.value = it
+                        showList = it
                     }
                 }
             }
@@ -94,7 +96,7 @@ fun MovieScreen(showSelected: (ShowModel) -> Unit = {}) {
         }
         ShowListComponent(
             label = movieViewModel.viewState.currentSelectedLabel,
-            showList = showList.value,
+            showList = showList,
             showSelected = selectedShowCallback
         ) {
             movieViewModel.viewEventState.value = LoadMoreMovieListViewEvent()

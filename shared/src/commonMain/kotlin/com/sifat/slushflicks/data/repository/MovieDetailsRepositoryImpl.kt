@@ -25,6 +25,7 @@ class MovieDetailsRepositoryImpl(
     private val localDataManager: LocalDataManager,
     networkStateManager: NetworkStateManager
 ) : BaseRepository(networkStateManager), MovieDetailsRepository {
+
     override suspend fun getMovieDetails(movieId: Long): DataState<MovieEntity> {
         return localDataManager.getMovieDetails(movieId)?.let { entity ->
             return if (hasOtherData(entity)) Success(data = entity) else fetchMovieDetails(movieId)
@@ -60,7 +61,8 @@ class MovieDetailsRepositoryImpl(
             getDataState(
                 movieApi.getRelatedMovies(movieId = movieId, relation = SIMILAR_LABEL, page = page)
             ) {
-                it?.results?.map { it.toEntity(localDataManager.getGenres()) } ?: emptyList()
+                val genres = localDataManager.getGenres()
+                it?.results?.map { it.toEntity(genres) } ?: emptyList()
             }
         }
     }
@@ -72,14 +74,17 @@ class MovieDetailsRepositoryImpl(
                     movieId = movieId, relation = RECOMMENDATION_LABEL, page = page
                 )
             ) {
-                it?.results?.map { it.toEntity(localDataManager.getGenres()) } ?: emptyList()
+                val genres = localDataManager.getGenres()
+                it?.results?.map { it.toEntity(genres) } ?: emptyList()
             }
         }
     }
 
     override suspend fun getReviews(movieId: Long, page: Int): DataState<List<ReviewApiModel>> {
         return execute {
-            getDataState(movieApi.getMovieReviews(movieId, page))
+            getDataState(movieApi.getMovieReviews(movieId, page)) {
+                it?.results ?: emptyList()
+            }
         }
     }
 

@@ -39,30 +39,28 @@ fun RelatedShowComponent(
     showModels: List<ShowModel>,
     onShowSelected: (ShowModel) -> Unit = {}
 ) {
-    if (!showModels.isNullOrEmpty()) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(vertical = 12.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(vertical = 12.dp)
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = title,
+            style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onPrimary)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 8.dp)
         ) {
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = title,
-                style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onPrimary)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 8.dp)
-            ) {
-                items(showModels) {
-                    RelatedShowItem(
-                        showModel = it,
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        onShowSelected = onShowSelected
-                    )
-                }
+            items(showModels) {
+                RelatedShowItem(
+                    showModel = it,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    onShowSelected = onShowSelected
+                )
             }
         }
     }
