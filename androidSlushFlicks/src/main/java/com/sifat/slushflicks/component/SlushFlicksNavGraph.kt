@@ -2,6 +2,7 @@ package com.sifat.slushflicks.component
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
@@ -32,6 +33,7 @@ import kotlinx.coroutines.FlowPreview
 @Composable
 fun SlushFlicksNavGraph(
     modifier: Modifier = Modifier,
+    scaffoldState: ScaffoldState,
     navController: NavHostController = rememberNavController(),
     startDestination: String = SPLASH,
 ) {
@@ -57,14 +59,14 @@ fun SlushFlicksNavGraph(
         }
         composable("$MOVIE_DETAILS{$MOVIE_ID}") {
             (it.arguments?.get(MOVIE_ID) as? String)?.let { movieId ->
-                MovieDetailsScreen(movieId = movieId.toLong()) {
+                MovieDetailsScreen(scaffoldState = scaffoldState, movieId = movieId.toLong()) {
                     navigationController.popBackStack()
                 }
             }
         }
         composable("$TV_SHOW_DETAILS{$TV_SHOW_ID}") {
             (it.arguments?.get(TV_SHOW_ID) as? String)?.let { tvShowId ->
-                TvShowDetailsScreen(tvShowId = tvShowId.toLong()) {
+                TvShowDetailsScreen(scaffoldState = scaffoldState, tvShowId = tvShowId.toLong()) {
                     navigationController.popBackStack()
                 }
             }

@@ -12,6 +12,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -31,6 +32,7 @@ import com.sifat.slushflicks.R
 import com.sifat.slushflicks.Route
 import com.sifat.slushflicks.Route.MOVIE_DETAILS
 import com.sifat.slushflicks.Route.TV_SHOW_DETAILS
+import com.sifat.slushflicks.component.SlushFlicksSnackBar
 import com.sifat.slushflicks.component.about.AboutScreen
 import com.sifat.slushflicks.component.movie.MovieScreen
 import com.sifat.slushflicks.component.search.SearchScreen
@@ -53,6 +55,7 @@ fun HomeScreen(
             currentRoute = route
         }
     }
+    val scaffoldState = rememberScaffoldState()
 
     DisposableEffect(navigationListener) {
         navController.addOnDestinationChangedListener(navigationListener)
@@ -61,6 +64,8 @@ fun HomeScreen(
         }
     }
     Scaffold(
+        scaffoldState = scaffoldState,
+        snackbarHost = { SlushFlicksSnackBar(snackbarHostState = it) },
         bottomBar = {
             HomeBottomNav(currentRoute = currentRoute) {
                 if (it == currentRoute) return@HomeBottomNav
@@ -95,7 +100,7 @@ fun HomeScreen(
                     slideInHorizontally(initialOffsetX = { -1000 })
                 }
             ) {
-                MovieScreen { show ->
+                MovieScreen(scaffoldState = scaffoldState) { show ->
                     showSelected(MOVIE_DETAILS, show.id)
                 }
             }
@@ -114,7 +119,7 @@ fun HomeScreen(
                     slideInHorizontally(initialOffsetX = { -1000 })
                 }
             ) {
-                TvShowScreen { show ->
+                TvShowScreen(scaffoldState) { show ->
                     showSelected(TV_SHOW_DETAILS, show.id)
                 }
             }
@@ -134,6 +139,7 @@ fun HomeScreen(
                 }
             ) {
                 SearchScreen(
+                    scaffoldState = scaffoldState,
                     movieSelected = { show ->
                         showSelected(MOVIE_DETAILS, show.id)
                     },

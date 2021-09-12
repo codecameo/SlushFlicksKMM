@@ -29,7 +29,11 @@ class TvShowDetailsUseCaseImpl(
                 when (state) {
                     is Error -> getTvShowDetails(state.data).let { model ->
                         recentRepository.updateRecentTvShow(tvShowId)
-                        Error(data = model, errorMessage = state.errorMessage)
+                        Error(
+                            data = model,
+                            errorMessage = state.errorMessage,
+                            statusCode = state.statusCode
+                        )
                     }
                     is Success -> getTvShowDetails(state.data).let { model ->
                         recentRepository.updateRecentTvShow(tvShowId)

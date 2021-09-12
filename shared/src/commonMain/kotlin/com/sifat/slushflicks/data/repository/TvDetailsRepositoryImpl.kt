@@ -36,7 +36,13 @@ class TvDetailsRepositoryImpl(
                         emit(Success(data = it, message = state.message))
                     }
                     is Error -> localDataManager.getTvShowDetails(tvShowId).also {
-                        emit(Error(data = it, errorMessage = state.errorMessage))
+                        emit(
+                            Error(
+                                data = it,
+                                errorMessage = state.errorMessage,
+                                statusCode = state.statusCode
+                            )
+                        )
                     }
                 }
             }

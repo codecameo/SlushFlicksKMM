@@ -1,8 +1,5 @@
 package com.sifat.slushflicks.data.repository
 
-import com.sifat.slushflicks.data.Constants.DEFAULT_DOUBLE
-import com.sifat.slushflicks.data.Constants.DEFAULT_INT
-import com.sifat.slushflicks.data.Constants.DEFAULT_LONG
 import com.sifat.slushflicks.data.Constants.EMPTY_STRING
 import com.sifat.slushflicks.data.Label.Companion.RECOMMENDATION_LABEL
 import com.sifat.slushflicks.data.Label.Companion.SIMILAR_LABEL
@@ -40,7 +37,13 @@ class MovieDetailsRepositoryImpl(
                         emit(Success(data = it, message = state.message))
                     }
                     is Error -> localDataManager.getMovieDetails(movieId).also {
-                        emit(Error(data = it, errorMessage = state.errorMessage))
+                        emit(
+                            Error(
+                                data = it,
+                                errorMessage = state.errorMessage,
+                                statusCode = state.statusCode
+                            )
+                        )
                     }
                 }
             }
@@ -109,7 +112,7 @@ class MovieDetailsRepositoryImpl(
                 it?.toEntity()
             }.also {
                 (it as? Success)?.data?.let { movie ->
-                    localDataManager.insertMovieDetails(movie)
+                    localDataManager.updateMovieDetails(movie)
                 }
             }
         }

@@ -28,11 +28,15 @@ class MovieDetailsUseCaseImpl(
             .map { state ->
                 when (state) {
                     is Error -> getMovieDetails(state.data).let { model ->
-                        recentRepository.updateRecentTvShow(movieId)
-                        Error(data = model, errorMessage = state.errorMessage)
+                        recentRepository.updateRecentMovie(movieId)
+                        Error(
+                            data = model,
+                            errorMessage = state.errorMessage,
+                            statusCode = state.statusCode
+                        )
                     }
                     is Success -> getMovieDetails(state.data).let { model ->
-                        recentRepository.updateRecentTvShow(movieId)
+                        recentRepository.updateRecentMovie(movieId)
                         Success(data = model, message = state.message)
                     }
                 }

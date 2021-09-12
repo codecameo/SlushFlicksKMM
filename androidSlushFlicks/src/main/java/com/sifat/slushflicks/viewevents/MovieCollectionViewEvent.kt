@@ -1,8 +1,8 @@
 package com.sifat.slushflicks.viewevents
 
 sealed class MovieCollectionViewEvent : ViewEvent() {
-    object FetchCollectionViewEvent : MovieCollectionViewEvent()
+    class FetchCollectionViewEvent : MovieCollectionViewEvent()
     class UpdateCollectionViewEvent(val label: String) : MovieCollectionViewEvent()
-    object FetchMovieListViewEvent : MovieCollectionViewEvent()
+    class FetchMovieListViewEvent : MovieCollectionViewEvent()
     class LoadMoreMovieListViewEvent : MovieCollectionViewEvent()
 }

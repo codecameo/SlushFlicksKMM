@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -55,12 +56,14 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
+import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.CollapsingTopBar
 import com.sifat.slushflicks.component.ReviewListComponent
 import com.sifat.slushflicks.component.details.CastComponent
 import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
+import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
 import com.sifat.slushflicks.component.tvshow.EpisodeComponent
 import com.sifat.slushflicks.component.verticalGradientTint
@@ -88,7 +91,7 @@ private const val maxImageAspectRatio = 5f
 
 @ExperimentalCoilApi
 @Composable
-fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
+fun TvShowDetailsScreen(scaffoldState: ScaffoldState, tvShowId: Long, onBack: () -> Unit) {
     val viewModel = getViewModel<TvShowDetailsViewModel>()
     var similar by remember { mutableStateOf(emptyList<ShowModel>()) }
     var recommendation by remember { mutableStateOf(emptyList<ShowModel>()) }
@@ -99,21 +102,27 @@ fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
     var canShare by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val onBackCallBack by rememberUpdatedState(newValue = onBack)
-    val maxImageHeight =
-        LocalContext.current.resources.displayMetrics.widthPixels / minImageAspectRatio
+    val snackBarState = remember { scaffoldState.snackbarHostState }
+    val context = LocalContext.current
+    val maxImageHeight = context.resources.displayMetrics.widthPixels / minImageAspectRatio
     val currentAspectRatio by remember {
         derivedStateOf {
             val collapseRange = maxOf(maxImageHeight - scrollState.value, 0f)
             minOf(maxImageAspectRatio, (maxImageHeight / collapseRange))
         }
     }
-    LaunchedEffect(currentTvShowId) {
+    LaunchedEffect(true) {
         viewModel.viewActionState.onEach { action ->
             when (action) {
                 is FetchTvShowDetailsViewAction -> {
                     (action.viewState as? Success)?.data?.let { tvShow ->
                         canShare = true
                         tvShowModel = tvShow
+                    }
+                    (action.viewState as? ViewState.Error)?.let {
+                        snackBarState.showSnackbar(
+                            message = getErrorMessage(context, it.errorCode, it.errorMessage)
+                        )
                     }
                 }
                 is FetchSimilarTvShowViewAction -> {
