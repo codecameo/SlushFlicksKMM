@@ -45,7 +45,7 @@ class CollectionViewState {
         page++
     }
 
-    private fun reset(label: String = EMPTY_STRING) {
+    fun reset(label: String = EMPTY_STRING) {
         page = 0
         isLoadingMore = false
         showList.clear()

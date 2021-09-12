@@ -14,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.Route
-import com.sifat.slushflicks.component.splash.SplashViewModel
 import com.sifat.slushflicks.viewevents.SplashViewEvent.UpdateGenreEvent
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.getViewModel

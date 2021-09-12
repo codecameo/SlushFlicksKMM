@@ -17,6 +17,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
@@ -31,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +41,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Success
+import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.movie.ShowListComponent
 import com.sifat.slushflicks.component.search.ShowType.MOVIE
 import com.sifat.slushflicks.component.search.ShowType.TV_SHOW
@@ -66,6 +67,7 @@ import org.koin.androidx.compose.getViewModel
 @ExperimentalCoilApi
 @Composable
 fun SearchScreen(
+    scaffoldState: ScaffoldState,
     movieSelected: (ShowModel) -> Unit = {},
     tvShowSelected: (ShowModel) -> Unit = {}
 ) {
@@ -78,9 +80,10 @@ fun SearchScreen(
     var showType by remember { mutableStateOf(searchViewModel.viewState.showType) }
     var showEmptyState by remember { mutableStateOf(true) }
     var loading by remember { mutableStateOf(false) }
+    val snackBarState = remember { scaffoldState.snackbarHostState }
     val context = LocalContext.current
 
-    LaunchedEffect(query) {
+    LaunchedEffect(true) {
         searchViewModel.viewActionState.onEach { action ->
             when (action) {
                 is ShowResultViewAction -> {
@@ -90,6 +93,17 @@ fun SearchScreen(
                         showEmptyState = list.isEmpty()
                         if (bottomState.bottomSheetState.isExpanded) {
                             coroutineScope.launch { bottomState.bottomSheetState.collapse() }
+                        }
+                    }
+                    (action.viewState as? ViewState.Error)?.let {
+                        launch {
+                            snackBarState.showSnackbar(
+                                message = getErrorMessage(
+                                    context = context,
+                                    errorMessage = it.errorMessage,
+                                    errorCode = it.errorCode
+                                )
+                            )
                         }
                     }
                 }

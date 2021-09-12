@@ -5,6 +5,7 @@ import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.component.home.CollectionViewState
+import com.sifat.slushflicks.data.Constants.EMPTY_STRING
 import com.sifat.slushflicks.data.Constants.INVALID_INT
 import com.sifat.slushflicks.data.Label.Companion.TRENDING_LABEL
 import com.sifat.slushflicks.data.state.DataState
@@ -57,7 +58,7 @@ class MovieViewModel(
     }
 
     private suspend fun fetchMovieList(execute: suspend () -> DataState<List<ShowModel>>) {
-        _viewActionState.value = when (val state = execute()) {
+        mutableViewActionState.value = when (val state = execute()) {
             is DataState.Error -> FetchMovieListViewAction(getErrorState(state))
             is DataState.Success -> {
                 viewState.addShowList(state.data ?: emptyList())
@@ -69,22 +70,24 @@ class MovieViewModel(
 
     private suspend fun handleCollectionEvent() {
         if (viewState.collectionItems.isNotEmpty()) {
-            _viewActionState.value =
+            viewState.collectionItems.find { it.selected }
+                .let { viewState.reset(it?.label ?: EMPTY_STRING) }
+            mutableViewActionState.value =
                 FetchCollectionViewAction(Success(data = viewState.collectionItems))
             return
         }
-        _viewActionState.value = FetchCollectionViewAction(Loading())
+        mutableViewActionState.value = FetchCollectionViewAction(Loading())
         getViewState(collectionUseCase.execute()) {
             viewState.initCollectionList(it)
             viewState.collectionItems
         }.let { state ->
-            _viewActionState.value = FetchCollectionViewAction(state)
+            mutableViewActionState.value = FetchCollectionViewAction(state)
         }
     }
 
     private fun updateLabel(label: String) {
         viewState.updateSelectedLabel(label)
-        _viewActionState.value =
+        mutableViewActionState.value =
             FetchCollectionViewAction(Success(viewState.collectionItems))
     }
 }

@@ -2,8 +2,10 @@ package com.sifat.slushflicks.component.tvshow
 
 import com.sifat.slushflicks.AppDispatchers
 import com.sifat.slushflicks.ViewState
+import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.component.home.CollectionViewState
+import com.sifat.slushflicks.data.Constants.EMPTY_STRING
 import com.sifat.slushflicks.data.Constants.INVALID_INT
 import com.sifat.slushflicks.data.Label.Companion.TRENDING_LABEL
 import com.sifat.slushflicks.data.state.DataState
@@ -56,29 +58,37 @@ class TvShowViewModel(
     }
 
     private suspend fun fetchMovieList(execute: suspend () -> DataState<List<ShowModel>>) {
-        _viewActionState.value = when (val state = execute()) {
+        mutableViewActionState.value = when (val state = execute()) {
             is DataState.Error -> FetchTvListViewAction(getErrorState(state))
             is DataState.Success -> {
                 viewState.addShowList(state.data ?: emptyList())
                 viewState.isLoadingMore = false
-                FetchTvListViewAction(ViewState.Success(data = viewState.showList.distinctBy { it.id }))
+                FetchTvListViewAction(Success(data = viewState.showList.distinctBy { it.id }))
             }
         }
     }
 
     private suspend fun handleCollectionEvent() {
-        _viewActionState.value = FetchCollectionViewAction(ViewState.Loading())
+        if (viewState.collectionItems.isNotEmpty()) {
+            viewState.collectionItems.find { it.selected }
+                .let { viewState.reset(it?.label ?: EMPTY_STRING) }
+            mutableViewActionState.value =
+                FetchCollectionViewAction(Success(data = viewState.collectionItems))
+            return
+        }
+
+        mutableViewActionState.value = FetchCollectionViewAction(ViewState.Loading())
         getViewState(collectionUseCase.execute()) {
             viewState.initCollectionList(it)
             viewState.collectionItems
         }.let { state ->
-            _viewActionState.value = FetchCollectionViewAction(state)
+            mutableViewActionState.value = FetchCollectionViewAction(state)
         }
     }
 
     private fun updateLabel(label: String) {
         viewState.updateSelectedLabel(label)
-        _viewActionState.value =
-            FetchCollectionViewAction(ViewState.Success(viewState.collectionItems))
+        mutableViewActionState.value =
+            FetchCollectionViewAction(Success(viewState.collectionItems))
     }
 }

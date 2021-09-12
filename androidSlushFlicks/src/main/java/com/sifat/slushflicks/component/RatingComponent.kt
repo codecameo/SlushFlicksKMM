@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sifat.slushflicks.R
+import com.sifat.slushflicks.data.Constants
 
 @Composable
 fun RatingComponent(modifier: Modifier = Modifier, voteAvg: Double) {
@@ -45,7 +46,7 @@ fun RatingComponent(modifier: Modifier = Modifier, voteAvg: Double) {
         )
         Spacer(modifier = Modifier.size(4.dp))
         Text(
-            text = voteAvg.toString(),
+            text = Constants.RATING_FORMAT.format(voteAvg),
             style = MaterialTheme.typography.overline.copy(color = MaterialTheme.colors.primary)
         )
     }

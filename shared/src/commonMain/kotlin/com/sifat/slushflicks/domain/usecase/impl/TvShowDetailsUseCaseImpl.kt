@@ -14,26 +14,33 @@ import com.sifat.slushflicks.domain.usecase.TvShowDetailsUseCase
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 class TvShowDetailsUseCaseImpl(
     private val recentRepository: RecentRepository,
     private val tvDetailsRepository: TvDetailsRepository
 ) : BaseUseCase(), TvShowDetailsUseCase {
-    override suspend fun execute(tvShowId: Long): DataState<TvShowModel> {
-        return tvDetailsRepository.getTvShowDetails(tvShowId).let { state ->
-            when (state) {
-                is Error -> getErrorResponse(state) {
-                    it?.toModel()
-                }
-                is Success -> getTvShowDetails(state.data).let { model ->
-                    recentRepository.updateRecentTvShow(tvShowId)
-                    Success(
-                        data = model,
-                        message = state.message
-                    )
+    override suspend fun execute(tvShowId: Long): Flow<DataState<TvShowModel>> {
+        return tvDetailsRepository.getTvShowDetails(tvShowId)
+            .distinctUntilChanged()
+            .map { state ->
+                when (state) {
+                    is Error -> getTvShowDetails(state.data).let { model ->
+                        recentRepository.updateRecentTvShow(tvShowId)
+                        Error(
+                            data = model,
+                            errorMessage = state.errorMessage,
+                            statusCode = state.statusCode
+                        )
+                    }
+                    is Success -> getTvShowDetails(state.data).let { model ->
+                        recentRepository.updateRecentTvShow(tvShowId)
+                        Success(data = model, message = state.message)
+                    }
                 }
             }
-        }
     }
 
     private suspend fun getTvShowDetails(tvShowEntity: TvShowEntity?): TvShowModel? {

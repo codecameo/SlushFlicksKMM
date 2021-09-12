@@ -1,9 +1,7 @@
 package com.sifat.slushflicks.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,22 +12,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun DividerComponent(modifier: Modifier = Modifier) {
-    Row(modifier = modifier) {
-        Spacer(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 6.dp)
-        )
-        Spacer(
-            modifier = Modifier
-                .height(12.dp)
-                .width(1.dp)
-                .background(MaterialTheme.colors.onSecondary)
-        )
-        Spacer(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 6.dp)
-        )
-    }
+    Box(
+        modifier = modifier
+            .padding(start = 8.dp, end = 8.dp)
+            .height(10.dp)
+            .width(1.dp)
+            .background(MaterialTheme.colors.onSecondary.copy(0.8f))
+    )
 }
