@@ -1,16 +1,23 @@
 package com.sifat.slushflicks.component.details.tvshow
 
+import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -24,15 +31,20 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,17 +55,21 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Success
+import com.sifat.slushflicks.component.CollapsingTopBar
 import com.sifat.slushflicks.component.ReviewListComponent
 import com.sifat.slushflicks.component.details.CastComponent
 import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.getGenreList
+import com.sifat.slushflicks.component.tvshow.EpisodeComponent
 import com.sifat.slushflicks.component.verticalGradientTint
+import com.sifat.slushflicks.data.BULLET_SIGN
+import com.sifat.slushflicks.data.SPACE
 import com.sifat.slushflicks.domain.model.ReviewModel
 import com.sifat.slushflicks.domain.model.ShowModel
 import com.sifat.slushflicks.domain.model.TvShowModel
+import com.sifat.slushflicks.utils.ext.inRange
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchRecommendedTvShowViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchReviewViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchSimilarTvShowViewAction
@@ -65,6 +81,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
+import kotlin.math.ulp
+
+private const val minImageAspectRatio = 0.95f
+private const val maxImageAspectRatio = 5f
 
 @ExperimentalCoilApi
 @Composable
@@ -78,18 +98,22 @@ fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
     var currentTvShowId by remember { mutableStateOf(tvShowId) }
     var canShare by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val gradientColor = listOf(
-        MaterialTheme.colors.primary.copy(alpha = 0.3f),
-        MaterialTheme.colors.primary.copy(alpha = 0.3f),
-        MaterialTheme.colors.primary
-    )
+    val onBackCallBack by rememberUpdatedState(newValue = onBack)
+    val maxImageHeight =
+        LocalContext.current.resources.displayMetrics.widthPixels / minImageAspectRatio
+    val currentAspectRatio by remember {
+        derivedStateOf {
+            val collapseRange = maxOf(maxImageHeight - scrollState.value, 0f)
+            minOf(maxImageAspectRatio, (maxImageHeight / collapseRange))
+        }
+    }
     LaunchedEffect(currentTvShowId) {
         viewModel.viewActionState.onEach { action ->
             when (action) {
                 is FetchTvShowDetailsViewAction -> {
-                    (action.viewState as? Success)?.data?.let { movie ->
+                    (action.viewState as? Success)?.data?.let { tvShow ->
                         canShare = true
-                        tvShowModel = movie
+                        tvShowModel = tvShow
                     }
                 }
                 is FetchSimilarTvShowViewAction -> {
@@ -117,159 +141,291 @@ fun TvShowDetailsScreen(tvShowId: Long, onBack: () -> Unit) {
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
+        modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier.verticalScroll(state = scrollState)
+        Body(
+            tvShowModel = tvShowModel,
+            scrollState = scrollState,
+            recommendation = recommendation,
+            similar = similar,
+            userReviews = userReviews,
         ) {
-            Box(modifier = Modifier.aspectRatio(0.95f)) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalGradientTint(gradientColor),
-                    painter = rememberImagePainter(
-                        data = tvShowModel.posterPath,
-                        builder = {
-                            crossfade(false)
-                            placeholder(R.drawable.placeholder)
-                            error(R.drawable.placeholder)
-                        }
-                    ),
-                    contentDescription = tvShowModel.title,
-                    contentScale = ContentScale.Crop
-                )
-
-                if (tvShowModel.video.isNotEmpty()) {
-                    IconButton(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .background(
-                                color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f),
-                                shape = CircleShape
-                            )
-                            .padding(6.dp),
-                        onClick = {
-                        }
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(30.dp),
-                            imageVector = Icons.Filled.PlayArrow,
-                            tint = MaterialTheme.colors.onPrimary,
-                            contentDescription = stringResource(id = R.string.text_trailer)
-                        )
-                    }
-                }
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomStart)
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    text = tvShowModel.title,
-                    style = MaterialTheme.typography.h4.copy(color = MaterialTheme.colors.onPrimary),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = getGenreList(tvShowModel.genres),
-                style = MaterialTheme.typography.caption.copy(
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colors.secondary
-                )
-            )
-
-            ShowInfoComponent(
-                voteAvg = tvShowModel.voteAvg,
-                voteCount = tvShowModel.voteCount,
-                releaseDate = tvShowModel.releaseDate,
-                runtime = tvShowModel.runtime
-            )
-
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.text_overview),
-                    style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onPrimary)
-                )
-                Icon(
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 4.dp)
-                        .align(Alignment.CenterVertically),
-                    painter = painterResource(id = R.drawable.ic_popularity),
-                    contentDescription = stringResource(id = R.string.text_popularity),
-                    tint = MaterialTheme.colors.secondary
-                )
-                Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = tvShowModel.popularity.toString(),
-                    style = MaterialTheme.typography.caption.copy(
-                        color = MaterialTheme.colors.onSecondary,
-                        fontSize = 10.sp
-                    )
-                )
-            }
-
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
-                text = tvShowModel.overview,
-                style = MaterialTheme.typography.caption.copy(MaterialTheme.colors.onSecondary)
-            )
-            if (tvShowModel.casts.isNotEmpty()) {
-                CastComponent(casts = tvShowModel.casts)
-            }
-            if (recommendation.isNotEmpty()) {
-                RelatedShowComponent(
-                    showModels = recommendation,
-                    title = stringResource(id = R.string.text_recommended)
-                ) {
-                    coroutineScope.launch { scrollState.animateScrollTo(0) }
-                    currentTvShowId = it.id
-                }
-            }
-            if (similar.isNotEmpty()) {
-                RelatedShowComponent(
-                    showModels = similar,
-                    title = stringResource(id = R.string.text_similar)
-                ) {
-                    coroutineScope.launch { scrollState.animateScrollTo(0) }
-                    currentTvShowId = it.id
-                }
-            }
-            if (userReviews.isNotEmpty()) {
-                ReviewListComponent(
-                    modifier = Modifier.padding(top = 8.dp),
-                    reviews = userReviews,
-                    loadMore = {
-                    }
-                )
-            }
+            coroutineScope.launch { scrollState.animateScrollTo(0) }
+            currentTvShowId = it.id
         }
-        Icon(
-            modifier = Modifier
-                .statusBarsPadding()
-                .clickable { onBack() }
-                .padding(16.dp),
-            imageVector = Icons.Filled.ArrowBack,
-            tint = MaterialTheme.colors.onPrimary,
-            contentDescription = stringResource(id = R.string.text_back)
+        CollapseImage(
+            tvShowModel = tvShowModel,
+            aspectRatio = currentAspectRatio
         )
+        TopBar(
+            modifier = Modifier.fillMaxWidth(),
+            tvShowModel = tvShowModel,
+            aspectRatio = currentAspectRatio,
+            canShare = canShare,
+            onBack = onBackCallBack
+        )
+    }
+}
 
-        if (canShare) {
+@Composable
+fun TopBar(
+    modifier: Modifier = Modifier,
+    tvShowModel: TvShowModel,
+    aspectRatio: Float,
+    canShare: Boolean,
+    onBack: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .aspectRatio(aspectRatio)
+    ) {
+        CollapsingTopBar(
+            collapseFactor = aspectRatio.inRange(maxImageAspectRatio, minImageAspectRatio),
+            modifier = Modifier.statusBarsPadding()
+        ) {
             Icon(
                 modifier = Modifier
-                    .statusBarsPadding()
-                    .align(Alignment.TopEnd)
+                    .wrapContentWidth()
+                    .layoutId(CollapsingTopBar.BACK_ID)
                     .clickable { onBack() }
                     .padding(16.dp),
-                imageVector = Icons.Filled.Share,
+                imageVector = Icons.Filled.ArrowBack,
                 tint = MaterialTheme.colors.onPrimary,
-                contentDescription = stringResource(id = R.string.title_share)
+                contentDescription = stringResource(id = R.string.text_back)
+            )
+
+            if (canShare) {
+                Icon(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .layoutId(CollapsingTopBar.SHARE_ID)
+                        .clickable { onBack() }
+                        .padding(16.dp),
+                    imageVector = Icons.Filled.Share,
+                    tint = MaterialTheme.colors.onPrimary,
+                    contentDescription = stringResource(id = R.string.title_share)
+                )
+            }
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .layoutId(CollapsingTopBar.TITLE_ID)
+                    .wrapContentHeight()
+                    .padding(horizontal = 16.dp),
+                text = tvShowModel.title,
+                style = MaterialTheme.typography.h4.copy(
+                    color = MaterialTheme.colors.onPrimary,
+                    fontSize = (getFontSize(aspectRatio)).sp
+                ),
+                maxLines = if (aspectRatio > 3f) 1 else 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
+}
+
+@ExperimentalCoilApi
+@Composable
+fun CollapseImage(tvShowModel: TvShowModel, aspectRatio: Float) {
+    val gradientColor = listOf(
+        MaterialTheme.colors.primary.copy(alpha = 0.3f),
+        MaterialTheme.colors.primary.copy(alpha = 0.3f),
+        MaterialTheme.colors.primary
+    )
+
+    aspectRatio.ulp
+
+    Box(modifier = Modifier.aspectRatio(aspectRatio)) {
+        Image(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalGradientTint(gradientColor),
+            painter = rememberImagePainter(
+                data = tvShowModel.posterPath,
+                builder = {
+                    crossfade(false)
+                    placeholder(R.drawable.placeholder)
+                    error(R.drawable.placeholder)
+                }
+            ),
+            contentDescription = tvShowModel.title,
+            contentScale = ContentScale.Crop
+        )
+
+        if (tvShowModel.video.isNotEmpty()) {
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .graphicsLayer {
+                        aspectRatio
+                            .inRange(3f, minImageAspectRatio)
+                            .let { ratio ->
+                                alpha = 1f - ratio
+                                scaleX = 1f * alpha
+                                scaleY = 1f * alpha
+                            }
+                    }
+                    .background(
+                        color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f),
+                        shape = CircleShape
+                    )
+                    .padding(6.dp),
+                onClick = {
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.size(30.dp),
+                    imageVector = Icons.Filled.PlayArrow,
+                    tint = MaterialTheme.colors.onPrimary,
+                    contentDescription = stringResource(id = R.string.text_trailer)
+                )
+            }
+        }
+    }
+}
+
+@ExperimentalCoilApi
+@Composable
+fun Body(
+    modifier: Modifier = Modifier,
+    tvShowModel: TvShowModel,
+    recommendation: List<ShowModel>,
+    similar: List<ShowModel>,
+    userReviews: List<ReviewModel>,
+    scrollState: ScrollState,
+    onShowSelected: (ShowModel) -> Unit
+) {
+    Column(
+        modifier = modifier.verticalScroll(state = scrollState)
+    ) {
+        Spacer(modifier = Modifier.aspectRatio(minImageAspectRatio))
+        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+            Text(
+                text = getSeasonEpisode(
+                    LocalContext.current,
+                    tvShowModel.numOfSeason,
+                    tvShowModel.numOfEpisode
+                ),
+                style = MaterialTheme.typography.overline.copy(
+                    color = MaterialTheme.colors.onPrimary
+                )
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                modifier = Modifier
+                    .background(
+                        shape = MaterialTheme.shapes.small,
+                        color = MaterialTheme.colors.secondary
+                    )
+                    .padding(horizontal = 4.dp)
+                    .align(Alignment.CenterVertically),
+                text = tvShowModel.status.uppercase(),
+                style = MaterialTheme.typography.overline.copy(fontSize = 10.sp)
+            )
+        }
+
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = getGenreList(tvShowModel.genres),
+            style = MaterialTheme.typography.caption.copy(
+                fontSize = 11.sp,
+                color = MaterialTheme.colors.secondary
+            )
+        )
+
+        ShowInfoComponent(
+            voteAvg = tvShowModel.voteAvg,
+            voteCount = tvShowModel.voteCount,
+            releaseDate = tvShowModel.releaseDate,
+            runtime = tvShowModel.runtime
+        )
+
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.text_overview),
+                style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onPrimary)
+            )
+            Icon(
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 4.dp)
+                    .align(Alignment.CenterVertically),
+                painter = painterResource(id = R.drawable.ic_popularity),
+                contentDescription = stringResource(id = R.string.text_popularity),
+                tint = MaterialTheme.colors.secondary
+            )
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                text = tvShowModel.popularity.toString(),
+                style = MaterialTheme.typography.caption.copy(
+                    color = MaterialTheme.colors.onSecondary,
+                    fontSize = 10.sp
+                )
+            )
+        }
+
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
+            text = tvShowModel.overview,
+            style = MaterialTheme.typography.caption.copy(MaterialTheme.colors.onSecondary)
+        )
+
+        if (tvShowModel.casts.isNotEmpty()) {
+            CastComponent(casts = tvShowModel.casts)
+        }
+        tvShowModel.nextEpisode?.let { episode ->
+            EpisodeComponent(
+                episodeModel = episode,
+                title = stringResource(id = R.string.text_next_episode)
+            )
+        }
+        tvShowModel.lastEpisode?.let { episode ->
+            EpisodeComponent(
+                episodeModel = episode,
+                title = stringResource(id = R.string.text_last_episode)
+            )
+        }
+        if (recommendation.isNotEmpty()) {
+            RelatedShowComponent(
+                showModels = recommendation,
+                title = stringResource(id = R.string.text_recommended)
+            ) {
+                onShowSelected(it)
+            }
+        }
+        if (similar.isNotEmpty()) {
+            RelatedShowComponent(
+                showModels = similar,
+                title = stringResource(id = R.string.text_similar)
+            ) {
+                onShowSelected(it)
+            }
+        }
+        if (userReviews.isNotEmpty()) {
+            ReviewListComponent(
+                modifier = Modifier.padding(top = 8.dp),
+                reviews = userReviews,
+                loadMore = {
+                }
+            )
+        }
+        Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+fun getFontSize(aspectRatio: Float): Float {
+    return 22f + (4f - (4f * aspectRatio.inRange(maxImageAspectRatio, minImageAspectRatio)))
+}
+
+fun getSeasonEpisode(context: Context, seasonCount: Int, episodeCount: Int): String {
+    return StringBuilder(context.getString(R.string.seasons))
+        .append(SPACE)
+        .append(seasonCount)
+        .append(SPACE)
+        .append(BULLET_SIGN)
+        .append(SPACE)
+        .append(context.getString(R.string.episodes))
+        .append(SPACE)
+        .append(episodeCount).toString()
 }

@@ -38,7 +38,7 @@ fun CastComponent(casts: List<CastModel>) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(vertical = 12.dp)
+            .padding(top = 12.dp, bottom = 4.dp)
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
