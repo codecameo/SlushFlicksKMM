@@ -20,8 +20,10 @@ abstract class BaseViewModel<VS>(
     private val dispatchers: AppDispatchers
 ) : ViewModel() {
     private val eventBufferSize = 5
-    protected val _viewActionState = MutableStateFlow<ViewAction>(InitAction)
-    val viewActionState: StateFlow<ViewAction> = _viewActionState
+    protected val mutableViewActionState = MutableStateFlow<ViewAction>(InitAction).also {
+        it.buffer(eventBufferSize)
+    }
+    val viewActionState: StateFlow<ViewAction> = mutableViewActionState
     val viewEventState = MutableStateFlow<ViewEvent>(InitEvent)
 
     init {
@@ -33,7 +35,7 @@ abstract class BaseViewModel<VS>(
 
     protected suspend fun postAction(viewAction: ViewAction) {
         withContext(dispatchers.getMainDispatcher()) {
-            _viewActionState.value = viewAction
+            mutableViewActionState.value = viewAction
         }
     }
 

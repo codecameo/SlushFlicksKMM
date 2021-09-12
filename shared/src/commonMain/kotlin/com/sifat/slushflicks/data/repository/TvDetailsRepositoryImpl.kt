@@ -1,6 +1,6 @@
 package com.sifat.slushflicks.data.repository
 
-import com.sifat.slushflicks.data.Constants
+import com.sifat.slushflicks.data.Constants.EMPTY_STRING
 import com.sifat.slushflicks.data.Label.Companion.RECOMMENDATION_LABEL
 import com.sifat.slushflicks.data.Label.Companion.SIMILAR_LABEL
 import com.sifat.slushflicks.data.cache.TvShowEntity
@@ -14,27 +14,41 @@ import com.sifat.slushflicks.data.mapper.toEntity
 import com.sifat.slushflicks.data.remote.api.TvShowApi
 import com.sifat.slushflicks.data.remote.model.ReviewApiModel
 import com.sifat.slushflicks.data.state.DataState
+import com.sifat.slushflicks.data.state.DataState.Error
+import com.sifat.slushflicks.data.state.DataState.Success
 import com.sifat.slushflicks.domain.repository.TvDetailsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TvDetailsRepositoryImpl(
     private val tvShowApi: TvShowApi,
     private val localDataManager: LocalDataManager,
     networkStateManager: NetworkStateManager
 ) : BaseRepository(networkStateManager), TvDetailsRepository {
-    override suspend fun getTvShowDetails(tvShowId: Long): DataState<TvShowEntity> {
-        return localDataManager.getTvShowDetails(tvShowId)?.let { entity ->
-            return if (hasOtherData(entity)) DataState.Success(data = entity) else fetchTvShowDetails(
-                tvShowId
-            )
-        } ?: fetchTvShowDetails(tvShowId)
+    override suspend fun getTvShowDetails(tvShowId: Long): Flow<DataState<TvShowEntity>> {
+        return flow {
+            localDataManager.getTvShowDetails(tvShowId).also {
+                emit(Success(data = it))
+            }
+            updateTvShowDetails(tvShowId).let { state ->
+                when (state) {
+                    is Success -> localDataManager.getTvShowDetails(tvShowId).also {
+                        emit(Success(data = it, message = state.message))
+                    }
+                    is Error -> localDataManager.getTvShowDetails(tvShowId).also {
+                        emit(Error(data = it, errorMessage = state.errorMessage))
+                    }
+                }
+            }
+        }
     }
 
     override suspend fun getTvShowVideo(tvShowId: Long, seasonNumber: Int): DataState<String> {
         return execute {
             getDataState(tvShowApi.getTvShowVideos(tvShowId, seasonNumber)) { apiModel ->
-                apiModel?.results?.find { isYoutubeModel(it) }?.key ?: Constants.EMPTY_STRING
+                apiModel?.results?.find { isYoutubeModel(it) }?.key ?: EMPTY_STRING
             }.also {
-                (it as? DataState.Success)?.data?.let { video ->
+                (it as? Success)?.data?.let { video ->
                     localDataManager.updateTvDetails(videoKey = video, tvShowId = tvShowId)
                 }
             }
@@ -46,7 +60,7 @@ class TvDetailsRepositoryImpl(
             getDataState(tvShowApi.getTvShowCredits(tvShowId)) { credits ->
                 credits?.casts?.map { it.toColumn() }
             }.also {
-                (it as? DataState.Success)?.data?.let { casts ->
+                (it as? Success)?.data?.let { casts ->
                     localDataManager.updateTvDetails(casts = casts, tvShowId = tvShowId)
                 }
             }
@@ -87,26 +101,13 @@ class TvDetailsRepositoryImpl(
         }
     }
 
-    private suspend fun fetchTvShowDetails(tvShowId: Long): DataState<TvShowEntity> {
+    private suspend fun updateTvShowDetails(tvShowId: Long): DataState<TvShowEntity> {
         return execute {
-            getDataState(tvShowApi.getTvShowDetails(tvShowId)) {
-                it?.toEntity()
-            }.also {
-                (it as? DataState.Success)?.data?.let { tvShow ->
-                    localDataManager.insertTvShowDetails(tvShow)
+            getDataState(tvShowApi.getTvShowDetails(tvShowId)) { it?.toEntity() }.also {
+                (it as? Success)?.data?.let { tvShow ->
+                    localDataManager.updateTvDetails(tvShow)
                 }
             }
-        }
-    }
-
-    private fun hasOtherData(entity: TvShowEntity): Boolean {
-        return entity.run {
-            runtime != Constants.DEFAULT_INT ||
-                voteCount != Constants.DEFAULT_INT ||
-                status != Constants.EMPTY_STRING ||
-                posterPath != Constants.EMPTY_STRING ||
-                popularity != Constants.DEFAULT_DOUBLE ||
-                directors.isNotEmpty()
         }
     }
 }

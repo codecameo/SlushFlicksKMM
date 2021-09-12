@@ -17,6 +17,8 @@ import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchMovieDetailsV
 import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchRelatedMovieViewEvent
 import com.sifat.slushflicks.viewevents.ViewEvent
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(
@@ -39,7 +41,7 @@ class MovieDetailsViewModel(
     private suspend fun handleReviewEvent(movieId: Long) {
         if (viewState.reviewPage == INVALID_INT) return
         val nextPage = viewState.reviewPage + 1
-        _viewActionState.value = FetchReviewViewAction(
+        mutableViewActionState.value = FetchReviewViewAction(
             getViewState(
                 reviewUseCase.execute(movieId = movieId, page = nextPage),
                 callback = {
@@ -54,12 +56,12 @@ class MovieDetailsViewModel(
     private suspend fun handleRelatedMovie(movieId: Long) {
         coroutineScope {
             launch {
-                _viewActionState.value = FetchRecommendedMovieViewAction(
+                mutableViewActionState.value = FetchRecommendedMovieViewAction(
                     getViewState(recommendedMovieUseCase.execute(movieId, 1))
                 )
             }
             launch {
-                _viewActionState.value = FetchSimilarMovieViewAction(
+                mutableViewActionState.value = FetchSimilarMovieViewAction(
                     getViewState(similarMovieUseCase.execute(movieId, 1))
                 )
             }
@@ -69,8 +71,11 @@ class MovieDetailsViewModel(
     private suspend fun handleMovieDetailsEvent(movieId: Long) {
         viewState.movieId = movieId
         viewState.reviewPage = 0
-        _viewActionState.value = FetchMovieDetailsViewAction(
-            getViewState(movieDetailsUseCase.execute(movieId = movieId))
-        )
+        coroutineScope {
+            movieDetailsUseCase.execute(movieId = movieId)
+                .onEach {
+                    mutableViewActionState.value = FetchMovieDetailsViewAction(getViewState(it))
+                }.launchIn(this)
+        }
     }
 }

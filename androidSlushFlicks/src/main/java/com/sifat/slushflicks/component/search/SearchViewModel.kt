@@ -41,7 +41,7 @@ class SearchViewModel(
     private fun handleUpdateShowType(showType: ShowType) {
         if (showType == viewState.showType) return
         viewState.updateShowType(showType)
-        _viewActionState.value = UpdateShowTypeViewAction(showType = showType)
+        mutableViewActionState.value = UpdateShowTypeViewAction(showType = showType)
     }
 
     private suspend fun handleLoadMore() {
@@ -65,13 +65,13 @@ class SearchViewModel(
     }
 
     private suspend fun getRecentShow() {
-        _viewActionState.value = ShowResultViewAction(ViewState.Loading())
+        mutableViewActionState.value = ShowResultViewAction(ViewState.Loading())
         val nextPage = viewState.page + 1
         when (viewState.showType) {
             MOVIE -> recentMovieUseCase.execute(page = nextPage)
             TV_SHOW -> recentTvShowUseCase.execute(page = nextPage)
         }.let { state ->
-            _viewActionState.value = when (state) {
+            mutableViewActionState.value = when (state) {
                 is DataState.Error -> ShowResultViewAction(getErrorState(state))
                 is DataState.Success -> {
                     if (viewState.query.isEmpty()) {
@@ -85,13 +85,13 @@ class SearchViewModel(
     }
 
     private suspend fun performSearch() {
-        _viewActionState.value = ShowResultViewAction(ViewState.Loading())
+        mutableViewActionState.value = ShowResultViewAction(ViewState.Loading())
         val nextPage = viewState.page + 1
         when (viewState.showType) {
             MOVIE -> movieSearchUseCase.execute(query = viewState.query, page = nextPage)
             TV_SHOW -> tvShowSearchUseCase.execute(query = viewState.query, page = nextPage)
         }.let { state ->
-            _viewActionState.value = when (state) {
+            mutableViewActionState.value = when (state) {
                 is DataState.Error -> ShowResultViewAction(getErrorState(state))
                 is DataState.Success -> {
                     if (state.data?.query == viewState.query && state.data?.page == nextPage) {

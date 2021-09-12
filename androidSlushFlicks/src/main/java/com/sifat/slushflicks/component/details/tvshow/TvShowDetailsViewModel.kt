@@ -17,6 +17,8 @@ import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchReviewViewEv
 import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchTvShowDetailsViewEvent
 import com.sifat.slushflicks.viewevents.ViewEvent
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class TvShowDetailsViewModel(
@@ -39,7 +41,7 @@ class TvShowDetailsViewModel(
     private suspend fun handleReviewEvent(tvShowId: Long) {
         if (viewState.reviewPage == INVALID_INT) return
         val nextPage = viewState.reviewPage + 1
-        _viewActionState.value = FetchReviewViewAction(
+        mutableViewActionState.value = FetchReviewViewAction(
             getViewState(
                 reviewUseCase.execute(tvShowId = tvShowId, page = nextPage),
                 callback = {
@@ -55,12 +57,12 @@ class TvShowDetailsViewModel(
     private suspend fun handleRelatedTvShow(movieId: Long) {
         coroutineScope {
             launch {
-                _viewActionState.value = FetchRecommendedTvShowViewAction(
+                mutableViewActionState.value = FetchRecommendedTvShowViewAction(
                     getViewState(recommendedTvShowUseCase.execute(movieId, 1))
                 )
             }
             launch {
-                _viewActionState.value = FetchSimilarTvShowViewAction(
+                mutableViewActionState.value = FetchSimilarTvShowViewAction(
                     getViewState(similarTvShowUseCase.execute(movieId, 1))
                 )
             }
@@ -70,8 +72,12 @@ class TvShowDetailsViewModel(
     private suspend fun handleTvShowDetailsEvent(tvShowId: Long) {
         viewState.tvShowId = tvShowId
         viewState.reviewPage = 0
-        _viewActionState.value = FetchTvShowDetailsViewAction(
-            getViewState(tvShowDetailsUseCase.execute(tvShowId = tvShowId))
-        )
+        coroutineScope {
+            tvShowDetailsUseCase.execute(tvShowId = tvShowId)
+                .onEach {
+                    mutableViewActionState.value = FetchTvShowDetailsViewAction(getViewState(it))
+                }
+                .launchIn(this)
+        }
     }
 }

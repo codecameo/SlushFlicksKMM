@@ -14,26 +14,29 @@ import com.sifat.slushflicks.domain.usecase.MovieDetailsUseCase
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 class MovieDetailsUseCaseImpl(
     private val movieDetailsRepository: MovieDetailsRepository,
     private val recentRepository: RecentRepository
 ) : BaseUseCase(), MovieDetailsUseCase {
-    override suspend fun execute(movieId: Long): DataState<MovieModel> {
-        return movieDetailsRepository.getMovieDetails(movieId).let { state ->
-            when (state) {
-                is Error -> getErrorResponse(state) {
-                    it?.toModel()
-                }
-                is Success -> getMovieDetails(state.data).let { model ->
-                    recentRepository.updateRecentMovie(movieId)
-                    Success(
-                        data = model,
-                        message = state.message
-                    )
+    override suspend fun execute(movieId: Long): Flow<DataState<MovieModel>> {
+        return movieDetailsRepository.getMovieDetails(movieId)
+            .distinctUntilChanged()
+            .map { state ->
+                when (state) {
+                    is Error -> getMovieDetails(state.data).let { model ->
+                        recentRepository.updateRecentTvShow(movieId)
+                        Error(data = model, errorMessage = state.errorMessage)
+                    }
+                    is Success -> getMovieDetails(state.data).let { model ->
+                        recentRepository.updateRecentTvShow(movieId)
+                        Success(data = model, message = state.message)
+                    }
                 }
             }
-        }
     }
 
     private suspend fun getMovieDetails(movieEntity: MovieEntity?): MovieModel? {

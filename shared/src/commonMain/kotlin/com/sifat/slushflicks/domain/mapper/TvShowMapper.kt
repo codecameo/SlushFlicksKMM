@@ -28,7 +28,7 @@ fun TvShowEntity.toModel(videoKey: String? = null, movieCasts: List<CastModel>? 
         status = status,
         nextEpisode = nextEpisode?.toModel(),
         lastEpisode = lastEpisode?.toModel(),
-        seasons = seasons?.map { it.toModel() },
+        seasons = seasons?.map { it.toModel() }?.reversed(),
         numOfSeason = numOfSeason,
         numOfEpisode = numOfEpisode,
         title = title,
@@ -41,7 +41,7 @@ fun TvShowEntity.toModel(videoKey: String? = null, movieCasts: List<CastModel>? 
     )
 
 fun SeasonColumn.toModel() = SeasonModel(
-    id = INVALID_ID_LONG,
+    id = id ?: INVALID_ID_LONG,
     airDate = airDate ?: EMPTY_STRING,
     name = name ?: EMPTY_STRING,
     posterPath = posterPath?.let { getCastImage(it) } ?: EMPTY_STRING,

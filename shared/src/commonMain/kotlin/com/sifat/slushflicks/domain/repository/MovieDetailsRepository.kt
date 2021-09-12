@@ -5,9 +5,10 @@ import com.sifat.slushflicks.data.cache.column.CastColumn
 import com.sifat.slushflicks.data.cache.model.ShowEntity
 import com.sifat.slushflicks.data.remote.model.ReviewApiModel
 import com.sifat.slushflicks.data.state.DataState
+import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailsRepository {
-    suspend fun getMovieDetails(movieId: Long): DataState<MovieEntity>
+    suspend fun getMovieDetails(movieId: Long): Flow<DataState<MovieEntity>>
     suspend fun getMovieVideo(movieId: Long): DataState<String>
     suspend fun getMovieCast(movieId: Long): DataState<List<CastColumn>>
     suspend fun getSimilarMovies(movieId: Long, page: Int = 1): DataState<List<ShowEntity>>

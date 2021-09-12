@@ -56,7 +56,7 @@ class TvShowViewModel(
     }
 
     private suspend fun fetchMovieList(execute: suspend () -> DataState<List<ShowModel>>) {
-        _viewActionState.value = when (val state = execute()) {
+        mutableViewActionState.value = when (val state = execute()) {
             is DataState.Error -> FetchTvListViewAction(getErrorState(state))
             is DataState.Success -> {
                 viewState.addShowList(state.data ?: emptyList())
@@ -67,18 +67,18 @@ class TvShowViewModel(
     }
 
     private suspend fun handleCollectionEvent() {
-        _viewActionState.value = FetchCollectionViewAction(ViewState.Loading())
+        mutableViewActionState.value = FetchCollectionViewAction(ViewState.Loading())
         getViewState(collectionUseCase.execute()) {
             viewState.initCollectionList(it)
             viewState.collectionItems
         }.let { state ->
-            _viewActionState.value = FetchCollectionViewAction(state)
+            mutableViewActionState.value = FetchCollectionViewAction(state)
         }
     }
 
     private fun updateLabel(label: String) {
         viewState.updateSelectedLabel(label)
-        _viewActionState.value =
+        mutableViewActionState.value =
             FetchCollectionViewAction(ViewState.Success(viewState.collectionItems))
     }
 }

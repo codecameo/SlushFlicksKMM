@@ -17,8 +17,11 @@ import com.sifat.slushflicks.data.mapper.toEntity
 import com.sifat.slushflicks.data.remote.api.MovieApi
 import com.sifat.slushflicks.data.remote.model.ReviewApiModel
 import com.sifat.slushflicks.data.state.DataState
+import com.sifat.slushflicks.data.state.DataState.Error
 import com.sifat.slushflicks.data.state.DataState.Success
 import com.sifat.slushflicks.domain.repository.MovieDetailsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class MovieDetailsRepositoryImpl(
     private val movieApi: MovieApi,
@@ -26,10 +29,22 @@ class MovieDetailsRepositoryImpl(
     networkStateManager: NetworkStateManager
 ) : BaseRepository(networkStateManager), MovieDetailsRepository {
 
-    override suspend fun getMovieDetails(movieId: Long): DataState<MovieEntity> {
-        return localDataManager.getMovieDetails(movieId)?.let { entity ->
-            return if (hasOtherData(entity)) Success(data = entity) else fetchMovieDetails(movieId)
-        } ?: fetchMovieDetails(movieId)
+    override suspend fun getMovieDetails(movieId: Long): Flow<DataState<MovieEntity>> {
+        return flow {
+            localDataManager.getMovieDetails(movieId).also {
+                emit(Success(data = it))
+            }
+            updateMovieDetails(movieId).let { state ->
+                when (state) {
+                    is Success -> localDataManager.getMovieDetails(movieId).also {
+                        emit(Success(data = it, message = state.message))
+                    }
+                    is Error -> localDataManager.getMovieDetails(movieId).also {
+                        emit(Error(data = it, errorMessage = state.errorMessage))
+                    }
+                }
+            }
+        }
     }
 
     override suspend fun getMovieVideo(movieId: Long): DataState<String> {
@@ -88,7 +103,7 @@ class MovieDetailsRepositoryImpl(
         }
     }
 
-    private suspend fun fetchMovieDetails(movieId: Long): DataState<MovieEntity> {
+    private suspend fun updateMovieDetails(movieId: Long): DataState<MovieEntity> {
         return execute {
             getDataState(movieApi.getMovieDetails(movieId)) {
                 it?.toEntity()
@@ -97,19 +112,6 @@ class MovieDetailsRepositoryImpl(
                     localDataManager.insertMovieDetails(movie)
                 }
             }
-        }
-    }
-
-    private fun hasOtherData(entity: MovieEntity): Boolean {
-        return entity.run {
-            runtime != DEFAULT_INT ||
-                voteCount != DEFAULT_INT ||
-                tagline != EMPTY_STRING ||
-                status != EMPTY_STRING ||
-                posterPath != EMPTY_STRING ||
-                popularity != DEFAULT_DOUBLE ||
-                budget != DEFAULT_LONG ||
-                revenue != DEFAULT_LONG
         }
     }
 }

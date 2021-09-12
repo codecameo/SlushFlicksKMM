@@ -386,6 +386,11 @@ fun Body(
                 title = stringResource(id = R.string.text_last_episode)
             )
         }
+        tvShowModel.seasons?.let { seasons ->
+            if (seasons.isNotEmpty()) {
+                SessionComponent(seasons = seasons)
+            }
+        }
         if (recommendation.isNotEmpty()) {
             RelatedShowComponent(
                 showModels = recommendation,
