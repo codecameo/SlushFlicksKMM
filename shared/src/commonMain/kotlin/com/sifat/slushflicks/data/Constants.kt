@@ -1,6 +1,7 @@
 package com.sifat.slushflicks.data
 
 object Constants {
+    const val RATING_FORMAT = "%.1f"
     const val EMPTY_STRING = ""
     const val INVALID_INT = -1
     const val DEFAULT_INT = 0

@@ -2,8 +2,10 @@ package com.sifat.slushflicks.component.tvshow
 
 import com.sifat.slushflicks.AppDispatchers
 import com.sifat.slushflicks.ViewState
+import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.component.home.CollectionViewState
+import com.sifat.slushflicks.data.Constants.EMPTY_STRING
 import com.sifat.slushflicks.data.Constants.INVALID_INT
 import com.sifat.slushflicks.data.Label.Companion.TRENDING_LABEL
 import com.sifat.slushflicks.data.state.DataState
@@ -61,12 +63,20 @@ class TvShowViewModel(
             is DataState.Success -> {
                 viewState.addShowList(state.data ?: emptyList())
                 viewState.isLoadingMore = false
-                FetchTvListViewAction(ViewState.Success(data = viewState.showList.distinctBy { it.id }))
+                FetchTvListViewAction(Success(data = viewState.showList.distinctBy { it.id }))
             }
         }
     }
 
     private suspend fun handleCollectionEvent() {
+        if (viewState.collectionItems.isNotEmpty()) {
+            viewState.collectionItems.find { it.selected }
+                .let { viewState.reset(it?.label ?: EMPTY_STRING) }
+            mutableViewActionState.value =
+                FetchCollectionViewAction(Success(data = viewState.collectionItems))
+            return
+        }
+
         mutableViewActionState.value = FetchCollectionViewAction(ViewState.Loading())
         getViewState(collectionUseCase.execute()) {
             viewState.initCollectionList(it)
@@ -79,6 +89,6 @@ class TvShowViewModel(
     private fun updateLabel(label: String) {
         viewState.updateSelectedLabel(label)
         mutableViewActionState.value =
-            FetchCollectionViewAction(ViewState.Success(viewState.collectionItems))
+            FetchCollectionViewAction(Success(viewState.collectionItems))
     }
 }
