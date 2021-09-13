@@ -1,8 +1,8 @@
 package com.sifat.slushflicks.data.repository
 
 import com.sifat.slushflicks.data.Constants.EMPTY_STRING
-import com.sifat.slushflicks.data.Label.Companion.RECOMMENDATION_LABEL
-import com.sifat.slushflicks.data.Label.Companion.SIMILAR_LABEL
+import com.sifat.slushflicks.data.Label.RECOMMENDATION_LABEL
+import com.sifat.slushflicks.data.Label.SIMILAR_LABEL
 import com.sifat.slushflicks.data.cache.MovieEntity
 import com.sifat.slushflicks.data.cache.column.CastColumn
 import com.sifat.slushflicks.data.cache.manager.LocalDataManager

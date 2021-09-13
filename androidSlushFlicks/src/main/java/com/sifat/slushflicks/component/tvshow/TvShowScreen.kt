@@ -113,7 +113,6 @@ fun TvShowScreen(scaffoldState: ScaffoldState, showSelected: (ShowModel) -> Unit
             items(collectionItems.value, key = { it.toString() }) {
                 ShowTypeChip(it) { label ->
                     tvShowViewModel.viewEventState.value = UpdateCollectionViewEvent(label = label)
-                    tvShowViewModel.viewEventState.value = FetchTvShowListViewEvent
                 }
             }
         }

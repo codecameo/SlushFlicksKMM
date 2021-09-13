@@ -2,6 +2,7 @@ package com.sifat.slushflicks.di
 
 import co.touchlab.kermit.LogcatLogger
 import co.touchlab.kermit.Logger
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -10,7 +11,11 @@ import com.sifat.slushflicks.data.cache.manager.FireStoreManager
 import com.sifat.slushflicks.data.cache.manager.FireStoreManagerImpl
 import com.sifat.slushflicks.data.manager.NetworkStateManager
 import com.sifat.slushflicks.data.manager.NetworkStateManagerImpl
+import com.sifat.slushflicks.data.repository.DynamicLinkRepositoryImpl
 import com.sifat.slushflicks.di.DiConstants.DATABASE_NAME
+import com.sifat.slushflicks.di.DiConstants.NAME_DYNAMIC_BASE_LINK
+import com.sifat.slushflicks.di.DiConstants.NAME_DYNAMIC_DOMAIN
+import com.sifat.slushflicks.domain.repository.DynamicLinkRepository
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +41,17 @@ actual fun platformModule() = module {
         fireStore
     }
 
+    single<DynamicLinkRepository> {
+        DynamicLinkRepositoryImpl(
+            get(named(name = NAME_DYNAMIC_BASE_LINK)),
+            get(named(name = NAME_DYNAMIC_DOMAIN)),
+            get()
+        )
+    }
+
     single<FireStoreManager> { FireStoreManagerImpl(get()) }
+
+    single { FirebaseDynamicLinks.getInstance() }
 }
 
 actual fun getLogger(): Logger = LogcatLogger()

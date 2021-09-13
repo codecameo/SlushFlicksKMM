@@ -1,14 +1,14 @@
 package com.sifat.slushflicks.data.remote.api.impl
 
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.CREDITS_PATH
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.REVIEWS_PATH
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TRENDING_TV_SHOW_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SESSION_PATH
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.TV_SHOW_PATH
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.VIDEOS_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.CREDITS_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.REVIEWS_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.TRENDING_TV_SHOW_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.TV_SESSION_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.TV_SHOW_PATH
+import com.sifat.slushflicks.data.remote.ApiEndPoint.VIDEOS_PATH
 import com.sifat.slushflicks.data.remote.ApiErrorParser
-import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_API_KEY
-import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_PAGE
+import com.sifat.slushflicks.data.remote.ApiRequest.QUERY_KEY_API_KEY
+import com.sifat.slushflicks.data.remote.ApiRequest.QUERY_KEY_PAGE
 import com.sifat.slushflicks.data.remote.ApiResponse
 import com.sifat.slushflicks.data.remote.api.TvShowApi
 import com.sifat.slushflicks.data.remote.model.CreditsApiModel

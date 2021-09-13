@@ -5,7 +5,7 @@ import com.sifat.slushflicks.data.cache.manager.LocalDataManager
 import com.sifat.slushflicks.data.manager.NetworkStateManager
 import com.sifat.slushflicks.data.mapper.toEntity
 import com.sifat.slushflicks.data.remote.ApiSuccessResponse
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.NO_INTERNET_ERROR
+import com.sifat.slushflicks.data.remote.StatusCode.NO_INTERNET_ERROR
 import com.sifat.slushflicks.data.remote.api.GenreApi
 import com.sifat.slushflicks.data.remote.model.GenreListApiModel
 import com.sifat.slushflicks.data.state.DataState

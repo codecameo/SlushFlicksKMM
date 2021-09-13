@@ -7,7 +7,9 @@ import com.sifat.slushflicks.data.cache.manager.FireStoreManager
 import com.sifat.slushflicks.data.cache.manager.FireStoreManagerImpl
 import com.sifat.slushflicks.data.manager.NetworkStateManager
 import com.sifat.slushflicks.data.manager.NetworkStateManagerImpl
+import com.sifat.slushflicks.data.repository.DynamicLinkRepositoryImpl
 import com.sifat.slushflicks.di.DiConstants.DATABASE_NAME
+import com.sifat.slushflicks.domain.repository.DynamicLinkRepository
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +25,7 @@ actual fun platformModule() = module {
     }
     single<NetworkStateManager> { NetworkStateManagerImpl() }
     single<FireStoreManager> { FireStoreManagerImpl() }
+    single<DynamicLinkRepository> { DynamicLinkRepositoryImpl() }
 }
 
 actual fun getLogger(): Logger = NSLogLogger()

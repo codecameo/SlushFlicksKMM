@@ -50,7 +50,7 @@ interface DatabaseManager {
 
     suspend fun getTvShowDetails(tvShowId: Long): TvShowEntity?
 
-    suspend fun updateTvDetails(model: TvShowEntity)
+    suspend fun updateTvDetails(tvShow: TvShowEntity)
 
     suspend fun updateTvDetails(casts: List<CastColumn>, tvShowId: Long)
 

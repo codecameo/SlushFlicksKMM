@@ -2,8 +2,13 @@ package com.sifat.slushflicks.component.details.tvshow
 
 import com.sifat.slushflicks.AppDispatchers
 import com.sifat.slushflicks.ViewState
+import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.data.Constants.INVALID_INT
+import com.sifat.slushflicks.data.DynamicLinkConstants.TV_SERIES_TYPE
+import com.sifat.slushflicks.data.DynamicLinkParam
+import com.sifat.slushflicks.domain.model.TvShowModel
+import com.sifat.slushflicks.domain.usecase.GetDynamicLinkUseCase
 import com.sifat.slushflicks.domain.usecase.GetTvReviewUseCase
 import com.sifat.slushflicks.domain.usecase.RecommendedTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.SimilarTvShowUseCase
@@ -12,9 +17,11 @@ import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchRecommended
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchReviewViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchSimilarTvShowViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchTvShowDetailsViewAction
+import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.ShareViewAction
 import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchRelatedTvShowViewEvent
 import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchReviewViewEvent
 import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchTvShowDetailsViewEvent
+import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.ShareViewEvent
 import com.sifat.slushflicks.viewevents.ViewEvent
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +33,7 @@ class TvShowDetailsViewModel(
     private val recommendedTvShowUseCase: RecommendedTvShowUseCase,
     private val reviewUseCase: GetTvReviewUseCase,
     private val tvShowDetailsUseCase: TvShowDetailsUseCase,
+    private val getDynamicLinkUseCase: GetDynamicLinkUseCase,
     override val viewState: TvShowDetailsViewState = TvShowDetailsViewState(),
     appDispatchers: AppDispatchers
 ) : BaseViewModel<TvShowDetailsViewState>(appDispatchers) {
@@ -34,8 +42,28 @@ class TvShowDetailsViewModel(
             is FetchTvShowDetailsViewEvent -> handleTvShowDetailsEvent(event.tvShowId)
             is FetchRelatedTvShowViewEvent -> handleRelatedTvShow(event.tvShowId)
             is FetchReviewViewEvent -> handleReviewEvent(event.tvShowId)
+            is ShareViewEvent -> handleShareEvent(event.tvShowModel)
             else -> throwEventNotSupported(event = event)
         }
+    }
+
+    private suspend fun handleShareEvent(tvShowModel: TvShowModel) {
+        postAction(ShareViewAction(Loading()))
+        postAction(
+            ShareViewAction(
+                getViewState(
+                    getDynamicLinkUseCase.execute(
+                        DynamicLinkParam(
+                            showId = tvShowModel.id,
+                            showType = TV_SERIES_TYPE,
+                            showName = tvShowModel.title,
+                            overview = tvShowModel.overview,
+                            imageUrl = tvShowModel.backdropPath
+                        )
+                    )
+                )
+            )
+        )
     }
 
     private suspend fun handleReviewEvent(tvShowId: Long) {

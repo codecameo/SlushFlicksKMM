@@ -1,9 +1,9 @@
 package com.sifat.slushflicks.data.remote.api.impl
 
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.GENRES_MOVIE_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.GENRES_TV_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.GENRES_MOVIE_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.GENRES_TV_URL
 import com.sifat.slushflicks.data.remote.ApiErrorParser
-import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_API_KEY
+import com.sifat.slushflicks.data.remote.ApiRequest.QUERY_KEY_API_KEY
 import com.sifat.slushflicks.data.remote.ApiResponse
 import com.sifat.slushflicks.data.remote.api.GenreApi
 import com.sifat.slushflicks.data.remote.model.GenreListApiModel

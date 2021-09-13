@@ -7,7 +7,7 @@ import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.component.home.CollectionViewState
 import com.sifat.slushflicks.data.Constants.EMPTY_STRING
 import com.sifat.slushflicks.data.Constants.INVALID_INT
-import com.sifat.slushflicks.data.Label.Companion.TRENDING_LABEL
+import com.sifat.slushflicks.data.Label.TRENDING_LABEL
 import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.model.ShowModel
 import com.sifat.slushflicks.domain.usecase.GetTrendingTvListUseCase

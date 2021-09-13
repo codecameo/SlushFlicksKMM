@@ -1,7 +1,7 @@
 package com.sifat.slushflicks.data.repository
 
-import com.sifat.slushflicks.data.Label.Companion.RECENTLY_VISITED_MOVIE
-import com.sifat.slushflicks.data.Label.Companion.RECENTLY_VISITED_TV_SHOW
+import com.sifat.slushflicks.data.Label.RECENTLY_VISITED_MOVIE
+import com.sifat.slushflicks.data.Label.RECENTLY_VISITED_TV_SHOW
 import com.sifat.slushflicks.data.cache.MovieCollectionEntity
 import com.sifat.slushflicks.data.cache.TvCollectionEntity
 import com.sifat.slushflicks.data.cache.manager.LocalDataManager

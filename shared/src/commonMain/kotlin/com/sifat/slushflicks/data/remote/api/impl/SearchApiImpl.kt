@@ -1,11 +1,11 @@
 package com.sifat.slushflicks.data.remote.api.impl
 
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.SEARCH_MOVIE_URL
-import com.sifat.slushflicks.data.remote.ApiEndPoint.Companion.SEARCH_TV_SHOW_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.SEARCH_MOVIE_URL
+import com.sifat.slushflicks.data.remote.ApiEndPoint.SEARCH_TV_SHOW_URL
 import com.sifat.slushflicks.data.remote.ApiErrorParser
-import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_API_KEY
-import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_PAGE
-import com.sifat.slushflicks.data.remote.ApiRequest.Companion.QUERY_KEY_SEARCH
+import com.sifat.slushflicks.data.remote.ApiRequest.QUERY_KEY_API_KEY
+import com.sifat.slushflicks.data.remote.ApiRequest.QUERY_KEY_PAGE
+import com.sifat.slushflicks.data.remote.ApiRequest.QUERY_KEY_SEARCH
 import com.sifat.slushflicks.data.remote.ApiResponse
 import com.sifat.slushflicks.data.remote.api.SearchApi
 import com.sifat.slushflicks.data.remote.model.MovieListApiModel

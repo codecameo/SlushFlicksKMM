@@ -17,4 +17,7 @@ sealed class MovieDetailsViewAction : ViewAction() {
 
     class FetchReviewViewAction(val viewState: ViewState<List<ReviewModel>>) :
         MovieCollectionViewAction()
+
+    class ShareViewAction(val viewState: ViewState<String>) :
+        MovieCollectionViewAction()
 }
