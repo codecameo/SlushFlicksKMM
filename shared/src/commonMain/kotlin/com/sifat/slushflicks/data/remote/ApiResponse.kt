@@ -1,6 +1,6 @@
 package com.sifat.slushflicks.data.remote
 
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.INTERNAL_ERROR
+import com.sifat.slushflicks.data.remote.StatusCode.INTERNAL_ERROR
 
 sealed class ApiResponse<Data>
 

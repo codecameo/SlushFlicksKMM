@@ -23,6 +23,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -55,6 +56,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.ViewState.Error
+import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.CollapsingTopBar
 import com.sifat.slushflicks.component.ReviewListComponent
@@ -63,6 +65,7 @@ import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
+import com.sifat.slushflicks.component.shareShow
 import com.sifat.slushflicks.component.showTrailer
 import com.sifat.slushflicks.component.verticalGradientTint
 import com.sifat.slushflicks.domain.model.MovieModel
@@ -73,9 +76,11 @@ import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchMovieDetails
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchRecommendedMovieViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchReviewViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchSimilarMovieViewAction
+import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.ShareViewAction
 import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchMovieDetailsViewEvent
 import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchRelatedMovieViewEvent
 import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchReviewViewEvent
+import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.ShareViewEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -136,6 +141,25 @@ fun MovieDetailsScreen(scaffoldState: ScaffoldState, movieId: Long, onBack: () -
                         userReviews = reviews
                     }
                 }
+                is ShareViewAction -> {
+                    canShare = action.viewState !is Loading
+                    when (action.viewState) {
+                        is Error -> snackBarState.showSnackbar(
+                            message = getErrorMessage(
+                                context,
+                                action.viewState.errorCode,
+                                action.viewState.errorMessage
+                            )
+                        )
+                        is Loading -> { // No Op
+                        }
+                        is Success -> if (!shareShow(context, action.viewState.data)) {
+                            coroutineScope.launch {
+                                snackBarState.showSnackbar(context.getString(R.string.error_no_app_found))
+                            }
+                        }
+                    }
+                }
             }
         }.launchIn(this)
         snapshotFlow { currentMovieId }.onEach {
@@ -161,14 +185,17 @@ fun MovieDetailsScreen(scaffoldState: ScaffoldState, movieId: Long, onBack: () -
         CollapseImage(
             movieModel = movieModel,
             aspectRatio = currentAspectRatio,
-            scaffoldState = scaffoldState
+            snackBarState = snackBarState
         )
         TopBar(
             modifier = Modifier.fillMaxWidth(),
             movieModel = movieModel,
             aspectRatio = currentAspectRatio,
             canShare = canShare,
-            onBack = onBackCallBack
+            onBack = onBackCallBack,
+            shareShow = {
+                viewModel.viewEventState.value = ShareViewEvent(movieModel)
+            }
         )
     }
 }
@@ -179,7 +206,8 @@ fun TopBar(
     movieModel: MovieModel,
     aspectRatio: Float,
     canShare: Boolean,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    shareShow: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -199,19 +227,16 @@ fun TopBar(
                 tint = MaterialTheme.colors.onPrimary,
                 contentDescription = stringResource(id = R.string.text_back)
             )
-
-            if (canShare) {
-                Icon(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .layoutId(CollapsingTopBar.SHARE_ID)
-                        .clickable { onBack() }
-                        .padding(16.dp),
-                    imageVector = Icons.Filled.Share,
-                    tint = MaterialTheme.colors.onPrimary,
-                    contentDescription = stringResource(id = R.string.title_share)
-                )
-            }
+            Icon(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .layoutId(CollapsingTopBar.SHARE_ID)
+                    .clickable { if (canShare) shareShow() }
+                    .padding(16.dp),
+                imageVector = Icons.Filled.Share,
+                tint = MaterialTheme.colors.onPrimary.copy(alpha = if (canShare) 1f else 0.5f),
+                contentDescription = stringResource(id = R.string.title_share)
+            )
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -232,7 +257,7 @@ fun TopBar(
 
 @ExperimentalCoilApi
 @Composable
-fun CollapseImage(movieModel: MovieModel, aspectRatio: Float, scaffoldState: ScaffoldState) {
+fun CollapseImage(movieModel: MovieModel, aspectRatio: Float, snackBarState: SnackbarHostState) {
     val gradientColor = listOf(
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
@@ -280,7 +305,7 @@ fun CollapseImage(movieModel: MovieModel, aspectRatio: Float, scaffoldState: Sca
                     if (movieModel.video.isNotEmpty()) {
                         if (!showTrailer(context = context, movieModel.video)) {
                             coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.install_youtube))
+                                snackBarState.showSnackbar(context.getString(R.string.install_youtube))
                             }
                         }
                     }

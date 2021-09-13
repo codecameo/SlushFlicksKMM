@@ -26,7 +26,7 @@ object Versions {
     const val analytics = "17.4.1"
     const val crashlytics = "17.0.0"
     const val firestore = "23.0.3"
-    const val dynamicLinks = "19.1.0"
+    const val dynamicLinks = "20.1.1"
 
     const val googleServices = "4.3.10"
 

@@ -25,6 +25,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -65,6 +66,7 @@ import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
+import com.sifat.slushflicks.component.shareShow
 import com.sifat.slushflicks.component.showTrailer
 import com.sifat.slushflicks.component.tvshow.EpisodeComponent
 import com.sifat.slushflicks.component.verticalGradientTint
@@ -78,9 +80,11 @@ import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchRecommended
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchReviewViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchSimilarTvShowViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchTvShowDetailsViewAction
+import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.ShareViewAction
 import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchRelatedTvShowViewEvent
 import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchReviewViewEvent
 import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.FetchTvShowDetailsViewEvent
+import com.sifat.slushflicks.viewevents.TvShowDetailsViewEvent.ShareViewEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -140,6 +144,25 @@ fun TvShowDetailsScreen(scaffoldState: ScaffoldState, tvShowId: Long, onBack: ()
                         userReviews = reviews
                     }
                 }
+                is ShareViewAction -> {
+                    canShare = action.viewState !is ViewState.Loading
+                    when (action.viewState) {
+                        is ViewState.Error -> snackBarState.showSnackbar(
+                            message = getErrorMessage(
+                                context,
+                                action.viewState.errorCode,
+                                action.viewState.errorMessage
+                            )
+                        )
+                        is ViewState.Loading -> { // No Op
+                        }
+                        is Success -> if (!shareShow(context, action.viewState.data)) {
+                            coroutineScope.launch {
+                                snackBarState.showSnackbar(context.getString(R.string.error_no_app_found))
+                            }
+                        }
+                    }
+                }
             }
         }.launchIn(this)
         snapshotFlow { currentTvShowId }.onEach {
@@ -165,14 +188,17 @@ fun TvShowDetailsScreen(scaffoldState: ScaffoldState, tvShowId: Long, onBack: ()
         CollapseImage(
             tvShowModel = tvShowModel,
             aspectRatio = currentAspectRatio,
-            scaffoldState = scaffoldState
+            snackbarState = snackBarState
         )
         TopBar(
             modifier = Modifier.fillMaxWidth(),
             tvShowModel = tvShowModel,
             aspectRatio = currentAspectRatio,
             canShare = canShare,
-            onBack = onBackCallBack
+            onBack = onBackCallBack,
+            shareShow = {
+                viewModel.viewEventState.value = ShareViewEvent(tvShowModel)
+            }
         )
     }
 }
@@ -183,7 +209,8 @@ fun TopBar(
     tvShowModel: TvShowModel,
     aspectRatio: Float,
     canShare: Boolean,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    shareShow: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -203,19 +230,16 @@ fun TopBar(
                 tint = MaterialTheme.colors.onPrimary,
                 contentDescription = stringResource(id = R.string.text_back)
             )
-
-            if (canShare) {
-                Icon(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .layoutId(CollapsingTopBar.SHARE_ID)
-                        .clickable { onBack() }
-                        .padding(16.dp),
-                    imageVector = Icons.Filled.Share,
-                    tint = MaterialTheme.colors.onPrimary,
-                    contentDescription = stringResource(id = R.string.title_share)
-                )
-            }
+            Icon(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .layoutId(CollapsingTopBar.SHARE_ID)
+                    .clickable { if (canShare) shareShow() }
+                    .padding(16.dp),
+                imageVector = Icons.Filled.Share,
+                tint = MaterialTheme.colors.onPrimary.copy(alpha = if (canShare) 1f else 0.5f),
+                contentDescription = stringResource(id = R.string.title_share)
+            )
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -236,7 +260,7 @@ fun TopBar(
 
 @ExperimentalCoilApi
 @Composable
-fun CollapseImage(tvShowModel: TvShowModel, aspectRatio: Float, scaffoldState: ScaffoldState) {
+fun CollapseImage(tvShowModel: TvShowModel, aspectRatio: Float, snackbarState: SnackbarHostState) {
     val gradientColor = listOf(
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
@@ -284,7 +308,7 @@ fun CollapseImage(tvShowModel: TvShowModel, aspectRatio: Float, scaffoldState: S
                     if (tvShowModel.video.isNotEmpty()) {
                         if (!showTrailer(context = context, tvShowModel.video)) {
                             coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.install_youtube))
+                                snackbarState.showSnackbar(context.getString(R.string.install_youtube))
                             }
                         }
                     }

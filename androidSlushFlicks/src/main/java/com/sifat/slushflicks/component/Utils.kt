@@ -7,11 +7,12 @@ import androidx.core.content.ContextCompat
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.data.BULLET_SIGN
 import com.sifat.slushflicks.data.NA
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.EMPTY_RESPONSE
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.INTERNAL_ERROR
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.NO_INTERNET_ERROR
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.RESOURCE_NOT_FOUND
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.UNAUTHORIZED
+import com.sifat.slushflicks.data.PLAIN_TEXT_TYPE
+import com.sifat.slushflicks.data.remote.StatusCode.EMPTY_RESPONSE
+import com.sifat.slushflicks.data.remote.StatusCode.INTERNAL_ERROR
+import com.sifat.slushflicks.data.remote.StatusCode.NO_INTERNET_ERROR
+import com.sifat.slushflicks.data.remote.StatusCode.RESOURCE_NOT_FOUND
+import com.sifat.slushflicks.data.remote.StatusCode.UNAUTHORIZED
 import com.sifat.slushflicks.domain.model.GenreModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -55,6 +56,20 @@ fun showTrailer(context: Context, videoId: String): Boolean {
         ContextCompat.startActivity(context, intent, null)
     }
     return activeApp.isNotEmpty()
+}
+
+fun shareShow(context: Context, dynamicLink: String?): Boolean {
+    if (dynamicLink.isNullOrEmpty()) return false
+    val message = String.format(context.getString(R.string.text_friend_message), dynamicLink)
+    return try {
+        val i = Intent(Intent.ACTION_SEND)
+        i.type = PLAIN_TEXT_TYPE
+        i.putExtra(Intent.EXTRA_TEXT, message)
+        context.startActivity(Intent.createChooser(i, context.getString(R.string.text_share_to)))
+        true
+    } catch (e: Exception) {
+        false
+    }
 }
 
 const val YOUTUBE_PACKAGE_NAME = "com.google.android.youtube"

@@ -42,7 +42,8 @@ fun viewModelModule() = module {
             appDispatchers = get(),
             similarMovieUseCase = get(),
             recommendedMovieUseCase = get(),
-            reviewUseCase = get()
+            reviewUseCase = get(),
+            getDynamicLinkUseCase = get()
         )
     }
     viewModel {
@@ -51,7 +52,8 @@ fun viewModelModule() = module {
             appDispatchers = get(),
             similarTvShowUseCase = get(),
             recommendedTvShowUseCase = get(),
-            reviewUseCase = get()
+            reviewUseCase = get(),
+            getDynamicLinkUseCase = get()
         )
     }
 }

@@ -1,6 +1,6 @@
 package com.sifat.slushflicks.data.state
 
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.INTERNAL_ERROR
+import com.sifat.slushflicks.data.remote.StatusCode.INTERNAL_ERROR
 
 sealed class DataState<Data> {
 

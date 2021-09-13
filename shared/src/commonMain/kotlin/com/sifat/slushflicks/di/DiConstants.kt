@@ -10,4 +10,6 @@ object DiConstants {
     const val MOVIE_LIST_TRENDING_NAME = "movieListTrending"
     const val TV_SHOW_LIST_OTHER_NAME = "tvShowListOthers"
     const val TV_SHOW_LIST_TRENDING_NAME = "tvShowListTrending"
+    const val NAME_DYNAMIC_BASE_LINK = "dynamicBaseLink"
+    const val NAME_DYNAMIC_DOMAIN = "dynamicDomain"
 }

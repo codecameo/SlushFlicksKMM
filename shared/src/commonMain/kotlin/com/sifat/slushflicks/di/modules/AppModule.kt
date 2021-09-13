@@ -12,8 +12,12 @@ import com.sifat.slushflicks.data.getAppDispatcher
 import com.sifat.slushflicks.data.manager.TimeManager
 import com.sifat.slushflicks.data.manager.impl.TimeManagerImpl
 import com.sifat.slushflicks.data.remote.API_KEY
+import com.sifat.slushflicks.data.remote.DYNAMIC_LINK_BASE_URL
+import com.sifat.slushflicks.data.remote.DYNAMIC_LINK_DOMAIN
 import com.sifat.slushflicks.di.DiConstants.API_KEY_NAME
 import com.sifat.slushflicks.di.DiConstants.DATABASE_NAME
+import com.sifat.slushflicks.di.DiConstants.NAME_DYNAMIC_BASE_LINK
+import com.sifat.slushflicks.di.DiConstants.NAME_DYNAMIC_DOMAIN
 import com.sifat.slushflicks.di.getLogger
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -22,6 +26,8 @@ fun appModule() = module {
     single { Kermit(getLogger()) }
     single(named(name = API_KEY_NAME)) { API_KEY }
     single(named(name = DATABASE_NAME)) { DB_NAME }
+    single(named(name = NAME_DYNAMIC_BASE_LINK)) { DYNAMIC_LINK_BASE_URL }
+    single(named(name = NAME_DYNAMIC_DOMAIN)) { DYNAMIC_LINK_DOMAIN }
     single { ColumnTypeAdapter(get()) }
     single { getAppDispatcher() }
     single<Broadcaster<Boolean>> { NetworkStateBroadcaster(get()) }

@@ -5,8 +5,8 @@ import com.sifat.slushflicks.data.remote.ApiEmptyResponse
 import com.sifat.slushflicks.data.remote.ApiErrorResponse
 import com.sifat.slushflicks.data.remote.ApiResponse
 import com.sifat.slushflicks.data.remote.ApiSuccessResponse
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.EMPTY_RESPONSE
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.NO_INTERNET_ERROR
+import com.sifat.slushflicks.data.remote.StatusCode.EMPTY_RESPONSE
+import com.sifat.slushflicks.data.remote.StatusCode.NO_INTERNET_ERROR
 import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.data.state.DataState.Error
 import com.sifat.slushflicks.data.state.DataState.Success

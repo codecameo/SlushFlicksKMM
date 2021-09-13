@@ -6,8 +6,8 @@ import com.sifat.slushflicks.data.cache.manager.DataManagerConstants.MOVIE_COLLE
 import com.sifat.slushflicks.data.cache.manager.DataManagerConstants.TV_COLLECTION_ID
 import com.sifat.slushflicks.data.cache.model.CollectionEntity
 import com.sifat.slushflicks.data.cache.model.CollectionFireStoreResponse
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.EMPTY_RESPONSE
-import com.sifat.slushflicks.data.remote.StatusCode.Companion.INTERNAL_ERROR
+import com.sifat.slushflicks.data.remote.StatusCode.EMPTY_RESPONSE
+import com.sifat.slushflicks.data.remote.StatusCode.INTERNAL_ERROR
 import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.data.state.DataState.Error
 import com.sifat.slushflicks.data.state.DataState.Success

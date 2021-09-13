@@ -1,9 +1,15 @@
 package com.sifat.slushflicks.component.details.movie
 
 import com.sifat.slushflicks.AppDispatchers
+import com.sifat.slushflicks.ViewState
+import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.data.Constants.INVALID_INT
+import com.sifat.slushflicks.data.DynamicLinkConstants.MOVIE_SHOW_TYPE
+import com.sifat.slushflicks.data.DynamicLinkParam
+import com.sifat.slushflicks.domain.model.MovieModel
+import com.sifat.slushflicks.domain.usecase.GetDynamicLinkUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieReviewUseCase
 import com.sifat.slushflicks.domain.usecase.MovieDetailsUseCase
 import com.sifat.slushflicks.domain.usecase.RecommendedMovieUseCase
@@ -12,9 +18,11 @@ import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchMovieDetails
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchRecommendedMovieViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchReviewViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchSimilarMovieViewAction
-import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent
+import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.ShareViewAction
 import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchMovieDetailsViewEvent
 import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchRelatedMovieViewEvent
+import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.FetchReviewViewEvent
+import com.sifat.slushflicks.viewevents.MovieDetailsViewEvent.ShareViewEvent
 import com.sifat.slushflicks.viewevents.ViewEvent
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +34,7 @@ class MovieDetailsViewModel(
     private val recommendedMovieUseCase: RecommendedMovieUseCase,
     private val reviewUseCase: GetMovieReviewUseCase,
     private val movieDetailsUseCase: MovieDetailsUseCase,
+    private val getDynamicLinkUseCase: GetDynamicLinkUseCase,
     override val viewState: MovieDetailsViewState = MovieDetailsViewState(),
     appDispatchers: AppDispatchers
 ) : BaseViewModel<MovieDetailsViewState>(appDispatchers) {
@@ -33,9 +42,29 @@ class MovieDetailsViewModel(
         when (event) {
             is FetchMovieDetailsViewEvent -> handleMovieDetailsEvent(event.movieId)
             is FetchRelatedMovieViewEvent -> handleRelatedMovie(event.movieId)
-            is MovieDetailsViewEvent.FetchReviewViewEvent -> handleReviewEvent(event.movieId)
+            is FetchReviewViewEvent -> handleReviewEvent(event.movieId)
+            is ShareViewEvent -> handleShareEvent(event.movie)
             else -> throwEventNotSupported(event = event)
         }
+    }
+
+    private suspend fun handleShareEvent(movie: MovieModel) {
+        postAction(ShareViewAction(Loading()))
+        postAction(
+            ShareViewAction(
+                getViewState(
+                    getDynamicLinkUseCase.execute(
+                        DynamicLinkParam(
+                            showId = movie.id,
+                            showType = MOVIE_SHOW_TYPE,
+                            showName = movie.title,
+                            overview = movie.overview,
+                            imageUrl = movie.backdropPath
+                        )
+                    )
+                )
+            )
+        )
     }
 
     private suspend fun handleReviewEvent(movieId: Long) {

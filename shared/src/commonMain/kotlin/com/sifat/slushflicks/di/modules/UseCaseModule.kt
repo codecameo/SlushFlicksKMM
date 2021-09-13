@@ -5,6 +5,7 @@ import com.sifat.slushflicks.di.DiConstants.MOVIE_LIST_TRENDING_NAME
 import com.sifat.slushflicks.di.DiConstants.TV_SHOW_LIST_OTHER_NAME
 import com.sifat.slushflicks.di.DiConstants.TV_SHOW_LIST_TRENDING_NAME
 import com.sifat.slushflicks.domain.usecase.GenreUseCase
+import com.sifat.slushflicks.domain.usecase.GetDynamicLinkUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieListUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieReviewUseCase
 import com.sifat.slushflicks.domain.usecase.GetTrendingMovieListUseCase
@@ -26,6 +27,7 @@ import com.sifat.slushflicks.domain.usecase.TvShowSearchUseCase
 import com.sifat.slushflicks.domain.usecase.UpdateRecentMovieUseCase
 import com.sifat.slushflicks.domain.usecase.UpdateRecentTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.impl.GenreUseCaseImpl
+import com.sifat.slushflicks.domain.usecase.impl.GetDynamicLinkUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetMovieListUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetMovieReviewUseCaseImpl
 import com.sifat.slushflicks.domain.usecase.impl.GetTrendingMovieListUseCaseImpl
@@ -71,4 +73,5 @@ fun useCaseModule() = module {
     factory<GetMovieReviewUseCase> { GetMovieReviewUseCaseImpl(get()) }
     factory<MovieDetailsUseCase> { MovieDetailsUseCaseImpl(get(), get()) }
     factory<TvShowDetailsUseCase> { TvShowDetailsUseCaseImpl(get(), get()) }
+    factory<GetDynamicLinkUseCase> { GetDynamicLinkUseCaseImpl(get()) }
 }
