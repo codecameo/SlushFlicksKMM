@@ -93,8 +93,8 @@ class LocalDataManagerImpl(
         return databaseManager.getTvShowDetails(tvShowId)
     }
 
-    override suspend fun updateTvDetails(model: TvShowEntity) {
-        databaseManager.updateTvDetails(model)
+    override suspend fun updateTvDetails(tvShow: TvShowEntity) {
+        databaseManager.updateTvDetails(tvShow)
     }
 
     override suspend fun updateTvDetails(casts: List<CastColumn>, tvShowId: Long) {

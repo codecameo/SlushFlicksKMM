@@ -1,6 +1,9 @@
 package com.sifat.slushflicks.component
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.core.content.ContextCompat
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.data.BULLET_SIGN
 import com.sifat.slushflicks.data.NA
@@ -40,3 +43,19 @@ fun getErrorMessage(context: Context, errorCode: Int?, errorMessage: String?): S
         else -> context.getString(R.string.error_message)
     }
 }
+
+fun showTrailer(context: Context, videoId: String): Boolean {
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse(String.format(YOUTUBE_VIDEO_LINK, videoId))
+    )
+    intent.`package` = YOUTUBE_PACKAGE_NAME
+    val activeApp = context.packageManager.queryIntentActivities(intent, 0)
+    if (activeApp.isNotEmpty()) {
+        ContextCompat.startActivity(context, intent, null)
+    }
+    return activeApp.isNotEmpty()
+}
+
+const val YOUTUBE_PACKAGE_NAME = "com.google.android.youtube"
+const val YOUTUBE_VIDEO_LINK = "https://www.youtube.com/watch?v=%s"

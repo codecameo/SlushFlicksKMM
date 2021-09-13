@@ -65,6 +65,7 @@ import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
+import com.sifat.slushflicks.component.showTrailer
 import com.sifat.slushflicks.component.tvshow.EpisodeComponent
 import com.sifat.slushflicks.component.verticalGradientTint
 import com.sifat.slushflicks.data.BULLET_SIGN
@@ -84,7 +85,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
-import kotlin.math.ulp
 
 private const val minImageAspectRatio = 0.95f
 private const val maxImageAspectRatio = 5f
@@ -164,7 +164,8 @@ fun TvShowDetailsScreen(scaffoldState: ScaffoldState, tvShowId: Long, onBack: ()
         }
         CollapseImage(
             tvShowModel = tvShowModel,
-            aspectRatio = currentAspectRatio
+            aspectRatio = currentAspectRatio,
+            scaffoldState = scaffoldState
         )
         TopBar(
             modifier = Modifier.fillMaxWidth(),
@@ -235,14 +236,14 @@ fun TopBar(
 
 @ExperimentalCoilApi
 @Composable
-fun CollapseImage(tvShowModel: TvShowModel, aspectRatio: Float) {
+fun CollapseImage(tvShowModel: TvShowModel, aspectRatio: Float, scaffoldState: ScaffoldState) {
     val gradientColor = listOf(
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
         MaterialTheme.colors.primary
     )
-
-    aspectRatio.ulp
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.aspectRatio(aspectRatio)) {
         Image(
@@ -280,6 +281,13 @@ fun CollapseImage(tvShowModel: TvShowModel, aspectRatio: Float) {
                     )
                     .padding(6.dp),
                 onClick = {
+                    if (tvShowModel.video.isNotEmpty()) {
+                        if (!showTrailer(context = context, tvShowModel.video)) {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.install_youtube))
+                            }
+                        }
+                    }
                 }
             ) {
                 Icon(
@@ -378,6 +386,11 @@ fun Body(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
             text = tvShowModel.overview,
             style = MaterialTheme.typography.caption.copy(MaterialTheme.colors.onSecondary)
+        )
+
+        DirectorComponent(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
+            directors = tvShowModel.directors
         )
 
         if (tvShowModel.casts.isNotEmpty()) {

@@ -40,7 +40,7 @@ fun EpisodeComponent(modifier: Modifier = Modifier, title: String, episodeModel:
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = if (title.isNullOrEmpty()) NA else title,
+            text = title,
             style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onPrimary)
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -85,7 +85,7 @@ fun EpisodeComponent(modifier: Modifier = Modifier, title: String, episodeModel:
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    text = episodeModel.name,
+                    text = if (episodeModel.name.isEmpty()) NA else episodeModel.name,
                     style = MaterialTheme.typography.subtitle2.copy(MaterialTheme.colors.onPrimary),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

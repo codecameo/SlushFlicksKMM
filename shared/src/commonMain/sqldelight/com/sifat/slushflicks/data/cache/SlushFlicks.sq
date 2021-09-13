@@ -191,7 +191,7 @@ upsertMovie {
 UPDATE MovieEntity
     SET voteCount = :voteCount, voteAvg = :voteAvg, releaseData = :releaseData,
     popularity = :popularity, genres = :genres, budget = :budget, revenue = :revenue,
-    runtime = :runtime, status = :status, tagline = :tagline
+    runtime = :runtime, status = :status, tagline = :tagline, posterPath =: posterPath
     WHERE id = :id;
 
 INSERT OR IGNORE INTO MovieEntity(id, voteCount,voteAvg,title,releaseData,backdropPath,overview,posterPath,status,tagline,video,popularity,budget,revenue,runtime,genres,casts)
@@ -302,7 +302,8 @@ UPDATE TvShowEntity
     SET voteCount = :voteCount, voteAvg = :voteAvg, releaseData = :releaseData,
     popularity = :popularity, genres = :genres, runtime = :runtime, status = :status,
     nextEpisode = :nextEpisode, lastEpisode = :lastEpisode, seasons = :seasons,
-    numOfEpisode = :numOfEpisode, numOfSeason = :numOfSeason, directors = :directors
+    numOfEpisode = :numOfEpisode, numOfSeason = :numOfSeason, directors = :directors,
+    posterPath = :posterPath
     WHERE id = :id;
 
 INSERT OR IGNORE INTO TvShowEntity(id,voteCount,voteAvg,title,releaseData,backdropPath,overview,

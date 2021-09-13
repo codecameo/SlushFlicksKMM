@@ -15,7 +15,8 @@ fun isYoutubeModel(videoApiModel: VideoApiModel): Boolean {
 }
 
 fun getDirectors(createdBy: List<CreatedBy>?): String {
-    return createdBy?.joinToString { " $BULLET_SIGN " } ?: EMPTY_STRING
+    return createdBy?.joinToString(separator = " $BULLET_SIGN ") { it.name ?: EMPTY_STRING }
+        ?: EMPTY_STRING
 }
 
 fun getRuntime(runtimes: List<Int>?): Int {

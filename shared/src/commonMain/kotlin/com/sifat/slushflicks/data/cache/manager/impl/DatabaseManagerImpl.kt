@@ -138,45 +138,45 @@ class DatabaseManagerImpl(
 
     override suspend fun insertMovieDetails(movie: MovieEntity) {
         slushFlicksQueries.insertMovieReplace(
-            movie.id,
-            movie.voteCount,
-            movie.voteAvg,
-            movie.title,
-            movie.releaseData,
-            movie.backdropPath,
-            movie.overview,
-            movie.posterPath,
-            movie.status,
-            movie.tagline,
-            movie.video,
-            movie.popularity,
-            movie.budget,
-            movie.revenue,
-            movie.runtime,
-            movie.genres,
-            movie.casts
+            id = movie.id,
+            voteCount = movie.voteCount,
+            voteAvg = movie.voteAvg,
+            title = movie.title,
+            releaseData = movie.releaseData,
+            backdropPath = movie.backdropPath,
+            overview = movie.overview,
+            posterPath = movie.posterPath,
+            status = movie.status,
+            tagline = movie.tagline,
+            video = movie.video,
+            popularity = movie.popularity,
+            budget = movie.budget,
+            revenue = movie.revenue,
+            runtime = movie.runtime,
+            genres = movie.genres,
+            casts = movie.casts
         )
     }
 
     override suspend fun updateMovieDetails(model: MovieEntity) {
         slushFlicksQueries.upsertMovie(
-            model.voteCount,
-            model.voteAvg,
-            model.releaseData,
-            model.popularity,
-            model.genres,
-            model.budget,
-            model.revenue,
-            model.runtime,
-            model.status,
-            model.tagline,
-            model.id,
-            model.title,
-            model.backdropPath,
-            model.overview,
-            model.posterPath,
-            model.video,
-            model.casts
+            voteCount = model.voteCount,
+            voteAvg = model.voteAvg,
+            releaseData = model.releaseData,
+            popularity = model.popularity,
+            genres = model.genres,
+            budget = model.budget,
+            revenue = model.revenue,
+            runtime = model.runtime,
+            status = model.status,
+            tagline = model.tagline,
+            id = model.id,
+            title = model.title,
+            backdropPath = model.backdropPath,
+            posterPath = model.posterPath,
+            overview = model.overview,
+            video = model.video,
+            casts = model.casts
         )
     }
 
@@ -190,26 +190,26 @@ class DatabaseManagerImpl(
 
     override suspend fun insertTvShowDetails(tvShow: TvShowEntity) {
         slushFlicksQueries.insertTvShowReplace(
-            tvShow.id,
-            tvShow.voteCount,
-            tvShow.voteAvg,
-            tvShow.title,
-            tvShow.releaseData,
-            tvShow.backdropPath,
-            tvShow.overview,
-            tvShow.posterPath,
-            tvShow.status,
-            tvShow.video,
-            tvShow.popularity,
-            tvShow.runtime,
-            tvShow.directors,
-            tvShow.numOfEpisode,
-            tvShow.numOfSeason,
-            tvShow.genres,
-            tvShow.casts,
-            tvShow.nextEpisode,
-            tvShow.lastEpisode,
-            tvShow.seasons
+            id = tvShow.id,
+            voteCount = tvShow.voteCount,
+            voteAvg = tvShow.voteAvg,
+            title = tvShow.title,
+            releaseData = tvShow.releaseData,
+            backdropPath = tvShow.backdropPath,
+            overview = tvShow.overview,
+            posterPath = tvShow.posterPath,
+            status = tvShow.status,
+            video = tvShow.video,
+            popularity = tvShow.popularity,
+            runtime = tvShow.runtime,
+            directors = tvShow.directors,
+            numOfEpisode = tvShow.numOfEpisode,
+            numOfSeason = tvShow.numOfSeason,
+            genres = tvShow.genres,
+            casts = tvShow.casts,
+            nextEpisode = tvShow.nextEpisode,
+            lastEpisode = tvShow.lastEpisode,
+            seasons = tvShow.seasons
         )
     }
 
@@ -217,28 +217,28 @@ class DatabaseManagerImpl(
         return slushFlicksQueries.selectTvShow(tvShowId).executeAsOneOrNull()
     }
 
-    override suspend fun updateTvDetails(model: TvShowEntity) {
+    override suspend fun updateTvDetails(tvShow: TvShowEntity) {
         slushFlicksQueries.upsertTvShow(
-            model.voteCount,
-            model.voteAvg,
-            model.releaseData,
-            model.popularity,
-            model.genres,
-            model.runtime,
-            model.status,
-            model.nextEpisode,
-            model.lastEpisode,
-            model.seasons,
-            model.numOfEpisode,
-            model.numOfSeason,
-            model.directors,
-            model.id,
-            model.title,
-            model.backdropPath,
-            model.overview,
-            model.posterPath,
-            model.video,
-            model.casts
+            id = tvShow.id,
+            voteCount = tvShow.voteCount,
+            voteAvg = tvShow.voteAvg,
+            title = tvShow.title,
+            releaseData = tvShow.releaseData,
+            backdropPath = tvShow.backdropPath,
+            overview = tvShow.overview,
+            posterPath = tvShow.posterPath,
+            status = tvShow.status,
+            video = tvShow.video,
+            popularity = tvShow.popularity,
+            runtime = tvShow.runtime,
+            directors = tvShow.directors,
+            numOfEpisode = tvShow.numOfEpisode,
+            numOfSeason = tvShow.numOfSeason,
+            genres = tvShow.genres,
+            casts = tvShow.casts,
+            nextEpisode = tvShow.nextEpisode,
+            lastEpisode = tvShow.lastEpisode,
+            seasons = tvShow.seasons
         )
     }
 

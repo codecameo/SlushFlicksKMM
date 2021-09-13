@@ -63,6 +63,7 @@ import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
+import com.sifat.slushflicks.component.showTrailer
 import com.sifat.slushflicks.component.verticalGradientTint
 import com.sifat.slushflicks.domain.model.MovieModel
 import com.sifat.slushflicks.domain.model.ReviewModel
@@ -79,7 +80,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
-import kotlin.math.ulp
 
 private const val minImageAspectRatio = 0.95f
 private const val maxImageAspectRatio = 5f
@@ -158,7 +158,11 @@ fun MovieDetailsScreen(scaffoldState: ScaffoldState, movieId: Long, onBack: () -
             coroutineScope.launch { scrollState.animateScrollTo(0) }
             currentMovieId = it.id
         }
-        CollapseImage(movieModel = movieModel, aspectRatio = currentAspectRatio)
+        CollapseImage(
+            movieModel = movieModel,
+            aspectRatio = currentAspectRatio,
+            scaffoldState = scaffoldState
+        )
         TopBar(
             modifier = Modifier.fillMaxWidth(),
             movieModel = movieModel,
@@ -228,14 +232,14 @@ fun TopBar(
 
 @ExperimentalCoilApi
 @Composable
-fun CollapseImage(movieModel: MovieModel, aspectRatio: Float) {
+fun CollapseImage(movieModel: MovieModel, aspectRatio: Float, scaffoldState: ScaffoldState) {
     val gradientColor = listOf(
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
         MaterialTheme.colors.primary.copy(alpha = 0.3f),
         MaterialTheme.colors.primary
     )
-
-    aspectRatio.ulp
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.aspectRatio(aspectRatio)) {
         Image(
@@ -273,6 +277,13 @@ fun CollapseImage(movieModel: MovieModel, aspectRatio: Float) {
                     )
                     .padding(6.dp),
                 onClick = {
+                    if (movieModel.video.isNotEmpty()) {
+                        if (!showTrailer(context = context, movieModel.video)) {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.install_youtube))
+                            }
+                        }
+                    }
                 }
             ) {
                 Icon(
