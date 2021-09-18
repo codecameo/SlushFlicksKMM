@@ -1,9 +1,6 @@
 package com.sifat.slushflicks.component.details.movie
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,23 +9,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -41,33 +27,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.ViewState.Error
 import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.ViewState.Success
-import com.sifat.slushflicks.component.CollapsingTopBar
 import com.sifat.slushflicks.component.ReviewListComponent
 import com.sifat.slushflicks.component.details.CastComponent
+import com.sifat.slushflicks.component.details.CollapseImage
 import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
+import com.sifat.slushflicks.component.details.TopBar
+import com.sifat.slushflicks.component.details.maxImageAspectRatio
+import com.sifat.slushflicks.component.details.minImageAspectRatio
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
 import com.sifat.slushflicks.component.shareShow
-import com.sifat.slushflicks.component.showTrailer
-import com.sifat.slushflicks.component.verticalGradientTint
 import com.sifat.slushflicks.domain.model.MovieModel
 import com.sifat.slushflicks.domain.model.ReviewModel
 import com.sifat.slushflicks.domain.model.ShowModel
@@ -85,9 +66,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
-
-private const val minImageAspectRatio = 0.95f
-private const val maxImageAspectRatio = 5f
 
 @ExperimentalCoilApi
 @Composable
@@ -183,13 +161,15 @@ fun MovieDetailsScreen(scaffoldState: ScaffoldState, movieId: Long, onBack: () -
             currentMovieId = it.id
         }
         CollapseImage(
-            movieModel = movieModel,
+            title = movieModel.title,
+            posterPath = movieModel.posterPath,
+            video = movieModel.video,
             aspectRatio = currentAspectRatio,
-            snackBarState = snackBarState
+            snackbarState = snackBarState
         )
         TopBar(
             modifier = Modifier.fillMaxWidth(),
-            movieModel = movieModel,
+            title = movieModel.title,
             aspectRatio = currentAspectRatio,
             canShare = canShare,
             onBack = onBackCallBack,
@@ -197,128 +177,6 @@ fun MovieDetailsScreen(scaffoldState: ScaffoldState, movieId: Long, onBack: () -
                 viewModel.viewEventState.value = ShareViewEvent(movieModel)
             }
         )
-    }
-}
-
-@Composable
-fun TopBar(
-    modifier: Modifier = Modifier,
-    movieModel: MovieModel,
-    aspectRatio: Float,
-    canShare: Boolean,
-    onBack: () -> Unit,
-    shareShow: () -> Unit
-) {
-    Box(
-        modifier = modifier
-            .aspectRatio(aspectRatio)
-    ) {
-        CollapsingTopBar(
-            collapseFactor = aspectRatio.inRange(maxImageAspectRatio, minImageAspectRatio),
-            modifier = Modifier.statusBarsPadding()
-        ) {
-            Icon(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .layoutId(CollapsingTopBar.BACK_ID)
-                    .clickable { onBack() }
-                    .padding(16.dp),
-                imageVector = Icons.Filled.ArrowBack,
-                tint = MaterialTheme.colors.onPrimary,
-                contentDescription = stringResource(id = R.string.text_back)
-            )
-            Icon(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .layoutId(CollapsingTopBar.SHARE_ID)
-                    .clickable { if (canShare) shareShow() }
-                    .padding(16.dp),
-                imageVector = Icons.Filled.Share,
-                tint = MaterialTheme.colors.onPrimary.copy(alpha = if (canShare) 1f else 0.5f),
-                contentDescription = stringResource(id = R.string.title_share)
-            )
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .layoutId(CollapsingTopBar.TITLE_ID)
-                    .wrapContentHeight()
-                    .padding(horizontal = 16.dp),
-                text = movieModel.title,
-                style = MaterialTheme.typography.h4.copy(
-                    color = MaterialTheme.colors.onPrimary,
-                    fontSize = (getFontSize(aspectRatio)).sp
-                ),
-                maxLines = if (aspectRatio > 3f) 1 else 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-@ExperimentalCoilApi
-@Composable
-fun CollapseImage(movieModel: MovieModel, aspectRatio: Float, snackBarState: SnackbarHostState) {
-    val gradientColor = listOf(
-        MaterialTheme.colors.primary.copy(alpha = 0.3f),
-        MaterialTheme.colors.primary.copy(alpha = 0.3f),
-        MaterialTheme.colors.primary
-    )
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-
-    Box(modifier = Modifier.aspectRatio(aspectRatio)) {
-        Image(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalGradientTint(gradientColor),
-            painter = rememberImagePainter(
-                data = movieModel.posterPath,
-                builder = {
-                    crossfade(false)
-                    placeholder(R.drawable.placeholder)
-                    error(R.drawable.placeholder)
-                }
-            ),
-            contentDescription = movieModel.title,
-            contentScale = ContentScale.Crop
-        )
-
-        if (movieModel.video.isNotEmpty()) {
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .graphicsLayer {
-                        aspectRatio
-                            .inRange(3f, minImageAspectRatio)
-                            .let { ratio ->
-                                alpha = 1f - ratio
-                                scaleX = 1f * alpha
-                                scaleY = 1f * alpha
-                            }
-                    }
-                    .background(
-                        color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f),
-                        shape = CircleShape
-                    )
-                    .padding(6.dp),
-                onClick = {
-                    if (movieModel.video.isNotEmpty()) {
-                        if (!showTrailer(context = context, movieModel.video)) {
-                            coroutineScope.launch {
-                                snackBarState.showSnackbar(context.getString(R.string.install_youtube))
-                            }
-                        }
-                    }
-                }
-            ) {
-                Icon(
-                    modifier = Modifier.size(30.dp),
-                    imageVector = Icons.Filled.PlayArrow,
-                    tint = MaterialTheme.colors.onPrimary,
-                    contentDescription = stringResource(id = R.string.text_trailer)
-                )
-            }
-        }
     }
 }
 
@@ -425,8 +283,4 @@ fun Body(
         }
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
-}
-
-fun getFontSize(aspectRatio: Float): Float {
-    return 22f + (4f - (4f * aspectRatio.inRange(maxImageAspectRatio, minImageAspectRatio)))
 }
