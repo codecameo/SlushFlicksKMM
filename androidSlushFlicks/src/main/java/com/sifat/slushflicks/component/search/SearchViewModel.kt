@@ -4,14 +4,15 @@ import com.sifat.slushflicks.AppDispatchers
 import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
-import com.sifat.slushflicks.component.search.ShowType.MOVIE
-import com.sifat.slushflicks.component.search.ShowType.TV_SHOW
 import com.sifat.slushflicks.data.Constants.INVALID_INT
 import com.sifat.slushflicks.data.state.DataState
 import com.sifat.slushflicks.domain.usecase.MovieSearchUseCase
 import com.sifat.slushflicks.domain.usecase.RecentMovieUseCase
 import com.sifat.slushflicks.domain.usecase.RecentTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.TvShowSearchUseCase
+import com.sifat.slushflicks.domain.utils.ShowType
+import com.sifat.slushflicks.domain.utils.ShowType.MOVIE
+import com.sifat.slushflicks.domain.utils.ShowType.TV_SHOW
 import com.sifat.slushflicks.viewaction.SearchViewAction.ShowResultViewAction
 import com.sifat.slushflicks.viewaction.SearchViewAction.UpdateShowTypeViewAction
 import com.sifat.slushflicks.viewevents.SearchViewEvent.LoadMoreShowViewEvent

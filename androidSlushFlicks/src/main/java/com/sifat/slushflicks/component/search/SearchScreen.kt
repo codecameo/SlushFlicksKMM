@@ -43,9 +43,10 @@ import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.movie.ShowListComponent
-import com.sifat.slushflicks.component.search.ShowType.MOVIE
-import com.sifat.slushflicks.component.search.ShowType.TV_SHOW
 import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.slushflicks.domain.utils.ShowType
+import com.sifat.slushflicks.domain.utils.ShowType.MOVIE
+import com.sifat.slushflicks.domain.utils.ShowType.TV_SHOW
 import com.sifat.slushflicks.viewaction.SearchViewAction.ShowResultViewAction
 import com.sifat.slushflicks.viewaction.SearchViewAction.UpdateShowTypeViewAction
 import com.sifat.slushflicks.viewevents.SearchViewEvent.LoadMoreShowViewEvent

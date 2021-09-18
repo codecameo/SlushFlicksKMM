@@ -1,19 +1,18 @@
 package com.sifat.slushflicks.component.details.movie
 
 import com.sifat.slushflicks.AppDispatchers
-import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.data.Constants.INVALID_INT
-import com.sifat.slushflicks.data.DynamicLinkConstants.MOVIE_SHOW_TYPE
 import com.sifat.slushflicks.data.DynamicLinkParam
 import com.sifat.slushflicks.domain.model.MovieModel
-import com.sifat.slushflicks.domain.usecase.GetDynamicLinkUseCase
+import com.sifat.slushflicks.domain.usecase.GenerateDynamicLinkUseCase
 import com.sifat.slushflicks.domain.usecase.GetMovieReviewUseCase
 import com.sifat.slushflicks.domain.usecase.MovieDetailsUseCase
 import com.sifat.slushflicks.domain.usecase.RecommendedMovieUseCase
 import com.sifat.slushflicks.domain.usecase.SimilarMovieUseCase
+import com.sifat.slushflicks.domain.utils.ShowType.MOVIE
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchMovieDetailsViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchRecommendedMovieViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchReviewViewAction
@@ -34,7 +33,7 @@ class MovieDetailsViewModel(
     private val recommendedMovieUseCase: RecommendedMovieUseCase,
     private val reviewUseCase: GetMovieReviewUseCase,
     private val movieDetailsUseCase: MovieDetailsUseCase,
-    private val getDynamicLinkUseCase: GetDynamicLinkUseCase,
+    private val generateDynamicLinkUseCase: GenerateDynamicLinkUseCase,
     override val viewState: MovieDetailsViewState = MovieDetailsViewState(),
     appDispatchers: AppDispatchers
 ) : BaseViewModel<MovieDetailsViewState>(appDispatchers) {
@@ -53,10 +52,10 @@ class MovieDetailsViewModel(
         postAction(
             ShareViewAction(
                 getViewState(
-                    getDynamicLinkUseCase.execute(
+                    generateDynamicLinkUseCase.execute(
                         DynamicLinkParam(
                             showId = movie.id,
-                            showType = MOVIE_SHOW_TYPE,
+                            showType = MOVIE.name,
                             showName = movie.title,
                             overview = movie.overview,
                             imageUrl = movie.backdropPath

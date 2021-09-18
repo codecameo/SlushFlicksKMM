@@ -23,6 +23,7 @@ import com.sifat.slushflicks.component.details.movie.MovieDetailsScreen
 import com.sifat.slushflicks.component.details.tvshow.TvShowDetailsScreen
 import com.sifat.slushflicks.component.home.HomeScreen
 import com.sifat.slushflicks.component.splash.SplashScreen
+import com.sifat.slushflicks.domain.utils.ShowType
 import kotlinx.coroutines.FlowPreview
 
 @ExperimentalCoilApi
@@ -44,8 +45,8 @@ fun SlushFlicksNavGraph(
         modifier = modifier
     ) {
         composable(SPLASH) {
-            SplashScreen { route ->
-                navigationController.navigate(route) {
+            SplashScreen {
+                navigationController.navigate(HOME) {
                     popUpTo(SPLASH) {
                         inclusive = true
                     }
@@ -53,7 +54,11 @@ fun SlushFlicksNavGraph(
             }
         }
         composable(HOME) {
-            HomeScreen { route, showId ->
+            HomeScreen { showType, showId ->
+                val route = when (showType) {
+                    ShowType.MOVIE -> MOVIE_DETAILS
+                    ShowType.TV_SHOW -> TV_SHOW_DETAILS
+                }
                 navigationController.navigate(route = "$route$showId")
             }
         }

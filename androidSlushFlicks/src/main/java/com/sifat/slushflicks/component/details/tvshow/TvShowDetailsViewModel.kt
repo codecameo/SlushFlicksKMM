@@ -5,14 +5,14 @@ import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.data.Constants.INVALID_INT
-import com.sifat.slushflicks.data.DynamicLinkConstants.TV_SERIES_TYPE
 import com.sifat.slushflicks.data.DynamicLinkParam
 import com.sifat.slushflicks.domain.model.TvShowModel
-import com.sifat.slushflicks.domain.usecase.GetDynamicLinkUseCase
+import com.sifat.slushflicks.domain.usecase.GenerateDynamicLinkUseCase
 import com.sifat.slushflicks.domain.usecase.GetTvReviewUseCase
 import com.sifat.slushflicks.domain.usecase.RecommendedTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.SimilarTvShowUseCase
 import com.sifat.slushflicks.domain.usecase.TvShowDetailsUseCase
+import com.sifat.slushflicks.domain.utils.ShowType.TV_SHOW
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchRecommendedTvShowViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchReviewViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchSimilarTvShowViewAction
@@ -33,7 +33,7 @@ class TvShowDetailsViewModel(
     private val recommendedTvShowUseCase: RecommendedTvShowUseCase,
     private val reviewUseCase: GetTvReviewUseCase,
     private val tvShowDetailsUseCase: TvShowDetailsUseCase,
-    private val getDynamicLinkUseCase: GetDynamicLinkUseCase,
+    private val generateDynamicLinkUseCase: GenerateDynamicLinkUseCase,
     override val viewState: TvShowDetailsViewState = TvShowDetailsViewState(),
     appDispatchers: AppDispatchers
 ) : BaseViewModel<TvShowDetailsViewState>(appDispatchers) {
@@ -52,10 +52,10 @@ class TvShowDetailsViewModel(
         postAction(
             ShareViewAction(
                 getViewState(
-                    getDynamicLinkUseCase.execute(
+                    generateDynamicLinkUseCase.execute(
                         DynamicLinkParam(
                             showId = tvShowModel.id,
-                            showType = TV_SERIES_TYPE,
+                            showType = TV_SHOW.name,
                             showName = tvShowModel.title,
                             overview = tvShowModel.overview,
                             imageUrl = tvShowModel.backdropPath

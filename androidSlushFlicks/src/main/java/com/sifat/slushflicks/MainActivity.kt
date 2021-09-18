@@ -7,8 +7,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.view.WindowCompat
+import coil.annotation.ExperimentalCoilApi
 import com.sifat.slushflicks.component.SlushFlicksApp
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoilApi
+@FlowPreview
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
