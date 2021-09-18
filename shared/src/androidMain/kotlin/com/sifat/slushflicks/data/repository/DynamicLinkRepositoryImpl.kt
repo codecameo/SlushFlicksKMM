@@ -1,6 +1,7 @@
 package com.sifat.slushflicks.data.repository
 
 import android.net.Uri
+import android.text.TextUtils
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.sifat.slushflicks.BuildConfig
@@ -16,6 +17,7 @@ import com.sifat.slushflicks.data.DynamicLinkConstants.SHOW_ID_PARAM
 import com.sifat.slushflicks.data.DynamicLinkConstants.SHOW_TYPE_PARAM
 import com.sifat.slushflicks.data.DynamicLinkConstants.SOURCE
 import com.sifat.slushflicks.data.DynamicLinkParam
+import com.sifat.slushflicks.domain.model.DeeplinkWrapper
 import com.sifat.slushflicks.domain.repository.DynamicLinkRepository
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -65,6 +67,30 @@ class DynamicLinkRepositoryImpl(
                         it.resume(null)
                     }
                 }
+        }
+
+    override suspend fun getDynamicLink(deeplinkData: DeeplinkWrapper<*>): Pair<String?, Long?>? =
+        suspendCancellableCoroutine {
+            (deeplinkData.data as? Uri)?.let { uri ->
+                FirebaseDynamicLinks.getInstance()
+                    .getDynamicLink(uri)
+                    .addOnCompleteListener { task ->
+                        var deepLink: Uri? = null
+                        if (task.isSuccessful && task.result != null) {
+                            deepLink = task.result.link
+                        } else if (!TextUtils.isEmpty(uri.toString())) {
+                            deepLink = uri
+                        }
+                        deepLink?.let { link ->
+                            it.resume(
+                                Pair(
+                                    link.getQueryParameter(SHOW_TYPE_PARAM),
+                                    link.getQueryParameter(SHOW_ID_PARAM)?.toLong()
+                                )
+                            )
+                        } ?: it.resume(null)
+                    }
+            } ?: it.resume(null)
         }
 
     private fun generateDeepLink(showId: Long, showType: String): String? {

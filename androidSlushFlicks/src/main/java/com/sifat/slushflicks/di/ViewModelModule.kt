@@ -2,6 +2,7 @@ package com.sifat.slushflicks.di
 
 import com.sifat.slushflicks.component.details.movie.MovieDetailsViewModel
 import com.sifat.slushflicks.component.details.tvshow.TvShowDetailsViewModel
+import com.sifat.slushflicks.component.home.HomeViewModel
 import com.sifat.slushflicks.component.movie.MovieViewModel
 import com.sifat.slushflicks.component.search.SearchViewModel
 import com.sifat.slushflicks.component.splash.SplashViewModel
@@ -43,7 +44,7 @@ fun viewModelModule() = module {
             similarMovieUseCase = get(),
             recommendedMovieUseCase = get(),
             reviewUseCase = get(),
-            getDynamicLinkUseCase = get()
+            generateDynamicLinkUseCase = get()
         )
     }
     viewModel {
@@ -53,6 +54,12 @@ fun viewModelModule() = module {
             similarTvShowUseCase = get(),
             recommendedTvShowUseCase = get(),
             reviewUseCase = get(),
+            generateDynamicLinkUseCase = get()
+        )
+    }
+    viewModel {
+        HomeViewModel(
+            appDispatchers = get(),
             getDynamicLinkUseCase = get()
         )
     }

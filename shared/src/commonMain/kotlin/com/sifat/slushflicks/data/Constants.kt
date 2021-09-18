@@ -31,8 +31,6 @@ object Label {
 object DynamicLinkConstants {
     const val SHOW_ID_PARAM = "show-id"
     const val SHOW_TYPE_PARAM = "show_type"
-    const val MOVIE_SHOW_TYPE = "movie"
-    const val TV_SERIES_TYPE = "tv_series"
     const val ANDROID_FALL_BACK_URL =
         "https://play.google.com/store/apps/details?id=com.sifat.slushflicks"
     const val IOS_FALL_BACK_URL =

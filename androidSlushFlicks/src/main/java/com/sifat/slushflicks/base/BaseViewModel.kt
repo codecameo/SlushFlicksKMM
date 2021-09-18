@@ -9,9 +9,10 @@ import com.sifat.slushflicks.viewaction.InitAction
 import com.sifat.slushflicks.viewaction.ViewAction
 import com.sifat.slushflicks.viewevents.InitEvent
 import com.sifat.slushflicks.viewevents.ViewEvent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -23,7 +24,8 @@ abstract class BaseViewModel<VS>(
     protected val mutableViewActionState = MutableStateFlow<ViewAction>(InitAction).also {
         it.buffer(eventBufferSize)
     }
-    val viewActionState: StateFlow<ViewAction> = mutableViewActionState
+    val viewActionState: Flow<ViewAction> =
+        mutableViewActionState.filter { !it.isRead }.onEach { it.isRead = true }
     val viewEventState = MutableStateFlow<ViewEvent>(InitEvent)
 
     init {

@@ -13,20 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.Route
 import com.sifat.slushflicks.viewevents.SplashViewEvent.UpdateGenreEvent
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun SplashScreen(onTimeout: (String) -> Unit) {
+fun SplashScreen(navigateToHome: () -> Unit) {
     val splashTimeout = 3000L
     val splashViewModel = getViewModel<SplashViewModel>()
-    val currentOnTimeout by rememberUpdatedState(onTimeout)
+    val navigateToHomeUpdate by rememberUpdatedState(navigateToHome)
     LaunchedEffect(true) {
         splashViewModel.viewEventState.value = UpdateGenreEvent
         delay(splashTimeout)
-        currentOnTimeout(Route.HOME)
+        navigateToHomeUpdate()
     }
     Surface(modifier = Modifier.fillMaxSize()) {
         Text(

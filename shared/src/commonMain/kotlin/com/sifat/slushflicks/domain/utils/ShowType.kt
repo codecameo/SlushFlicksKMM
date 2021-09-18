@@ -1,4 +1,4 @@
-package com.sifat.slushflicks.component.search
+package com.sifat.slushflicks.domain.utils
 
 enum class ShowType {
     MOVIE,

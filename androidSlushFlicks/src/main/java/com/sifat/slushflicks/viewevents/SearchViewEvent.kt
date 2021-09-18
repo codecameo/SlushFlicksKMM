@@ -1,6 +1,6 @@
 package com.sifat.slushflicks.viewevents
 
-import com.sifat.slushflicks.component.search.ShowType
+import com.sifat.slushflicks.domain.utils.ShowType
 
 sealed class SearchViewEvent : ViewEvent() {
     class QueryChangeViewEvent(val query: String) : SearchViewEvent()

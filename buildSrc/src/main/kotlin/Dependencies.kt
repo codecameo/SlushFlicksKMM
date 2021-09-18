@@ -146,7 +146,7 @@ object Firebase {
     const val analytics = "com.google.firebase:firebase-analytics:${Versions.analytics}"
     const val crashlytics = "com.google.firebase:firebase-crashlytics:${Versions.crashlytics}"
     const val firestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firestore}"
-    const val dynamicLink = "com.google.firebase:firebase-dynamic-links:${Versions.dynamicLinks}"
+    const val dynamicLink = "com.google.firebase:firebase-dynamic-links-ktx:${Versions.dynamicLinks}"
     const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
 }
 
