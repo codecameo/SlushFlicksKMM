@@ -5,7 +5,7 @@ This is a personal project and the core objective of this project was to have ha
 [![SlushFlicks](https://img.shields.io/badge/MAD-Score-green)](https://madscorecard.withgoogle.com/scorecards/3640381993/)
 
 <div>
-<img src=https://github.com/codecameo/SlushFlicksKMM/blob/readme_content/main/slushflicks_demo.gif >
+<img src=https://github.com/codecameo/SlushFlicksKMM/blob/main/slushflicks_demo.gif >
 </div>
 
 # Architecture
