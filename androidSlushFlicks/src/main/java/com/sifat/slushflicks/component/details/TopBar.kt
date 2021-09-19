@@ -3,7 +3,6 @@ package com.sifat.slushflicks.component.details
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -27,21 +26,25 @@ import com.sifat.slushflicks.component.CollapsingTopBar
 import com.sifat.slushflicks.utils.ext.inRange
 
 const val minImageAspectRatio = 0.95f
-const val maxImageAspectRatio = 5f
 
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
     title: String,
     aspectRatio: Float,
+    maxAspectRatio: Float,
     canShare: Boolean,
     onBack: () -> Unit,
     shareShow: () -> Unit
 ) {
-    Box(modifier = modifier.aspectRatio(aspectRatio)) {
+
+    Box(
+        modifier = modifier.aspectRatio(aspectRatio)
+    ) {
         CollapsingTopBar(
-            collapseFactor = aspectRatio.inRange(maxImageAspectRatio, minImageAspectRatio),
-            modifier = Modifier.statusBarsPadding()
+            collapseFactor = aspectRatio.inRange(maxAspectRatio, minImageAspectRatio),
+            modifier = Modifier
+                .statusBarsPadding()
         ) {
             Icon(
                 modifier = Modifier
@@ -65,14 +68,13 @@ fun TopBar(
             )
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .layoutId(CollapsingTopBar.TITLE_ID)
                     .wrapContentHeight()
                     .padding(horizontal = 16.dp),
                 text = title,
                 style = MaterialTheme.typography.h4.copy(
                     color = MaterialTheme.colors.onPrimary,
-                    fontSize = (getFontSize(aspectRatio)).sp
+                    fontSize = (getFontSize(aspectRatio, maxAspectRatio)).sp
                 ),
                 maxLines = if (aspectRatio > 3f) 1 else 2,
                 overflow = TextOverflow.Ellipsis
@@ -81,6 +83,6 @@ fun TopBar(
     }
 }
 
-fun getFontSize(aspectRatio: Float): Float {
-    return 22f + (4f - (4f * aspectRatio.inRange(maxImageAspectRatio, minImageAspectRatio)))
+fun getFontSize(aspectRatio: Float, maxAspectRatio: Float): Float {
+    return 22f + (4f - (4f * aspectRatio.inRange(maxAspectRatio, minImageAspectRatio)))
 }

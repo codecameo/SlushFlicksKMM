@@ -28,11 +28,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.ViewState.Error
@@ -44,7 +46,6 @@ import com.sifat.slushflicks.component.details.CollapseImage
 import com.sifat.slushflicks.component.details.RelatedShowComponent
 import com.sifat.slushflicks.component.details.ShowInfoComponent
 import com.sifat.slushflicks.component.details.TopBar
-import com.sifat.slushflicks.component.details.maxImageAspectRatio
 import com.sifat.slushflicks.component.details.minImageAspectRatio
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
@@ -52,7 +53,6 @@ import com.sifat.slushflicks.component.shareShow
 import com.sifat.slushflicks.domain.model.MovieModel
 import com.sifat.slushflicks.domain.model.ReviewModel
 import com.sifat.slushflicks.domain.model.ShowModel
-import com.sifat.slushflicks.utils.ext.inRange
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchMovieDetailsViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchRecommendedMovieViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchReviewViewAction
@@ -82,11 +82,15 @@ fun MovieDetailsScreen(scaffoldState: ScaffoldState, movieId: Long, onBack: () -
     val onBackCallBack by rememberUpdatedState(newValue = onBack)
     val snackBarState = remember { scaffoldState.snackbarHostState }
     val context = LocalContext.current
-    val maxImageHeight = context.resources.displayMetrics.widthPixels / minImageAspectRatio
+    val width = context.resources.displayMetrics.widthPixels
+    val maxImageHeight = width / minImageAspectRatio
+    val statusBarHeight = LocalWindowInsets.current.statusBars.top
+    val actionBarSize = LocalDensity.current.run { 56.dp.roundToPx() }
+    val maxImageRatio by lazy { width.toFloat() / (statusBarHeight + actionBarSize) }
     val currentAspectRatio by remember {
         derivedStateOf {
             val collapseRange = maxOf(maxImageHeight - scrollState.value, 0f)
-            minOf(maxImageAspectRatio, (maxImageHeight / collapseRange))
+            minOf(maxImageRatio, (maxImageHeight / collapseRange))
         }
     }
 
@@ -171,6 +175,7 @@ fun MovieDetailsScreen(scaffoldState: ScaffoldState, movieId: Long, onBack: () -
             modifier = Modifier.fillMaxWidth(),
             title = movieModel.title,
             aspectRatio = currentAspectRatio,
+            maxAspectRatio = maxImageRatio,
             canShare = canShare,
             onBack = onBackCallBack,
             shareShow = {
