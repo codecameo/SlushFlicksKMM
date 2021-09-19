@@ -5,7 +5,7 @@ This is a personal project and the core objective of this project was to have ha
 [![SlushFlicks](https://img.shields.io/badge/MAD-Score-green)](https://madscorecard.withgoogle.com/scorecards/3640381993/)
 
 <div>
-<img height="25%" width="25%" src=https://github.com/codecameo/SlushFlicks/blob/documentation/contents/slushflicks_demo.gif >
+<img src=https://github.com/codecameo/SlushFlicksKMM/blob/readme_content/main/slushflicks_demo.gif >
 </div>
 
 # Architecture
@@ -15,4 +15,4 @@ This is a personal project and the core objective of this project was to have ha
 + **Event:**  Events are being fired from the screen based on user interaction.
 + **ViewEvent:** When *ViewState* changes it fires the *ViewEvent*s which eventually reflects the changes to the user on the screen.
 <br><br>
-<img height="60%" width="60%" src=https://github.com/codecameo/SlushFlicks/blob/documentation/screenshots/mvi.png >
+<img height="60%" width="60%" src=https://github.com/codecameo/SlushFlicksKMM/blob/main/screenshots/mvi.png >
