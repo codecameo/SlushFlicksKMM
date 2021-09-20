@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import coil.annotation.ExperimentalCoilApi
 import com.sifat.slushflicks.component.InfiniteListHandler
 import com.sifat.slushflicks.component.ShowListItem
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.domain.model.ShowModel
 
 @ExperimentalCoilApi
 @Composable

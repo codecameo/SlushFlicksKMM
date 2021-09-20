@@ -31,7 +31,7 @@ import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.component.ShowTypeChip
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.home.model.CollectionListModel
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.domain.model.ShowModel
 import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchCollectionViewAction
 import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchMovieListViewAction
 import com.sifat.slushflicks.viewevents.MovieCollectionViewEvent.FetchCollectionViewEvent

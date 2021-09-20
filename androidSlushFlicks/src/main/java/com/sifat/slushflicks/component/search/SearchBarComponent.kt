@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.component.SlushFlicksTheme
-import com.sifat.slushflicks.data.Constants.EMPTY_STRING
+import com.sifat.common.data.Constants.EMPTY_STRING
 
 @Composable
 fun SearchBarComponent(

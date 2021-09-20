@@ -29,7 +29,7 @@ import com.sifat.slushflicks.component.ShowTypeChip
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.home.model.CollectionListModel
 import com.sifat.slushflicks.component.movie.ShowListComponent
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.domain.model.ShowModel
 import com.sifat.slushflicks.viewaction.TvCollectionViewAction.FetchCollectionViewAction
 import com.sifat.slushflicks.viewaction.TvCollectionViewAction.FetchTvListViewAction
 import com.sifat.slushflicks.viewevents.TvCollectionViewEvent.FetchCollectionViewEvent

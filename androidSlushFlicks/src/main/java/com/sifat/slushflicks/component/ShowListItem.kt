@@ -24,7 +24,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.domain.model.ShowModel
 import com.sifat.slushflicks.theme.Black10
 import com.sifat.slushflicks.theme.Black85
 import com.sifat.slushflicks.theme.Transparent

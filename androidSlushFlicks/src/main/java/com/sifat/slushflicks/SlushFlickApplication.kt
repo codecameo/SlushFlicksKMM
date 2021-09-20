@@ -3,7 +3,7 @@ package com.sifat.slushflicks
 import android.app.Application
 import co.touchlab.kermit.Kermit
 import com.sifat.slushflicks.di.appModule
-import com.sifat.slushflicks.di.initKoin
+import com.sifat.common.di.initKoin
 import com.sifat.slushflicks.di.viewModelModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi

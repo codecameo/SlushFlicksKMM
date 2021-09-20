@@ -1,7 +1,7 @@
-import com.sifat.slushflicks.data.cache.column.CastColumn;
-import com.sifat.slushflicks.data.cache.column.EpisodeColumn;
-import com.sifat.slushflicks.data.cache.column.GenreColumn;
-import com.sifat.slushflicks.data.cache.column.SeasonColumn;
+import com.sifat.common.data.cache.column.CastColumn;
+import com.sifat.common.data.cache.column.EpisodeColumn;
+import com.sifat.common.data.cache.column.GenreColumn;
+import com.sifat.common.data.cache.column.SeasonColumn;
 import kotlin.collections.List;
 
 CREATE TABLE GenreEntity(

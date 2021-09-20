@@ -1,6 +1,6 @@
 package com.sifat.slushflicks
 
-import com.sifat.slushflicks.data.Constants.EMPTY_STRING
+import com.sifat.common.data.Constants.EMPTY_STRING
 
 sealed class ViewState<Data> {
     class Loading<Data>(

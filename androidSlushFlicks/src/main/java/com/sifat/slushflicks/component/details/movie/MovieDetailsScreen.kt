@@ -49,9 +49,9 @@ import com.sifat.slushflicks.component.details.minImageAspectRatio
 import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
 import com.sifat.slushflicks.component.shareShow
-import com.sifat.slushflicks.domain.model.MovieModel
-import com.sifat.slushflicks.domain.model.ReviewModel
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.domain.model.MovieModel
+import com.sifat.common.domain.model.ReviewModel
+import com.sifat.common.domain.model.ShowModel
 import com.sifat.slushflicks.utils.ext.inRange
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchMovieDetailsViewAction
 import com.sifat.slushflicks.viewaction.MovieDetailsViewAction.FetchRecommendedMovieViewAction

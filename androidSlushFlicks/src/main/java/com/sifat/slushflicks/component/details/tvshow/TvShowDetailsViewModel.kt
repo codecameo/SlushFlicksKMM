@@ -1,18 +1,18 @@
 package com.sifat.slushflicks.component.details.tvshow
 
-import com.sifat.slushflicks.AppDispatchers
+import com.sifat.common.AppDispatchers
 import com.sifat.slushflicks.ViewState
 import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.base.BaseViewModel
-import com.sifat.slushflicks.data.Constants.INVALID_INT
-import com.sifat.slushflicks.data.DynamicLinkParam
-import com.sifat.slushflicks.domain.model.TvShowModel
-import com.sifat.slushflicks.domain.usecase.GenerateDynamicLinkUseCase
-import com.sifat.slushflicks.domain.usecase.GetTvReviewUseCase
-import com.sifat.slushflicks.domain.usecase.RecommendedTvShowUseCase
-import com.sifat.slushflicks.domain.usecase.SimilarTvShowUseCase
-import com.sifat.slushflicks.domain.usecase.TvShowDetailsUseCase
-import com.sifat.slushflicks.domain.utils.ShowType.TV_SHOW
+import com.sifat.common.data.Constants.INVALID_INT
+import com.sifat.common.data.DynamicLinkParam
+import com.sifat.common.domain.model.TvShowModel
+import com.sifat.common.domain.usecase.GenerateDynamicLinkUseCase
+import com.sifat.common.domain.usecase.GetTvReviewUseCase
+import com.sifat.common.domain.usecase.RecommendedTvShowUseCase
+import com.sifat.common.domain.usecase.SimilarTvShowUseCase
+import com.sifat.common.domain.usecase.TvShowDetailsUseCase
+import com.sifat.common.domain.utils.ShowType.TV_SHOW
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchRecommendedTvShowViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchReviewViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchSimilarTvShowViewAction
@@ -35,7 +35,7 @@ class TvShowDetailsViewModel(
     private val tvShowDetailsUseCase: TvShowDetailsUseCase,
     private val generateDynamicLinkUseCase: GenerateDynamicLinkUseCase,
     override val viewState: TvShowDetailsViewState = TvShowDetailsViewState(),
-    appDispatchers: AppDispatchers
+    appDispatchers: com.sifat.common.AppDispatchers
 ) : BaseViewModel<TvShowDetailsViewState>(appDispatchers) {
     override suspend fun handleViewEvent(event: ViewEvent) {
         when (event) {

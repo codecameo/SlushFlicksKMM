@@ -37,9 +37,9 @@ object Versions {
 }
 
 object Application {
-    const val versionName = "1.0"
+    const val versionName = "2.0.0"
     const val applicationId = "com.sifat.slushflicks"
-    const val versionCode = 1
+    const val versionCode = 2
 }
 
 object AndroidSdk {

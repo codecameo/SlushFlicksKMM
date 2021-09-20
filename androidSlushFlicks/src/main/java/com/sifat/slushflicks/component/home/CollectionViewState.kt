@@ -1,10 +1,10 @@
 package com.sifat.slushflicks.component.home
 
 import com.sifat.slushflicks.component.home.model.CollectionListModel
-import com.sifat.slushflicks.data.Constants.EMPTY_STRING
-import com.sifat.slushflicks.data.Constants.INVALID_INT
-import com.sifat.slushflicks.domain.model.CollectionModel
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.data.Constants.EMPTY_STRING
+import com.sifat.common.data.Constants.INVALID_INT
+import com.sifat.common.domain.model.CollectionModel
+import com.sifat.common.domain.model.ShowModel
 
 class CollectionViewState {
     var collectionItems = emptyList<CollectionListModel>()

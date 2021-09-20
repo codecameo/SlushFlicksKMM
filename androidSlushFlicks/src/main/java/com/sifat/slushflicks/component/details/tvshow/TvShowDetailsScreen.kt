@@ -52,11 +52,11 @@ import com.sifat.slushflicks.component.getErrorMessage
 import com.sifat.slushflicks.component.getGenreList
 import com.sifat.slushflicks.component.shareShow
 import com.sifat.slushflicks.component.tvshow.EpisodeComponent
-import com.sifat.slushflicks.data.BULLET_SIGN
-import com.sifat.slushflicks.data.SPACE
-import com.sifat.slushflicks.domain.model.ReviewModel
-import com.sifat.slushflicks.domain.model.ShowModel
-import com.sifat.slushflicks.domain.model.TvShowModel
+import com.sifat.common.data.BULLET_SIGN
+import com.sifat.common.data.SPACE
+import com.sifat.common.domain.model.ReviewModel
+import com.sifat.common.domain.model.ShowModel
+import com.sifat.common.domain.model.TvShowModel
 import com.sifat.slushflicks.utils.ext.inRange
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchRecommendedTvShowViewAction
 import com.sifat.slushflicks.viewaction.TvShowDetailsViewAction.FetchReviewViewAction

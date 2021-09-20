@@ -38,9 +38,9 @@ import com.sifat.slushflicks.component.about.AboutScreen
 import com.sifat.slushflicks.component.movie.MovieScreen
 import com.sifat.slushflicks.component.search.SearchScreen
 import com.sifat.slushflicks.component.tvshow.TvShowScreen
-import com.sifat.slushflicks.domain.utils.ShowType
-import com.sifat.slushflicks.domain.utils.ShowType.MOVIE
-import com.sifat.slushflicks.domain.utils.ShowType.TV_SHOW
+import com.sifat.common.domain.utils.ShowType
+import com.sifat.common.domain.utils.ShowType.MOVIE
+import com.sifat.common.domain.utils.ShowType.TV_SHOW
 import com.sifat.slushflicks.utils.ext.findActivity
 import com.sifat.slushflicks.viewaction.HomeViewAction.FetchDynamicLinkViewAction
 import com.sifat.slushflicks.viewevents.HomeViewEvent.FetchDynamicLinkViewEvent

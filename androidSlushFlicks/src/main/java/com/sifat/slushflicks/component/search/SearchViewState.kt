@@ -1,10 +1,10 @@
 package com.sifat.slushflicks.component.search
 
-import com.sifat.slushflicks.data.Constants.EMPTY_STRING
-import com.sifat.slushflicks.data.Constants.INVALID_INT
-import com.sifat.slushflicks.domain.model.ShowModel
-import com.sifat.slushflicks.domain.utils.ShowType
-import com.sifat.slushflicks.domain.utils.ShowType.MOVIE
+import com.sifat.common.data.Constants.EMPTY_STRING
+import com.sifat.common.data.Constants.INVALID_INT
+import com.sifat.common.domain.model.ShowModel
+import com.sifat.common.domain.utils.ShowType
+import com.sifat.common.domain.utils.ShowType.MOVIE
 
 class SearchViewState {
     var searchResult = mutableListOf<ShowModel>()

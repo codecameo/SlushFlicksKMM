@@ -1,18 +1,18 @@
 package com.sifat.slushflicks.component.movie
 
-import com.sifat.slushflicks.AppDispatchers
+import com.sifat.common.AppDispatchers
 import com.sifat.slushflicks.ViewState.Loading
 import com.sifat.slushflicks.ViewState.Success
 import com.sifat.slushflicks.base.BaseViewModel
 import com.sifat.slushflicks.component.home.CollectionViewState
-import com.sifat.slushflicks.data.Constants.EMPTY_STRING
-import com.sifat.slushflicks.data.Constants.INVALID_INT
-import com.sifat.slushflicks.data.Label.TRENDING_LABEL
-import com.sifat.slushflicks.data.state.DataState
-import com.sifat.slushflicks.domain.model.ShowModel
-import com.sifat.slushflicks.domain.usecase.GetMovieListUseCase
-import com.sifat.slushflicks.domain.usecase.GetTrendingMovieListUseCase
-import com.sifat.slushflicks.domain.usecase.MovieCollectionUseCase
+import com.sifat.common.data.Constants.EMPTY_STRING
+import com.sifat.common.data.Constants.INVALID_INT
+import com.sifat.common.data.Label.TRENDING_LABEL
+import com.sifat.common.data.state.DataState
+import com.sifat.common.domain.model.ShowModel
+import com.sifat.common.domain.usecase.GetMovieListUseCase
+import com.sifat.common.domain.usecase.GetTrendingMovieListUseCase
+import com.sifat.common.domain.usecase.MovieCollectionUseCase
 import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchCollectionViewAction
 import com.sifat.slushflicks.viewaction.MovieCollectionViewAction.FetchMovieListViewAction
 import com.sifat.slushflicks.viewevents.MovieCollectionViewEvent.FetchCollectionViewEvent

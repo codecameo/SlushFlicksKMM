@@ -1,10 +1,10 @@
 package com.sifat.slushflicks.component.home
 
 import android.net.Uri
-import com.sifat.slushflicks.AppDispatchers
+import com.sifat.common.AppDispatchers
 import com.sifat.slushflicks.base.BaseViewModel
-import com.sifat.slushflicks.domain.model.DeeplinkWrapper
-import com.sifat.slushflicks.domain.usecase.GetDynamicLinkUseCase
+import com.sifat.common.domain.model.DeeplinkWrapper
+import com.sifat.common.domain.usecase.GetDynamicLinkUseCase
 import com.sifat.slushflicks.viewaction.HomeViewAction.FetchDynamicLinkViewAction
 import com.sifat.slushflicks.viewevents.HomeViewEvent.FetchDynamicLinkViewEvent
 import com.sifat.slushflicks.viewevents.ViewEvent

@@ -30,7 +30,7 @@ import com.sifat.slushflicks.R
 import com.sifat.slushflicks.component.IconTextComponent
 import com.sifat.slushflicks.component.formatReleaseDate
 import com.sifat.slushflicks.component.verticalGradientTint
-import com.sifat.slushflicks.domain.model.SeasonModel
+import com.sifat.common.domain.model.SeasonModel
 
 @ExperimentalCoilApi
 @Composable

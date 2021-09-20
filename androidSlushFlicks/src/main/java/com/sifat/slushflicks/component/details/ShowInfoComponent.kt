@@ -11,7 +11,7 @@ import com.sifat.slushflicks.R
 import com.sifat.slushflicks.component.DividerComponent
 import com.sifat.slushflicks.component.IconTextComponent
 import com.sifat.slushflicks.component.formatReleaseDate
-import com.sifat.slushflicks.data.Constants
+import com.sifat.common.data.Constants
 
 @Composable
 fun ShowInfoComponent(

@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.domain.model.ReviewModel
+import com.sifat.common.domain.model.ReviewModel
 
 @Composable
 fun ReviewListComponent(

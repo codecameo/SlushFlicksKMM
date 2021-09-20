@@ -30,7 +30,7 @@ import coil.compose.rememberImagePainter
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.component.SlushFlicksTheme
 import com.sifat.slushflicks.component.verticalGradientTint
-import com.sifat.slushflicks.domain.model.CastModel
+import com.sifat.common.domain.model.CastModel
 
 @Composable
 fun CastComponent(casts: List<CastModel>) {

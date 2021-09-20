@@ -1,9 +1,9 @@
 package com.sifat.slushflicks.viewaction
 
 import com.sifat.slushflicks.ViewState
-import com.sifat.slushflicks.domain.model.MovieModel
-import com.sifat.slushflicks.domain.model.ReviewModel
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.domain.model.MovieModel
+import com.sifat.common.domain.model.ReviewModel
+import com.sifat.common.domain.model.ShowModel
 
 sealed class MovieDetailsViewAction : ViewAction() {
     class FetchMovieDetailsViewAction(val viewState: ViewState<MovieModel>) :

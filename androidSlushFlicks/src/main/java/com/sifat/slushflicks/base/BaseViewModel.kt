@@ -2,9 +2,9 @@ package com.sifat.slushflicks.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sifat.slushflicks.AppDispatchers
+import com.sifat.common.AppDispatchers
 import com.sifat.slushflicks.ViewState
-import com.sifat.slushflicks.data.state.DataState
+import com.sifat.common.data.state.DataState
 import com.sifat.slushflicks.viewaction.InitAction
 import com.sifat.slushflicks.viewaction.ViewAction
 import com.sifat.slushflicks.viewevents.InitEvent

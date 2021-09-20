@@ -10,7 +10,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.sp
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.data.SPACE
+import com.sifat.common.data.SPACE
 
 @Composable
 fun DirectorComponent(modifier: Modifier = Modifier, directors: String) {

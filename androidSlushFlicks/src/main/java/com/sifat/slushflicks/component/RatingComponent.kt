@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.data.Constants
+import com.sifat.common.data.Constants
 
 @Composable
 fun RatingComponent(modifier: Modifier = Modifier, voteAvg: Double) {

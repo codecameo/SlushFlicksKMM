@@ -30,8 +30,8 @@ import com.sifat.slushflicks.R
 import com.sifat.slushflicks.component.IconTextComponent
 import com.sifat.slushflicks.component.RatingComponent
 import com.sifat.slushflicks.component.formatReleaseDate
-import com.sifat.slushflicks.data.NA
-import com.sifat.slushflicks.domain.model.EpisodeModel
+import com.sifat.common.data.NA
+import com.sifat.common.domain.model.EpisodeModel
 
 @ExperimentalCoilApi
 @Composable

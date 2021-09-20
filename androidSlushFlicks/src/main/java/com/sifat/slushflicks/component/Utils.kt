@@ -5,15 +5,15 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import com.sifat.slushflicks.R
-import com.sifat.slushflicks.data.BULLET_SIGN
-import com.sifat.slushflicks.data.NA
-import com.sifat.slushflicks.data.PLAIN_TEXT_TYPE
-import com.sifat.slushflicks.data.remote.StatusCode.EMPTY_RESPONSE
-import com.sifat.slushflicks.data.remote.StatusCode.INTERNAL_ERROR
-import com.sifat.slushflicks.data.remote.StatusCode.NO_INTERNET_ERROR
-import com.sifat.slushflicks.data.remote.StatusCode.RESOURCE_NOT_FOUND
-import com.sifat.slushflicks.data.remote.StatusCode.UNAUTHORIZED
-import com.sifat.slushflicks.domain.model.GenreModel
+import com.sifat.common.data.BULLET_SIGN
+import com.sifat.common.data.NA
+import com.sifat.common.data.PLAIN_TEXT_TYPE
+import com.sifat.common.data.remote.StatusCode.EMPTY_RESPONSE
+import com.sifat.common.data.remote.StatusCode.INTERNAL_ERROR
+import com.sifat.common.data.remote.StatusCode.NO_INTERNET_ERROR
+import com.sifat.common.data.remote.StatusCode.RESOURCE_NOT_FOUND
+import com.sifat.common.data.remote.StatusCode.UNAUTHORIZED
+import com.sifat.common.domain.model.GenreModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 

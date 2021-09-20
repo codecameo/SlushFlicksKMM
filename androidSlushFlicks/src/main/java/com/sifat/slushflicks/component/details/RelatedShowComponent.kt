@@ -30,7 +30,7 @@ import coil.compose.rememberImagePainter
 import com.sifat.slushflicks.R
 import com.sifat.slushflicks.component.RatingComponent
 import com.sifat.slushflicks.component.verticalGradientTint
-import com.sifat.slushflicks.domain.model.ShowModel
+import com.sifat.common.domain.model.ShowModel
 
 @ExperimentalCoilApi
 @Composable

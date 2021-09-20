@@ -1,6 +1,6 @@
 package com.sifat.slushflicks.viewevents
 
-import com.sifat.slushflicks.domain.model.TvShowModel
+import com.sifat.common.domain.model.TvShowModel
 
 sealed class TvShowDetailsViewEvent : ViewEvent() {
     class FetchTvShowDetailsViewEvent(val tvShowId: Long) : TvShowDetailsViewEvent()

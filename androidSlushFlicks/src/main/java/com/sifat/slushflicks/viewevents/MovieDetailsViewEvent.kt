@@ -1,6 +1,6 @@
 package com.sifat.slushflicks.viewevents
 
-import com.sifat.slushflicks.domain.model.MovieModel
+import com.sifat.common.domain.model.MovieModel
 
 sealed class MovieDetailsViewEvent : ViewEvent() {
     class FetchMovieDetailsViewEvent(val movieId: Long) : MovieDetailsViewEvent()
